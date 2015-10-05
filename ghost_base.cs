@@ -1,0 +1,94 @@
+﻿using UnityEngine;
+using System.Collections;
+
+public class ghost_base : MonoBehaviour
+{
+	public GameObject mapicon_ob;
+	public GameObject ghostHP_ob;
+	GameObject ghostHP;
+	GameObject mapicon;
+	RectTransform rt;
+	Vector2 offset;
+	ParticleSystem right;
+	int myNum;
+	public int  dominator;
+	public Color domiColor;
+	bool coF;
+	ghost_control ghostC;
+
+	// Use this for initialization
+	void Start ()
+	{
+	
+	}
+	
+	// Update is called once per frame
+	void Update ()
+	{
+
+		if (ghostC.dominator > 0 && !coF && dominator != ghostC.dominator) {
+			coF = true;
+			StopCoroutine ("CanDominate");
+			StartCoroutine ("CanDominate", ghostC.dominator);
+		}
+		if (dominator != ghostC.dominator) {
+			SetParticle(false,-1,ghostC.domiColor);
+		}
+	}
+	
+	public void init (int num)
+	{
+		myNum = num;
+		offset.x = ((transform.position.x - 250f) * 3f) / 5f;
+		offset.y = ((transform.position.z - 250f) * 3f) / 5f;
+		ghostHP = Instantiate (ghostHP_ob);
+		ghostHP.GetComponent<ghost_control> ().init (gameObject);
+		ghostHP.transform.SetParent (GameObject.Find ("Minimap").transform);
+		right = transform.FindChild ("Light").GetComponent<ParticleSystem> ();
+		ghostC = ghostHP.GetComponent<ghost_control> ();
+		right.enableEmission = false;
+		mapicon = Instantiate (mapicon_ob, offset, Quaternion.identity) as GameObject;	
+		mapicon.transform.SetParent (GameObject.Find ("Map").transform);
+		mapicon.GetComponent<ghost_icon> ().init (num, offset,this);
+
+
+	}
+
+	public void Damage (int da, int t)
+	{
+		ghostHP.GetComponent<ghost_control> ().Damage (da, t);
+	}
+
+	public void SetDomi (int a)
+	{
+		dominator = a;
+	}
+
+	public int GetDomi ()
+	{
+		return dominator;
+	}
+
+	public void SetParticle (bool a, int c, Color b)
+	{
+		right.startColor = b;
+		right.enableEmission = a;
+		dominator = c;
+		domiColor = b;
+
+	}
+
+	public IEnumerator CanDominate (int a)
+	{
+		int k = 0;
+		while (k<150) {
+			if (ghostC.dominator != a) {
+				coF = false;
+				yield break;
+			}
+			k++;
+			yield return 0;
+		}
+		SetParticle (true, a, ghostC.domiColor);
+	}
+}
