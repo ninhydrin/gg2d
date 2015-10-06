@@ -116,6 +116,11 @@ public class selector : MonoBehaviour
 			leader = false;			
 		}
 	}
+	public GameObject Buy(){
+		organ_menu_entry theEntry = entry_list [point].GetComponent<organ_menu_entry> ();
+		Mana.RemoveMana (theEntry.cost);
+		return Instantiate(theEntry.sava) as GameObject;
+	}
 
 	public bool CanRelease ()
 	{

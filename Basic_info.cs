@@ -8,6 +8,7 @@ public class Basic_info : MonoBehaviour
 	GameObject MY_FACE;
 	GameObject MY_MANA;
 	GameObject TIME;
+	int player_num;
 	Color[] player_color;
 	GameObject SAVA_SIDE;
 	// Use this for initialization

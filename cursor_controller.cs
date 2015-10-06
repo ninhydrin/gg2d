@@ -300,6 +300,7 @@ public class cursor_controller : MonoBehaviour
 
 	public void SetSize (float a)
 	{
+
 		mapSize = a;
 	}
 }

@@ -122,7 +122,14 @@ public class organ_controller : MonoBehaviour
 					}
 				} else if (istype == 1) {
 					if (Input.GetKeyDown (buttons.A_Button)) {
-						menu_list [istype].GetComponent<selector> ().BuyItem ();
+						int k = playerC.IsEmp ();
+						print (k);
+						if (menu_list [istype].GetComponent<selector> ().CanBuy () && k != -1) {
+							GameObject itembuy = menu_list[istype].GetComponent<selector>().Buy();
+							playerC.AddItem (k,itembuy);
+							playerC.SetItemSprite(k,itembuy.GetComponent<item>().icon);
+							print ("ok");
+						}
 					}
 
 				} else if (istype == 2) {
@@ -153,30 +160,30 @@ public class organ_controller : MonoBehaviour
 
 				
 
-				if (cursorC.isTarget () > 0 &&targetGroup != cursorC.isTarget()) {
-					cursorC.SetMBdest(false);					
+				if (cursorC.isTarget () > 0 && targetGroup != cursorC.isTarget ()) {
+					cursorC.SetMBdest (false);					
 					cursorC.SetMBisGroup (true);
 					if (Input.GetKeyDown (buttons.A_Button)) {
 						ConnectGroup (cursorC.isTarget ());
 						savaDictSetting = false;	
-						cursorC.SetMBisGroup(false);
-						cursorC.SetMBgroup(true);
+						cursorC.SetMBisGroup (false);
+						cursorC.SetMBgroup (true);
 					}
 				} else {
-					cursorC.SetMBdest(true);
+					cursorC.SetMBdest (true);
 					cursorC.SetMBisGroup (false);					
 					if (Input.GetKeyDown (buttons.A_Button)) {
 						DictSet (cursorC.RealPos ());
 						savaDictSetting = false;
-						cursorC.SetMBmove(true);
+						cursorC.SetMBmove (true);
 					}
 				}
 
 
 				if (Input.GetKeyDown (buttons.B_Button) || Input.GetKeyDown (buttons.Pad_Left)) {
 					cursorC.SetMBdest (false);
-					cursorC.SetMBisGroup(false);
-					cursorC.SetMBcancel(true);
+					cursorC.SetMBisGroup (false);
+					cursorC.SetMBcancel (true);
 					savaDictSetting = false;
 				}
 
@@ -223,11 +230,11 @@ public class organ_controller : MonoBehaviour
 							istype = 0;
 						}
 					}
-					if(Input.GetKeyDown(buttons.B_Button)){
-						playerC.organ=false;
+					if (Input.GetKeyDown (buttons.B_Button)) {
+						playerC.organ = false;
 					}
 
-					if(Input.GetKeyDown(buttons.LT)){
+					if (Input.GetKeyDown (buttons.LT)) {
 
 					}
 				}
