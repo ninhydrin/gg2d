@@ -15,8 +15,8 @@ public class CameraController : MonoBehaviour
 	{
 		buttons = GameObject.Find ("Player_info").GetComponent<Button> ();
 		x = 8f;
-		y = 2f;
-		z = -4f;
+		y = 6f;
+		z = -7f;
 		xx = 0f;
 		yy = 4f;
 		zz = 8f;
@@ -34,15 +34,19 @@ public class CameraController : MonoBehaviour
 	// Update is called once per frame
 	void LateUpdate ()
 	{
-	
+		if (Input.GetKey (buttons.RStick_Right)) {
+		} else if (Input.GetKey (buttons.RStick_Left)) {
+		}
+		
 
 	
 		if (Input.GetKey (buttons.LB) || Input.GetKey (buttons.RB) || true) {
+			a = player.transform.position;
+			b = player.transform.localPosition;
+			a=new Vector3(a.x,0,a.z);
 			rot = new Vector3 (x, 0f, 0f);
 			offset = new Vector3 (0f, y, z);
-			transform.localPosition = offset;
-			transform.localEulerAngles = rot;
-			transform.eulerAngles = player.transform.eulerAngles;
+			transform.localPosition = a + offset;
 		} else {
 
 			offset = new Vector3 (xx, yy, zz);
