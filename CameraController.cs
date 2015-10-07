@@ -9,7 +9,7 @@ public class CameraController : MonoBehaviour
 	public float x, y, z, xx, yy, zz;
 	public Button buttons;
 	Transform Fc;
-	Transform Bc;
+	Transform CP;
 	// Use this for initialization
 	void Start ()
 	{
@@ -24,8 +24,8 @@ public class CameraController : MonoBehaviour
 		rot = new Vector3 (zz, 0f, 0f);
 		//transform.localRotation.x = ;
 		player = GameObject.FindWithTag ("Player");
-		Fc = GameObject.Find ("Player/Fc").transform;
-		Bc = GameObject.Find ("Player/Bc").transform;
+		
+		CP = GameObject.Find ("Player/Camera_Pos").transform;
 		a = player.transform.position;			
 
 	}
@@ -35,18 +35,18 @@ public class CameraController : MonoBehaviour
 	void LateUpdate ()
 	{
 		if (Input.GetKey (buttons.RStick_Right)) {
+			//transform.RotateAround (player.transform.position, Vector3.up, 1f);
+			
 		} else if (Input.GetKey (buttons.RStick_Left)) {
 		}
-		
+		b = CP.transform.position;
 
 	
 		if (Input.GetKey (buttons.LB) || Input.GetKey (buttons.RB) || true) {
-			a = player.transform.position;
-			b = player.transform.localPosition;
-			a=new Vector3(a.x,0,a.z);
-			rot = new Vector3 (x, 0f, 0f);
-			offset = new Vector3 (0f, y, z);
-			transform.localPosition = a + offset;
+			a = player.transform.position;			
+			a = new Vector3 (a.x, 0, a.z);
+			//offset = new Vector3 (0f, y, z);
+			transform.position = a + offset;
 		} else {
 
 			offset = new Vector3 (xx, yy, zz);

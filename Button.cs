@@ -46,6 +46,10 @@ public class Button : MonoBehaviour
 		LStick_Right = KeyCode.D;
 		LStick_Up = KeyCode.W;
 		LStick_Down = KeyCode.S;
+		RStick_Left = KeyCode.M;
+		RStick_Right = KeyCode.Slash;
+		RStick_Up = KeyCode.Period;
+		RStick_Down = KeyCode.Comma;
 		Pad_Left = KeyCode.Z;
 
 		Mana = 600;
