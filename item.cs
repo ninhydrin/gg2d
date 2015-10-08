@@ -21,19 +21,22 @@ public class item : MonoBehaviour
 	
 	}
 
-	public void UseMe (int a,GameObject player)
+	public void UseMe (int a, GameObject player)
 	{
+		PlayerController playerC=player.GetComponent<PlayerController>();
 		useNum--;
 		if (itemName == "LPL") {
-		}			
-		HashSet<GameObject> neighborhoodSava = player.GetComponent<PlayerController> ().GetNeighborhood (player.transform.position, 9);
-		foreach (GameObject nSava in neighborhoodSava) {
-			nSava.transform.parent.GetComponent<sava_base> ().Repair (150);
+			playerC.AddHP(300);
+			HashSet<GameObject> neighborhoodSava = playerC.GetNeighborhood (player.transform.position, 9);
+			foreach (GameObject nSava in neighborhoodSava) {
+				nSava.transform.parent.GetComponent<sava_base> ().Repair (300);
+			}
+		} else if (itemName == "TPL") {
+			playerC.AddTP(75);
 		}
-
 		if (useNum <= 0) {
-			DestroyImmediate(gameObject);
-			player.GetComponent<PlayerController>().SetItemSprite(a,null);
+			DestroyImmediate (gameObject);
+			playerC.SetItemSprite (a, null);
 		}
 	}
 

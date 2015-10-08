@@ -21,6 +21,8 @@ public class organ_controller : MonoBehaviour
 	Canvas organCanvas;
 	int point_samon;
 	GameObject mySava;
+	bool canSell;
+	bool canSell2;
 
 
 
@@ -31,7 +33,8 @@ public class organ_controller : MonoBehaviour
 		summoning = false;
 		savaDictSetting = false;
 		itemSell = false;
-
+		canSell = false;
+		canSell2 = false;
 		playerC = GetComponent<PlayerController> ();
 		menu = GameObject.Find ("Menu");
 		menu.GetComponent<UnityEngine.Canvas> ().enabled = false;
@@ -56,7 +59,10 @@ public class organ_controller : MonoBehaviour
 	{
 		if (playerC.organ) {		
 			organCanvas.enabled = true;
-
+			if (!canSell2) {
+				StartCoroutine ("ItemSellCoolTime");
+				canSell2 = true;
+			}
 
 		
 			if (ismenu) {										//メニュー表示中
@@ -125,9 +131,9 @@ public class organ_controller : MonoBehaviour
 						int k = playerC.IsEmp ();
 						print (k);
 						if (menu_list [istype].GetComponent<selector> ().CanBuy () && k != -1) {
-							GameObject itembuy = menu_list[istype].GetComponent<selector>().Buy();
-							playerC.AddItem (k,itembuy);
-							playerC.SetItemSprite(k,itembuy.GetComponent<item>().icon);
+							GameObject itembuy = menu_list [istype].GetComponent<selector> ().Buy ();
+							playerC.AddItem (k, itembuy);
+							playerC.SetItemSprite (k, itembuy.GetComponent<item> ().icon);
 							print ("ok");
 						}
 					}
@@ -247,7 +253,8 @@ public class organ_controller : MonoBehaviour
 			GameObject.Find ("Menu").GetComponent<UnityEngine.Canvas> ().enabled = false;
 			AllListClose ();
 			summoning = false;
-
+			canSell = false;
+			canSell2 = false;
 		}
 	}
 		
@@ -316,6 +323,18 @@ public class organ_controller : MonoBehaviour
 		a.GetComponent<mapicon> ().SetLeader (true);
 		a.GetComponent<mapicon> ().EntrustLeader ();
 
+	}
+
+	IEnumerator ItemSellCoolTime ()
+	{
+		int coolTime = 0;
+		while (coolTime<90) {
+			coolTime++;
+			if (!playerC.organ)
+				yield break;
+			yield return 0;
+		}
+		canSell = true;
 	}
 
 }

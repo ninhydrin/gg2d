@@ -9,9 +9,12 @@ public class PlayerController : MonoBehaviour
 	public Terrain terra;
 	public  bool organ;
 	public  bool menu;
+	public bool targeting;
 	private GameObject MG;
 	public Vector3 acceleration = new Vector3 (0, -20f, 0);	// 加速度
 	public Button buttons;
+	HashSet<GameObject> nearEnemy;
+
 	GameObject[] itemBox;
 	Image[] itemSlot;
 	RectTransform itemSelector;
@@ -20,6 +23,8 @@ public class PlayerController : MonoBehaviour
 	int nowHP;
 	int maxTP = 100;
 	int nowTP;
+	bool canitem;
+	bool canitem2;
 
 	void Start ()
 	{
@@ -32,7 +37,7 @@ public class PlayerController : MonoBehaviour
 		itemSelector = GameObject.Find ("Player_info/Item_slot/Item_selector").GetComponent<RectTransform> ();
 		itemSlot = new Image[6];
 		for (int i =0; i<6; i++)
-			itemSlot [i] = GameObject.Find ("Player_info/Item_slot/slot" + i.ToString ()).GetComponent<Image>();
+			itemSlot [i] = GameObject.Find ("Player_info/Item_slot/slot" + i.ToString ()).GetComponent<Image> ();
 		itemBox = new GameObject[6];
 		itemPoint = 0;
 	}
@@ -48,6 +53,10 @@ public class PlayerController : MonoBehaviour
 		
 		
 		if (!organ) {
+			if (!canitem2) {
+				canitem2 = true;
+				StartCoroutine ("ItemCoolTime", 90);
+			}
 
 			sle = transform.position [1] - Terrain.activeTerrain.SampleHeight (transform.position);
 
@@ -63,7 +72,7 @@ public class PlayerController : MonoBehaviour
 				organ = true;
 			}
 			if (Input.GetKeyDown (buttons.B_Button)) {			
-				UseItem(itemPoint);
+				UseItem (itemPoint);
 			}
 
 			if (Input.GetKeyDown (buttons.RB)) {
@@ -74,13 +83,24 @@ public class PlayerController : MonoBehaviour
 				MoveItemSelector ();				
 			}				
 
-
+			if(Input.GetKey(buttons.RT)){
+				nearEnemy = GetNeighborhoodEnemy(transform.position,10);
+				if (nearEnemy.Count != 0){
+					targeting=true;
+				}else{
+					targeting=false;
+				}
+			}else{
+				targeting=false;
+			} 
 
 
 
 
 		} else {
-
+			canitem = false;
+			canitem2 = false;
+			targeting=false;
 			if (Input.GetKeyDown (buttons.Pad_Left)) {
 				//organ = false;
 			}
@@ -99,10 +119,10 @@ public class PlayerController : MonoBehaviour
 
 	void UseItem (int a)
 	{
-		if (itemBox [a] != null) {
-			if(itemBox[a].GetComponent<item>()!=null){
+		if (itemBox [a] != null && canitem) {
+			if (itemBox [a].GetComponent<item> () != null) {
 				print ("use");
-				itemBox[a].GetComponent<item>().UseMe(a,gameObject);
+				itemBox [a].GetComponent<item> ().UseMe (a, gameObject);
 			}
 		
 		
@@ -120,9 +140,6 @@ public class PlayerController : MonoBehaviour
 		return nowTP;
 	}
 
-
-
-
 	public HashSet<GameObject> GetNeighborhood (Vector3 pos, float range)
 	{
 		HashSet<GameObject> c = new HashSet<GameObject> ();
@@ -133,27 +150,68 @@ public class PlayerController : MonoBehaviour
 		}
 		return c;
 	}
-
+	public HashSet<GameObject> GetNeighborhoodEnemy (Vector3 pos, float range)
+	{
+		HashSet<GameObject> c = new HashSet<GameObject> ();
+		Collider[] a = Physics.OverlapSphere (pos, range);
+		foreach (Collider b in a) {
+			if (b.gameObject.tag == "Enemy_sava" || b.gameObject.tag=="Enemy_master")
+				c.Add (b.gameObject);
+		}
+		return c;
+	}
 	public int IsEmp ()
 	{
-		for(int i = 0;i<6;i++){
-			if(itemBox[i]==null){
+		for (int i = 0; i<6; i++) {
+			if (itemBox [i] == null) {
 				return i;
 			}
 		}	
 		return -1;
 	}
-	public void AddItem (int a,GameObject b){
+
+	public void AddItem (int a, GameObject b)
+	{
 		itemBox [a] = b;
 	}
-	public void SetItemSprite(int a,Sprite b){
-		itemSlot[a].sprite = b;
+
+	public void SetItemSprite (int a, Sprite b)
+	{
+		itemSlot [a].sprite = b;
 	}
+
 	public void Damage (int num)
 	{
 		if (nowHP - num < 0)
 			nowHP = 0;
 		else
 			nowHP -= num;		
+	}
+
+	public void AddHP (int num)
+	{
+		nowHP = nowHP + num > maxHP ? maxHP : nowHP + num;
+	}
+
+	public void AddTP (int num)
+	{
+		nowTP = nowTP + num > maxTP ? maxTP : nowTP + num;
+	}
+
+	public void CoolTiem (int a)
+	{
+		StartCoroutine ("ItemCoolTime", a);
+	}
+
+	IEnumerator ItemCoolTime (int a)
+	{
+		int coolTime = 0;
+		while (coolTime<a) {
+			coolTime++;
+			if (organ)
+				yield break;
+			yield return 0;
+		}
+		canitem = true;
 	}
 }

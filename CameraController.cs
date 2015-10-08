@@ -5,26 +5,28 @@ public class CameraController : MonoBehaviour
 {
 	public GameObject player;
 	private Vector3 offset;
-	private Vector3 rot;
+	private Vector3  lockOn;
 	public float x, y, z, xx, yy, zz;
 	public Button buttons;
+	PlayerController playerC;
 	Transform Fc;
 	Transform CP;
 	// Use this for initialization
 	void Start ()
 	{
+		
 		buttons = GameObject.Find ("Player_info").GetComponent<Button> ();
 		x = 8f;
 		y = 6f;
 		z = -7f;
 		xx = 0f;
 		yy = 4f;
-		zz = 8f;
+		zz = -5f;
 		offset = new Vector3 (0f, y, z);
-		rot = new Vector3 (zz, 0f, 0f);
+		lockOn = new Vector3 (0f, yy, zz);
 		//transform.localRotation.x = ;
 		player = GameObject.FindWithTag ("Player");
-		
+		playerC = player.GetComponent<PlayerController> ();
 		CP = GameObject.Find ("Player/Camera_Pos").transform;
 		a = player.transform.position;			
 
@@ -42,23 +44,16 @@ public class CameraController : MonoBehaviour
 		b = CP.transform.position;
 
 	
-		if (Input.GetKey (buttons.LB) || Input.GetKey (buttons.RB) || true) {
+		if (playerC.targeting) {
 			a = player.transform.position;			
 			a = new Vector3 (a.x, 0, a.z);
 			//offset = new Vector3 (0f, y, z);
-			transform.position = a + offset;
+			transform.position = a + lockOn;		
 		} else {
-
-			offset = new Vector3 (xx, yy, zz);
-			if ((a - player.transform.position).magnitude > 3) {
-				a = player.transform.position;
-				transform.position = player.transform.position + offset;
-			}
-			transform.LookAt (player.transform.position);
-
-			//transform.rotation = player.transform.rotation;
-			//print (transform.rotation);
-
+			a = player.transform.position;			
+			a = new Vector3 (a.x, 0, a.z);
+			//offset = new Vector3 (0f, y, z);
+			transform.position = a + offset;		
 		}
 	
 	}
