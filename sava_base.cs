@@ -27,6 +27,9 @@ public class sava_base : MonoBehaviour
 	bool forRearch;
 	bool forSearch;
 	bool canReport;
+	Camera mainCam;
+	public GameObject damageText;
+	GameObject minimap;
 	// Use this for initialization
 	void Start ()
 	{
@@ -35,6 +38,8 @@ public class sava_base : MonoBehaviour
 		toSubmission = GameObject.Find ("Player_info/Sava_report").GetComponent<sava_report> ();
 		me = null;
 		canReport = true;
+		mainCam = GameObject.FindWithTag("MainCamera").GetComponent<Camera>();
+		minimap = GameObject.Find("Minimap");
 	}
 	
 	// Update is called once per frame
@@ -137,6 +142,11 @@ public class sava_base : MonoBehaviour
 	public void Damage (int a)
 	{
 		HP -= a;
+		Vector3 b = Camera.main.WorldToScreenPoint (me.transform.position);
+		b.y += 3f;
+		GameObject bb = Instantiate(damageText,new Vector3(b.x,b.y,0f),Quaternion.identity) as GameObject;
+		bb.GetComponent<Damage> ().DamageInt (a,minimap,me.transform.position);
+
 	}
 
 	public void Repair (int a)

@@ -6,6 +6,7 @@ public class MG_func : MonoBehaviour
 {
 
 	Queue<GameObject> sava_queue;
+
 	private GameObject player;
 	public RectTransform rt;
 	GameObject sava;
