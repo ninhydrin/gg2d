@@ -42,7 +42,7 @@ public class mapicon : MonoBehaviour
 
 			inter = Vector2.Distance (cursorRt.anchoredPosition, rt.anchoredPosition);
 
-			if (inter < 8f && (cursorC.isTarget () == 0|| (imTarget && cursorC.isTarget ()==myGroupNum)) && !cursorC.isMoving ()) {
+			if (inter < 8f && (cursorC.isTarget () <= 0|| (imTarget && cursorC.isTarget ()==myGroupNum)) && !cursorC.isMoving ()) {
 				if (!imTarget){
 					imTarget = true;
 					StartCoroutine(OnCursor());

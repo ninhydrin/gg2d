@@ -59,6 +59,7 @@ public class sava_base : MonoBehaviour
 					canReport=false;
 					StartCoroutine ("WaitReport");
 				}
+
 				forSearch = true;
 			} else if (near.Count == 0) {
 				forSearch = false;
@@ -141,12 +142,12 @@ public class sava_base : MonoBehaviour
 
 	public void Damage (int a)
 	{
-		HP -= a;
+
 		Vector3 b = Camera.main.WorldToScreenPoint (me.transform.position);
 		b.y += 3f;
 		GameObject bb = Instantiate(damageText,new Vector3(b.x,b.y,0f),Quaternion.identity) as GameObject;
 		bb.GetComponent<Damage> ().DamageInt (a,minimap,me.transform.position);
-
+		HP -= a;
 	}
 
 	public void Repair (int a)
