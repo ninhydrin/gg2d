@@ -14,13 +14,14 @@ public class organ_MG : MonoBehaviour
 	cursor_controller cursorC;
 	bool imTarget;
 	Image mycolor;
-
+	organ_controller organC;
 	int myGroupNum;
 	// Use this for initialization
 	void Start ()
 	{
 		rt = GetComponent<RectTransform> ();
 		MG = GameObject.FindWithTag ("PlayerMG");
+		organC = GameObject.FindWithTag ("Player").GetComponent<organ_controller> ();
 		offset = rt.anchoredPosition;
 		offset.x = (MG.transform.position.x - 250f) * 0.6f;
 		offset.y = (MG.transform.position.z - 250f) * 0.6f;
@@ -36,21 +37,23 @@ public class organ_MG : MonoBehaviour
 	void Update ()
 	{
 
+		if (organC.savaDictSetting || organC.summoning) {
+			float inter = Vector2.Distance (cursorRt.anchoredPosition, rt.anchoredPosition);
 
-		float inter = Vector2.Distance (cursorRt.anchoredPosition, rt.anchoredPosition);
+			if (inter < 15f && (cursorC.isTarget () == 0 || (imTarget && cursorC.isTarget () == -10)) && !cursorC.isMoving ()) {
+				if (!imTarget) {
+					imTarget = true;
+					StartCoroutine (OnCursor ());
+				}
+				cursorC.TargetingNum (myGroupNum);
+				cursorC.MoveTo (rt.anchoredPosition, myGroupNum, gameObject);		
 
-		//print (cursor.GetComponent<cursor_controller> ().isMoving ());
-		if (inter < 15f && (cursorC.isTarget () == 0 || (imTarget && cursorC.isTarget () == -10)) && !cursorC.isMoving ()) {
-			if (!imTarget) {
-				imTarget = true;
-				StartCoroutine(OnCursor());
+			} else if (inter > 15f) {
+				if (imTarget)
+					cursorC.TargetReset ();
+				imTarget = false;
 			}
-			cursorC.TargetingNum(myGroupNum);
-			cursorC.MoveTo (rt.anchoredPosition,myGroupNum,gameObject);		
-
-		} else if (inter > 15f) {
-			if (imTarget)
-				cursorC.TargetReset ();
+		} else {
 			imTarget = false;
 		}
 	}

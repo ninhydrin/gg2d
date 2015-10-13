@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
-
+using System.Collections.Generic;
 public class Sava_controler : MonoBehaviour
 {
 
@@ -10,6 +10,9 @@ public class Sava_controler : MonoBehaviour
 	float speed;
 	bool reached;
 	bool fighting;
+
+	HashSet<GameObject> nearEnemy;
+
 	static int idleState = Animator.StringToHash ("Base Layer.Idle");
 	static int walkState = Animator.StringToHash ("Base Layer.Idle");
 	static int fightingState = Animator.StringToHash ("Base Layer.Idle");
@@ -28,9 +31,13 @@ public class Sava_controler : MonoBehaviour
 	void Update ()
 	{
 		currentBaseState = anim.GetCurrentAnimatorStateInfo (0);
+		nearEnemy = GetNearAlly (5f);
+		fighting = nearEnemy.Count != 0 ? true : false;
 		if (fighting) {
+			anim.SetBool("Fighting",true);
 
 		} else {
+			anim.SetBool("Fighting",false);			
 			if ((dest - transform.position).magnitude < 3) {
 				dest = transform.position;
 				reached = true;	
@@ -50,4 +57,26 @@ public class Sava_controler : MonoBehaviour
 		}
 
 	}
+	HashSet<GameObject> GetNearAlly (float range)
+	{
+		HashSet<GameObject> c = new HashSet<GameObject> ();
+		Collider[] a = Physics.OverlapSphere (transform.position, range);
+		foreach (Collider b in a) {
+			if (b.gameObject.tag == "My_sava" || b.gameObject.tag == "Player" || b.gameObject.tag == "My_master")
+				c.Add (b.gameObject);
+		}
+		return c;
+	}
+	
+	HashSet<GameObject> GetNearEnemy (float range)
+	{
+		HashSet<GameObject> c = new HashSet<GameObject> ();
+		Collider[] a = Physics.OverlapSphere (transform.position, range);
+		foreach (Collider b in a) {			
+			if (b.gameObject.tag == "Enemy_sava" || b.gameObject.tag == "Enemy_master")
+				c.Add (b.gameObject);
+		}
+		return c;
+	}
+
 }

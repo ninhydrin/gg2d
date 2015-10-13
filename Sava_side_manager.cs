@@ -24,9 +24,10 @@ public class Sava_side_manager : MonoBehaviour
 		float x = 0f;
 		float y = 0f;
 		for (i=0; i<savaNum; i++) { //  ru-pu tyuu ni sava ga heru kamo
-			savaList[i].GetComponent<sava_side_info> ().SetPos (x, y);
-			y-=20f;
+			savaList [i].GetComponent<sava_side_info> ().SetPos (x, y);
+			y -= 20f;
 		}
+		//print (savaList [0].position);
 	}
 
 }

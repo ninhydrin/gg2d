@@ -14,7 +14,6 @@ public class PlayerController : MonoBehaviour
 	public Vector3 acceleration = new Vector3 (0, -20f, 0);	// 加速度
 	public Button buttons;
 	HashSet<GameObject> nearEnemy;
-
 	GameObject[] itemBox;
 	Image[] itemSlot;
 	RectTransform itemSelector;
@@ -83,15 +82,15 @@ public class PlayerController : MonoBehaviour
 				MoveItemSelector ();				
 			}				
 
-			if(Input.GetKey(buttons.RT)){
-				nearEnemy = GetNeighborhoodEnemy(transform.position,10);
-				if (nearEnemy.Count != 0){
-					targeting=true;
-				}else{
-					targeting=false;
+			if (Input.GetKey (buttons.RT)) {
+				nearEnemy = GetNeighborhoodEnemy (transform.position, 10);
+				if (nearEnemy.Count != 0) {
+					targeting = true;
+				} else {
+					targeting = false;
 				}
-			}else{
-				targeting=false;
+			} else {
+				targeting = false;
 			} 
 
 
@@ -100,7 +99,7 @@ public class PlayerController : MonoBehaviour
 		} else {
 			canitem = false;
 			canitem2 = false;
-			targeting=false;
+			targeting = false;
 			if (Input.GetKeyDown (buttons.Pad_Left)) {
 				//organ = false;
 			}
@@ -121,13 +120,19 @@ public class PlayerController : MonoBehaviour
 	{
 		if (itemBox [a] != null && canitem) {
 			if (itemBox [a].GetComponent<item> () != null) {
-				print ("use");
 				itemBox [a].GetComponent<item> ().UseMe (a, gameObject);
+			}				
+		} else if (itemBox [a] == null) {
+			HashSet<GameObject> storeTarget = GetNearAlly (2f);
+			Transform storeSava = null;
+			if(storeTarget.Count != 0){
+				foreach(GameObject child in storeTarget){
+					print (child.transform.parent);
+					storeSava = child.transform.parent;
+				}
+				itemBox[a].GetComponent<item>().icon = storeSava.GetComponent<sava_base>().face;
 			}
-		
-		
 		}
-
 	}
 
 	public int GetHP ()
@@ -150,16 +155,18 @@ public class PlayerController : MonoBehaviour
 		}
 		return c;
 	}
+
 	public HashSet<GameObject> GetNeighborhoodEnemy (Vector3 pos, float range)
 	{
 		HashSet<GameObject> c = new HashSet<GameObject> ();
 		Collider[] a = Physics.OverlapSphere (pos, range);
 		foreach (Collider b in a) {
-			if (b.gameObject.tag == "Enemy_sava" || b.gameObject.tag=="Enemy_master")
+			if (b.gameObject.tag == "Enemy_sava" || b.gameObject.tag == "Enemy_master")
 				c.Add (b.gameObject);
 		}
 		return c;
 	}
+
 	public int IsEmp ()
 	{
 		for (int i = 0; i<6; i++) {
@@ -213,5 +220,16 @@ public class PlayerController : MonoBehaviour
 			yield return 0;
 		}
 		canitem = true;
+	}
+
+	HashSet<GameObject> GetNearAlly (float range)
+	{
+		HashSet<GameObject> c = new HashSet<GameObject> ();
+		Collider[] a = Physics.OverlapSphere (gameObject.transform.position + Vector3.forward, range);
+		foreach (Collider b in a) {
+			if (b.gameObject.tag == "My_sava")
+				c.Add (b.gameObject);
+		}
+		return c;
 	}
 }
