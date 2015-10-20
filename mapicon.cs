@@ -52,7 +52,7 @@ public class mapicon : MonoBehaviour
 
 			} else if (inter > 6f) {
 				if (imTarget)
-					cursorC.TargetReset ();
+					cursorC.TargetingNum ();
 				imTarget = false;
 			}
 						

@@ -24,6 +24,7 @@ public class sava_base : MonoBehaviour
 	GameObject me;
 	GameObject mySava;
 	sava_report toSubmission;
+	
 	bool forRearch;
 	bool forSearch;
 	bool canReport;
@@ -45,8 +46,11 @@ public class sava_base : MonoBehaviour
 	// Update is called once per frame
 	void Update ()
 	{
-		if (me != null && Mathf.Abs (me.transform.position.magnitude - dest.magnitude) < 5f)
+		/*
+		if (me != null && Mathf.Abs ((me.transform.position - new Vector3 (dest.x, me.transform.position.y, dest.y)).magnitude) < 5f && !forRearch) {
 			StartCoroutine (SelfResetDest ());
+			forRearch=true;
+		}*/
 //		GetComponent<Rigidbody> ().AddForce (movement * speed * Time.deltaTime);
 		if (HP <= 0)
 			imDead ();
@@ -69,8 +73,9 @@ public class sava_base : MonoBehaviour
 
 	}
 
-	public	void init (int num, bool leader, int pmaxHp, GameObject mapicon, GameObject minimapicon, int sTime)
+	public	void init (GameObject savaOb, int num, bool leader, int pmaxHp, GameObject mapicon, GameObject minimapicon, int sTime)
 	{
+		ob = savaOb;
 		HP = maxHP = pmaxHp;
 		createMapIcon (mapicon, num);
 		createMinimapIcon (minimapicon);	
@@ -116,6 +121,7 @@ public class sava_base : MonoBehaviour
 	public void SetDestination (Vector2 destination)
 	{
 		dest = destination;
+		forRearch = false;
 	
 	}
 

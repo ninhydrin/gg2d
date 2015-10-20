@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class organ_controller : MonoBehaviour
 {
@@ -23,6 +24,8 @@ public class organ_controller : MonoBehaviour
 	GameObject mySava;
 	bool canSell;
 	bool canSell2;
+	Stack<Vector2> destStack;
+	Vector2  interchange;
 
 
 
@@ -51,7 +54,7 @@ public class organ_controller : MonoBehaviour
 		istype = 0;
 		buttons = GameObject.Find ("Player_info").GetComponent<Button> ();
 		cursorC = GameObject.Find ("Organ_Cursor").GetComponent<cursor_controller> ();
-		
+		destStack = new Stack<Vector2> (){};
 	}
 	
 	// Update is called once per frame
@@ -115,6 +118,10 @@ public class organ_controller : MonoBehaviour
 								cursorC.SetMBdest (true);
 								//	menu.GetComponent<UnityEngine.Canvas> ().enabled = false;
 								AllListClose ();
+								destStack.Clear ();
+								interchange = Vector2.one * -10000f;
+								destStack.Push(interchange);
+
 							} else {
 
 
@@ -134,12 +141,19 @@ public class organ_controller : MonoBehaviour
 							GameObject itembuy = menu_list [istype].GetComponent<selector> ().Buy ();
 							playerC.AddItem (k, itembuy);
 							playerC.SetItemSprite (k, itembuy.GetComponent<item> ().icon);
-							print ("ok");
 						}
 					}
 
 				} else if (istype == 2) {
-
+					if (Input.GetKeyDown (buttons.A_Button)) {
+						int k = playerC.IsEmp ();
+						print (k);
+						if (menu_list [istype].GetComponent<selector> ().CanBuy () && k != -1) {
+							GameObject itembuy = menu_list [istype].GetComponent<selector> ().Buy ();
+							playerC.AddItem (k, itembuy);
+							playerC.SetItemSprite (k, itembuy.GetComponent<item> ().icon);
+						}
+					}
 				} else if (istype == 3) {
 						
 				}
@@ -147,15 +161,32 @@ public class organ_controller : MonoBehaviour
 
 			} else if (summoning) {								//召喚準備中
 
-				if (Input.GetKeyDown (buttons.A_Button)) {
-					cursorC.SetMBmove (false);
-					cursorC.SetMBmarch (true);
-					menu_list [istype].GetComponent<selector> ().summon (point_samon);
-					summoning = false;
-				} 
+				if (cursorC.isTarget () > 0) {           //グループ化
+					targetGroup = cursorC.isTarget ();
+					cursorC.SetMBdest (false);
+					cursorC.SetMBisGroup (true);
+					if (Input.GetKeyDown (buttons.A_Button)) {
+						menu_list [istype].GetComponent<selector> ().summon (point_samon, GetDest (targetGroup), cursorC.isTarget ());
+						summoning = false;
+						cursorC.SetMBisGroup (false);
+						cursorC.SetMBgroup (true);
+					}
+				} else {//目的地設定
+					targetGroup = 0;
+					cursorC.SetMBdest (true);
+					cursorC.SetMBisGroup (false);
+					if (Input.GetKeyDown (buttons.A_Button) && cursorC.isTarget() < 0) {
+						cursorC.SetMBmove (false);
+						cursorC.SetMBmarch (true);
+						menu_list [istype].GetComponent<selector> ().summon (point_samon, cursorC.RealPos ());
+						summoning = false;
+					} 
+				}
+
 				if (Input.GetKeyDown (buttons.B_Button) || Input.GetKeyDown (buttons.Pad_Left)) {
 					cursorC.SetMBmove (false);
 					cursorC.SetMBcancel (true);
+					targetGroup = 0;
 					summoning = false;
 				}
 
@@ -166,7 +197,7 @@ public class organ_controller : MonoBehaviour
 
 				
 
-				if (cursorC.isTarget () > 0 && targetGroup != cursorC.isTarget ()) {
+				if (cursorC.isTarget () > 0 && targetGroup != cursorC.isTarget ()) { //グループ化
 					cursorC.SetMBdest (false);					
 					cursorC.SetMBisGroup (true);
 					if (Input.GetKeyDown (buttons.A_Button)) {
@@ -175,10 +206,11 @@ public class organ_controller : MonoBehaviour
 						cursorC.SetMBisGroup (false);
 						cursorC.SetMBgroup (true);
 					}
-				} else {
+				} else {    //目的地設定
 					cursorC.SetMBdest (true);
 					cursorC.SetMBisGroup (false);					
-					if (Input.GetKeyDown (buttons.A_Button)) {
+					if (Input.GetKeyDown (buttons.A_Button) && cursorC.isTarget() < 0) {
+
 						DictSet (cursorC.RealPos ());
 						savaDictSetting = false;
 						cursorC.SetMBmove (true);
@@ -222,6 +254,7 @@ public class organ_controller : MonoBehaviour
 							targetGroup = cursorC.isTarget ();
 							savaDictSetting = true;
 							SelectTarget ();
+							interchange = Vector2.one * -10000f;
 					
 						}
 				
@@ -288,6 +321,16 @@ public class organ_controller : MonoBehaviour
 			if (child.GetComponent<mapicon> ().getGroupNum () == targetGroup)
 				child.GetComponent<mapicon> ().SetDest (a);
 		}
+	}
+
+	Vector2 DictGet ()
+	{
+		foreach (Transform child in mySava.transform) {
+			if (child.GetComponent<mapicon> ().getGroupNum () == targetGroup) {
+				return child.GetComponent<mapicon> ().GetDest ();
+			}
+		}
+		return Vector2.zero;
 	}
 
 	public void ConnectGroup (int a)

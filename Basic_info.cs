@@ -2,7 +2,7 @@
 using System.Collections;
 
 public class Basic_info : MonoBehaviour
-{
+{	
 	float x, y;
 	GameObject MY_MG_HP;
 	GameObject MY_FACE;

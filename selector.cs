@@ -91,24 +91,26 @@ public class selector : MonoBehaviour
 	{
 		point = 0;
 		rt.anchoredPosition = init_pos;
-
 	}
 
-	public void summon (int point_sava)
+	public void summon (int point_sava,Vector2 dest, int teamnum = -100)
 	{
 		organ_menu_entry theEntry = entry_list [point_sava].GetComponent<organ_menu_entry> ();
 		Mana.RemoveMana (theEntry.cost);
-		Vector2 cursol_pos = GameObject.Find ("Organ_Cursor").GetComponent<cursor_controller> ().LocalPos ();
-		float x = cursol_pos.x / 3f * 5f + 250f;
-		float y = cursol_pos.y / 3f * 5f + 250f;
-		Vector3 dest = new Vector3 (x, y);
+
 		Vector3 init_pos = new Vector3 (50f, 5f, 50f);
 		bool leader = true;
-		int gnum = savaGroupNum;
-		savaGroupNum++;
+		int gnum;
+		if (teamnum == -100) {
+			gnum = savaGroupNum;
+			savaGroupNum++;		
+		} else {
+			gnum = teamnum;
+			leader=false;
+		}
 		for (int i =0; i<theEntry.HowMany; i++) {
 			GameObject sava = Instantiate (savant, init_pos, Quaternion.identity)as GameObject;
-			sava.GetComponent<sava_base> ().init (gnum, leader, theEntry.maxHp, theEntry.map_icon, theEntry.minimap_icon, theEntry.sumonTime);
+			sava.GetComponent<sava_base> ().init (theEntry.sava, gnum, leader, theEntry.maxHp, theEntry.map_icon, theEntry.minimap_icon, theEntry.sumonTime);
 			sava.GetComponent<sava_base> ().SetDestination (dest);
 			sava.transform.SetParent (GameObject.FindWithTag ("My_sava").transform);
 			sava.GetComponent<sava_base> ().ob = theEntry.sava;
@@ -116,15 +118,17 @@ public class selector : MonoBehaviour
 			leader = false;			
 		}
 	}
-	public GameObject Buy(){
+
+	public GameObject Buy ()
+	{
 		organ_menu_entry theEntry = entry_list [point].GetComponent<organ_menu_entry> ();
 		Mana.RemoveMana (theEntry.cost);
-		return Instantiate(theEntry.sava) as GameObject;
+		return Instantiate (theEntry.sava) as GameObject;
 	}
 
 	public bool CanRelease ()
 	{
-		if (Mana.GetMana () < entry_list [point].GetComponent<organ_menu_entry> ().releaseCost|| entry_list[point].GetComponent<organ_menu_entry>().releasing) {
+		if (Mana.GetMana () < entry_list [point].GetComponent<organ_menu_entry> ().releaseCost || entry_list [point].GetComponent<organ_menu_entry> ().releasing) {
 			return false;
 		} else {
 			return true;
@@ -151,12 +155,7 @@ public class selector : MonoBehaviour
 
 	public bool CanBuy ()
 	{
-		if (Mana.GetMana () < entry_list [point].GetComponent<organ_menu_entry> ().cost) {
-			print ("cant buy");
-			return false;
-		} else {
-			return true;
-		}
+		return (Mana.GetMana () < entry_list [point].GetComponent<organ_menu_entry> ().cost) ? false : true;
 	}
 
 	public void show ()
@@ -216,8 +215,8 @@ public class selector : MonoBehaviour
 			entry_list [i].GetComponent<RectTransform> ().anchoredPosition -= new Vector2 (0, -21f);								
 		}
 		
-		if (a==entry_num){
-			Up();			
+		if (a == entry_num) {
+			Up ();			
 		}
 	}
 

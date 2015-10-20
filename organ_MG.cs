@@ -50,7 +50,7 @@ public class organ_MG : MonoBehaviour
 
 			} else if (inter > 15f) {
 				if (imTarget)
-					cursorC.TargetReset ();
+					cursorC.TargetingNum();
 				imTarget = false;
 			}
 		} else {

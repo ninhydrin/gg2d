@@ -27,7 +27,7 @@ public class Damage : MonoBehaviour {
 			me.fontSize = 30;
 		}
 		
-		transform.parent=b.transform;
+		transform.SetParent(b.transform);
 		pos = c;
 		pos.y += 2f;
 	}

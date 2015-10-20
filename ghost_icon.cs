@@ -29,8 +29,8 @@ public class ghost_icon : MonoBehaviour
 
 		if (organC.savaDictSetting || organC.summoning) {
 			float inter = Vector2.Distance (cursorRt.anchoredPosition, rt.anchoredPosition);
-			
-			if (inter < 15f && (cursorC.isTarget () == 0 || (imTarget && cursorC.isTarget () == -10)) && !cursorC.isMoving ()) {
+
+			if (inter < 15f && (cursorC.isTarget () == 0 || (imTarget && cursorC.isTarget () == myGroupNum)) && !cursorC.isMoving ()) {
 				if (!imTarget) {
 					imTarget = true;
 				}
@@ -39,7 +39,7 @@ public class ghost_icon : MonoBehaviour
 				
 			} else if (inter > 15f) {
 				if (imTarget)
-					cursorC.TargetReset ();
+					cursorC.TargetingNum ();
 				imTarget = false;
 			}
 		} else {

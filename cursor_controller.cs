@@ -88,7 +88,7 @@ public class cursor_controller : MonoBehaviour
 	{
 	
 		if (player.GetComponent<PlayerController> ().organ) {		
-			if (!organC.ismenu || organC.summoning) {
+			if (!organC.ismenu || organC.summoning ||organC.savaDictSetting) {
 								
 				moveH = Input.GetAxis ("Horizontal");
 				moveV = Input.GetAxis ("Vertical");
@@ -110,9 +110,10 @@ public class cursor_controller : MonoBehaviour
 				rt.anchoredPosition = offset;
 				tox = 0f;
 				toy = 0f;
+			}else{
+				targetG=0;
+			}
 
-
-			}						
 		} else {
 			offset = rt.anchoredPosition = new Vector2 (0, 0);
 			targetG = 0;
@@ -160,17 +161,12 @@ public class cursor_controller : MonoBehaviour
 		moveV = 0f;
 		//rt.anchoredPosition = point;
 	}
-
-	public void TargetReset ()
-	{
-		targetG = 0;
-	}
-
+	
 	public int isTarget ()
 	{
 		return targetG;
 	}
-
+	
 	public bool isMoving ()
 	{
 		if (Input.GetAxis ("Horizontal") != 0 ||
@@ -180,7 +176,7 @@ public class cursor_controller : MonoBehaviour
 			return false;
 	}
 
-	public void TargetingNum (int a)
+	public void TargetingNum (int a=0)
 	{
 		targetG = a;
 	}
