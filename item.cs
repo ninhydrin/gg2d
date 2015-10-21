@@ -29,7 +29,7 @@ public class item : MonoBehaviour
 			playerC.AddHP(300);
 			HashSet<GameObject> neighborhoodSava = playerC.GetNeighborhood (player.transform.position, 9);
 			foreach (GameObject nSava in neighborhoodSava) {
-				nSava.transform.parent.GetComponent<sava_base> ().Repair (300);
+				nSava.transform.GetComponent<Sava_controler> ().Repair (300);
 			}
 		} else if (itemName == "TPL") {
 			playerC.AddTP(75);

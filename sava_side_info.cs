@@ -5,6 +5,7 @@ public class sava_side_info : MonoBehaviour
 {
 	GameObject myOb;
 	bool canDelete;
+	bool startF;
 	RectTransform rt;
 	RectTransform HPrt;
 	RectTransform LVrt;
@@ -24,29 +25,35 @@ public class sava_side_info : MonoBehaviour
 	// Update is called once per frame
 	void Update ()
 	{
-		GetComponent<UnityEngine.UI.Image> ().sprite = myOb.GetComponent<sava_base> ().face;		
+		//GetComponent<UnityEngine.UI.Image> ().sprite = myOb.GetComponent<sava_base> ().face;		
 		if (canDelete && myOb == null)
 			Destroy (this.gameObject);
-		inPosition = rt.anchoredPosition;
-		HPrt.sizeDelta=new Vector2 (HPLenUnit*myOb.GetComponent<sava_base>().HP,HPrt.sizeDelta.y);
-		LVrt.sizeDelta=new Vector2 (LVLenUnit*myOb.GetComponent<sava_base>().LV,LVrt.sizeDelta.y);
-		if (Input.GetKeyDown (KeyCode.H)) {
-			SlideIn();
+		if (startF) {
+			inPosition = rt.anchoredPosition;
+			HPrt.sizeDelta = new Vector2 (HPLenUnit * myOb.GetComponent<Sava_controler> ().HP, HPrt.sizeDelta.y);
+			LVrt.sizeDelta = new Vector2 (LVLenUnit * myOb.GetComponent<Sava_controler> ().LV, LVrt.sizeDelta.y);
+			if (Input.GetKeyDown (KeyCode.H)) {
+				SlideIn ();
+			}
 		}
 	}
 
-	public void init (GameObject ob)
+	public void init (GameObject ob,GameObject pre)
 	{
-		myOb = ob;
+		myOb = pre;
 		canDelete = true;
-		GetComponent<UnityEngine.UI.Image> ().sprite = myOb.GetComponent<sava_base> ().face;
+		GetComponent<UnityEngine.UI.Image> ().sprite = ob.GetComponent<Sava_controler> ().myFace;
 		rt = GetComponent<RectTransform> ();
 		HPrt = transform.FindChild ("Sava_side_HP").GetComponent<RectTransform> ();
 		LVrt = transform.FindChild ("Sava_side_LV").GetComponent<RectTransform> ();
-		HPLenUnit = HPrt.sizeDelta.x / (float)myOb.GetComponent<sava_base> ().maxHP;
+		HPLenUnit = HPrt.sizeDelta.x / (float)ob.GetComponent<Sava_controler> ().maxHP;
 		LVLenUnit = LVrt.sizeDelta.x / 99f;
+		LVrt.sizeDelta = new Vector2 (0, 0);
 	}
-
+	public void SetOb(GameObject ob){
+		myOb = ob;
+		startF = true;
+	}
 
 
 	public void SetPos (float x, float y)

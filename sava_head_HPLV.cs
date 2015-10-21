@@ -39,14 +39,14 @@ public class sava_head_HPLV: MonoBehaviour
 		} else {
 			HideBar();
 		}
-		HP_bar.GetComponent<RectTransform> ().sizeDelta = new Vector2 (HPLenUnit * myOb.transform.parent.GetComponent<sava_base> ().HP, HP_bar.GetComponent<RectTransform> ().sizeDelta.y);
+		HP_bar.GetComponent<RectTransform> ().sizeDelta = new Vector2 (HPLenUnit * myOb.GetComponent<Sava_controler> ().HP, HP_bar.GetComponent<RectTransform> ().sizeDelta.y);
 
 	}
 	public void init (GameObject target){
 		myOb = target;
 	}
 	void startinit(){
-		HPLenUnit = HP_bar.GetComponent<RectTransform> ().sizeDelta.x / (float)myOb.transform.parent.GetComponent<sava_base> ().maxHP;
+		HPLenUnit = HP_bar.GetComponent<RectTransform> ().sizeDelta.x / (float)myOb.GetComponent<Sava_controler> ().maxHP;
 
 	}
 	void HideBar ()

@@ -6,7 +6,10 @@ public class organ_menu_entry : MonoBehaviour
 {
 
 	public GameObject sava;
+	public GameObject minimap_icon;
+	public GameObject map_icon;
 	public int cost;
+	public string savaName;
 	public Sprite face;
 	public int sumonTime;
 	public bool sava_lock;
@@ -14,32 +17,27 @@ public class organ_menu_entry : MonoBehaviour
 	public int releaseCost;
 	public float releaseTime;
 	public int maxHp;
-	public GameObject minimap_icon;
-	public GameObject map_icon;
 
 
-	Color imLocking;
-	Color imLockingCant;
-	Color imFree;
-	Color imFreeCant;
-	Color ReleacingNow;
+	Color imLocking = Color.red;
+	Color imLockingCant = new Color (0.7f, 0.5f, 0.5f, 1f);
+	Color imFree= Color.white;
+	Color imFreeCant= Color.gray;
+	Color ReleacingNow = Color.yellow;
+
 	bool Cando;
 	Text CostText;
 	Text SnameText;
 	Image Myface;
 	Mana_manager myMana;
-	GameObject SavaInfo;
+
 	public bool releasing;
 
 	// Use this for initialization
 	void Start ()
 	{
-		imLocking = Color.red;
-		imLockingCant = new Color (0.7f, 0.5f, 0.5f, 1f);
-		imFree = Color.white;
-		imFreeCant = Color.gray;
-		ReleacingNow = Color.yellow;
 		CostText = transform.FindChild ("Cost").GetComponent<Text> ();
+
 		if (releaseCost > 0) {
 			CostText.text = releaseCost.ToString ();
 		} else {
@@ -47,10 +45,12 @@ public class organ_menu_entry : MonoBehaviour
 		}
 		SnameText = transform.FindChild ("Sname").GetComponent<Text> ();
 		Myface = transform.FindChild ("Face_image").GetComponent<Image> ();
+		myMana = GameObject.Find ("Mana").GetComponent<Mana_manager> ();
+
+		SnameText.text = savaName;
 		Myface.sprite = face;
 		Cando = true;
 		releasing = false;
-		myMana = GameObject.Find ("Mana").GetComponent<Mana_manager> ();
 	}
 	
 	// Update is called once per frame

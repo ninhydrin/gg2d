@@ -15,12 +15,14 @@ public class sava_base : MonoBehaviour
 	public int LV;
 	public int maxHP;
 	public int summonTime;
+
 	public GameObject minimap_icon_ob;
 	public GameObject map_icon_ob;
 	public GameObject headHP_ob;
 	public GameObject sideHP_ob;
 	public int myGroupNum;
 	public bool isLeader;
+
 	GameObject me;
 	GameObject mySava;
 	sava_report toSubmission;
@@ -31,6 +33,7 @@ public class sava_base : MonoBehaviour
 	Camera mainCam;
 	public GameObject damageText;
 	GameObject minimap;
+
 	// Use this for initialization
 	void Start ()
 	{
@@ -52,14 +55,12 @@ public class sava_base : MonoBehaviour
 			forRearch=true;
 		}*/
 //		GetComponent<Rigidbody> ().AddForce (movement * speed * Time.deltaTime);
-		if (HP <= 0)
-			imDead ();
 		if (me != null) {
 		
 			HashSet<GameObject> near = GetNearEnemy (me.transform.position, 10);
 			if (near.Count != 0 && !forSearch && canReport) {
 				if (isLeader) {
-					toSubmission.SubmitReport (face, "敵を発見");
+			//		toSubmission.SubmitReport (face, "敵を発見");
 					canReport=false;
 					StartCoroutine ("WaitReport");
 				}
@@ -77,13 +78,8 @@ public class sava_base : MonoBehaviour
 	{
 		ob = savaOb;
 		HP = maxHP = pmaxHp;
-		createMapIcon (mapicon, num);
-		createMinimapIcon (minimapicon);	
-
-		sideHP_ob = Instantiate (sideHP) as GameObject;		
-		sideHP_ob.transform.SetParent (GameObject.Find ("Player_info/Sava_side").transform);
-		sideHP_ob.GetComponent<sava_side_info> ().init (this.gameObject);
-
+		//createMapIcon (mapicon, num);
+		//createMinimapIcon (minimapicon);	
 		isLeader = leader;
 		myGroupNum = num;
 		summonTime = sTime;
@@ -103,17 +99,12 @@ public class sava_base : MonoBehaviour
 		minimap_icon_ob.GetComponent<minimap_icon> ().init (transform.FindChild ("Prepare").gameObject);
 	}
 
-	public void create ()
+	public void create (Vector3 init_pos,bool lead)
 	{
-		Destroy (transform.FindChild ("Prepare").transform.gameObject);
-		Vector3 init_pos = new Vector3 (50f, 01f, 50f);
-
 		me = Instantiate (ob, init_pos, Quaternion.identity )as GameObject;
+		ob.GetComponent<Sava_controler> ().SetLeader (isLeader);
 		me.transform.SetParent (transform);
 		map_icon_ob.GetComponent<mapicon> ().init (me, myGroupNum);
-		headHP_ob = Instantiate (headHP);
-		headHP_ob.GetComponent<sava_head_HPLV> ().init (me);
-		headHP_ob.transform.SetParent (GameObject.Find ("Sava_info").transform);
 		minimap_icon_ob.GetComponent<minimap_icon> ().init (me);
 
 	}
@@ -124,12 +115,7 @@ public class sava_base : MonoBehaviour
 		forRearch = false;
 	
 	}
-
-	public void ResetDestination ()
-	{
-		//dest = null;
-	}
-
+	
 	public Vector2 GetDestination ()
 	{
 		return dest;	
@@ -148,21 +134,11 @@ public class sava_base : MonoBehaviour
 
 	public void Damage (int a)
 	{
-
 		Vector3 b = Camera.main.WorldToScreenPoint (me.transform.position);
 		b.y += 3f;
 		GameObject bb = Instantiate(damageText,new Vector3(b.x,b.y,0f),Quaternion.identity) as GameObject;
 		bb.GetComponent<Damage> ().DamageInt (a,minimap,me.transform.position);
 		HP -= a;
-	}
-
-	public void Repair (int a)
-	{	
-		if (HP + a > maxHP) {
-			HP = maxHP;
-		} else {
-			HP += a;
-		}
 	}
 
 	public void imDead ()

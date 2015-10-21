@@ -98,7 +98,7 @@ public class selector : MonoBehaviour
 		organ_menu_entry theEntry = entry_list [point_sava].GetComponent<organ_menu_entry> ();
 		Mana.RemoveMana (theEntry.cost);
 
-		Vector3 init_pos = new Vector3 (50f, 5f, 50f);
+		Vector3 init_pos = new Vector3 (50f, 0f, 50f);
 		bool leader = true;
 		int gnum;
 		if (teamnum == -100) {
@@ -109,12 +109,12 @@ public class selector : MonoBehaviour
 			leader=false;
 		}
 		for (int i =0; i<theEntry.HowMany; i++) {
-			GameObject sava = Instantiate (savant, init_pos, Quaternion.identity)as GameObject;
-			sava.GetComponent<sava_base> ().init (theEntry.sava, gnum, leader, theEntry.maxHp, theEntry.map_icon, theEntry.minimap_icon, theEntry.sumonTime);
-			sava.GetComponent<sava_base> ().SetDestination (dest);
-			sava.transform.SetParent (GameObject.FindWithTag ("My_sava").transform);
-			sava.GetComponent<sava_base> ().ob = theEntry.sava;
-			MG.GetComponent<MG_func> ().Order (sava);
+			//GameObject sava = Instantiate (savant, init_pos, Quaternion.identity)as GameObject;
+			//sava.GetComponent<sava_base> ().init (theEntry.sava, gnum, leader, theEntry.maxHp, theEntry.map_icon, theEntry.minimap_icon, theEntry.sumonTime);
+			//sava.GetComponent<sava_base> ().SetDestination (dest);
+			//sava.transform.SetParent (GameObject.FindWithTag ("My_sava").transform);
+			//sava.GetComponent<sava_base> ().ob = theEntry.sava;
+			MG.Order (theEntry.sava,theEntry.sumonTime,leader,theEntry.map_icon,theEntry.minimap_icon,gnum,dest);
 			leader = false;			
 		}
 	}
