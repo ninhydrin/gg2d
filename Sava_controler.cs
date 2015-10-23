@@ -39,7 +39,7 @@ public class Sava_controler : MonoBehaviour
 	Vector3 tempDest;
 	float speed;
 	bool reached;
-	bool fighting;
+	public bool fighting;
 	NavMeshAgent agent;
 	HashSet<GameObject> nearEnemy;
 	GameObject Target;
@@ -229,14 +229,16 @@ public class Sava_controler : MonoBehaviour
 		Destroy (mMapIcon);
 		Destroy (headHP);
 		Destroy (sideHP);
-		Destroy (gameObject);
+		//Destroy (this);	
+		//Destroy (gameObject);
+		gameObject.tag="Die";
 	}
 
 	public void EntrustLeader ()
 	{
 		if (leader) {
 			foreach (Transform child in GameObject.Find("My_sava").transform) {
-				if (child.GetComponent<Sava_controler> ().GetGroupNum () == myGroupNum && !child.GetComponent<Sava_controler> ().isLeader ()) {
+				if (child.GetComponent<Sava_controler> ().GetGroupNum () == myGroupNum && !child.GetComponent<Sava_controler> ().isLeader () &&child.gameObject.tag !="Die") {
 					child.GetComponent<Sava_controler> ().SetLeader (true);
 					break;
 				}

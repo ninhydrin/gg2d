@@ -1,9 +1,18 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-
+using UnityEngine.UI;
 public class MG_func : MonoBehaviour
 {
+	int HP = 1000;
+	int maxBarrier=100;
+	int barrier=100;
+	RectTransform HPBar;
+	Text barrierOb;
+	float HPUnit;
+	bool canRecover;
+	int recF=0;
+
 	public struct order
 	{
 		public int summonTime;
@@ -27,7 +36,6 @@ public class MG_func : MonoBehaviour
 			gNum=gnum;
 		}
 	}
-
 	
 	
 	public GameObject headHP;
@@ -46,16 +54,19 @@ public class MG_func : MonoBehaviour
 	int summonToken;
 	int orderToken;
 
-
+	Game_All_Init GameMaster;
 	// Use this for initialization
 	void Start ()
 	{
+		GameMaster = GameObject.Find ("GameMaster").GetComponent<Game_All_Init> ();
 		player = GameObject.FindWithTag ("Player");		
 		rt = GetComponent<RectTransform> ();
 		sava_queue = new Queue<order>[6];
 		mySava = GameObject.FindWithTag ("My_sava").transform;
 		savaSide = GameObject.Find ("Player_info/Sava_side").transform;
-
+		HPBar = GameObject.Find ("Player_info/Player_MG_HP/MG_HP_bar").GetComponent<RectTransform> ();
+		HPUnit = HPBar.sizeDelta.x/HP;
+		barrierOb = GameObject.Find ("Player_info/Player_MG_HP/Barrier").GetComponent<Text> ();
 		creating = false;
 
 
@@ -88,8 +99,22 @@ public class MG_func : MonoBehaviour
 			Invoke ("make", slip.summonTime);
 			summonToken = summonToken > 4 ? 0 : summonToken + 1;
 		}
-		
+		barrierOb.text = barrier.ToString ();
+		HPBar.sizeDelta = new Vector2 (HP * HPUnit, HPBar.sizeDelta.y);
 
+		if (canRecover && barrier < maxBarrier) {
+			recF++;
+			if(recF%50 == 0){
+				recF=0;
+				barrier++;
+			}
+		}else if (barrier > maxBarrier) {
+			recF++;
+			if(recF%20 == 0){
+				recF=0;
+				barrier--;
+			}
+		}
 
 		//	GetComponent<UnityEngine.UI.Image>().enabled=true;			
 
@@ -129,8 +154,7 @@ public class MG_func : MonoBehaviour
 		headHP_ob.transform.SetParent (GameObject.Find ("Sava_info").transform);
 		return headHP_ob;
 	}
-
-
+	
 
 	GameObject createSideHP (GameObject ob,int pre)
 	{
@@ -154,6 +178,21 @@ public class MG_func : MonoBehaviour
 		minimap_icon_ob.transform.SetParent (GameObject.Find ("Minimap/Field").transform);
 		minimap_icon_ob.GetComponent<minimap_icon> ().init (prepare [targetPreNum].gameObject);
 		return minimap_icon_ob;
+	}
+	public void Damage(int a){
+		canRecover = false;
+		aa = 0;
+		StartCoroutine ("Recovery");
+		HP -= (int)(a*((100 - barrier)/100f));
+		barrier -= 1;		
+	}
+	int aa=0;
+	IEnumerator Recovery(){
+		while (aa<600) {
+			aa++;
+			yield return 0;
+		}
+		canRecover = true;
 	}
 
 }

@@ -13,7 +13,9 @@ public class PlayerController : MonoBehaviour
 	private GameObject MG;
 	public Vector3 acceleration = new Vector3 (0, -20f, 0);	// 加速度
 	public Button buttons;
-	HashSet<GameObject> nearEnemy;
+	public Color myColor;
+
+	public HashSet<GameObject> nearEnemy;
 	GameObject[] itemBox;
 	Image[] itemSlot;
 	RectTransform itemSelector;
@@ -91,6 +93,7 @@ public class PlayerController : MonoBehaviour
 				}
 			} else {
 				targeting = false;
+				//nearEnemy.Clear();
 			} 
 
 
@@ -139,10 +142,17 @@ public class PlayerController : MonoBehaviour
 	{
 		return nowHP;
 	}
-
-	public int GetTP ()
+	public int GetTP()
 	{
 		return nowTP;
+	}
+
+	public bool ConsumeTP (int a)
+	{
+		if (nowTP < a)
+			return false;
+		nowTP -= a;
+		return true;
 	}
 
 	public HashSet<GameObject> GetNeighborhood (Vector3 pos, float range)
@@ -221,6 +231,7 @@ public class PlayerController : MonoBehaviour
 		}
 		canitem = true;
 	}
+	
 
 	HashSet<GameObject> GetNearAlly (float range)
 	{
