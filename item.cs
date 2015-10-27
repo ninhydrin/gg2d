@@ -23,16 +23,20 @@ public class item : MonoBehaviour
 
 	public void UseMe (int a, GameObject player)
 	{
-		PlayerController playerC=player.GetComponent<PlayerController>();
+		PlayerController playerC = player.GetComponent<PlayerController> ();
 		useNum--;
 		if (itemName == "LPL") {
-			playerC.AddHP(300);
+			playerC.AddHP (300);
 			HashSet<GameObject> neighborhoodSava = playerC.GetNeighborhood (player.transform.position, 9);
 			foreach (GameObject nSava in neighborhoodSava) {
 				nSava.transform.GetComponent<Sava_controler> ().Repair (300);
 			}
+		} else if (itemName == "LPS") {
+			playerC.AddHP(150);
 		} else if (itemName == "TPL") {
-			playerC.AddTP(75);
+			playerC.AddTP (75);
+		} else if (itemName == "TPS") {
+			playerC.AddTP (40);
 		}
 		if (useNum <= 0) {
 			DestroyImmediate (gameObject);

@@ -77,10 +77,11 @@ public class CameraController : MonoBehaviour
 		} else {
 			if (Input.GetKey (buttons.RStick_Right)) {
 				Vector3 bbb = transform.eulerAngles;
+				thita+= 2;
 				transform.eulerAngles -= bbb;
-				transform.Rotate(Vector3.up,ang);				
-				thita+= 1;
-				offset = new Vector3(Mathf.Sin(Mathf.PI/180*thita)*z,y,Mathf.Cos(Mathf.PI/360*thita)*z);
+				//transform.Rotate(Vector3.up,thita);				
+				//transform.LookAt(player.transform.position );
+				offset = new Vector3(Mathf.Sin(Mathf.PI/180*thita)*z,y,Mathf.Cos(Mathf.PI/180*thita)*z);
 				transform.eulerAngles += bbb;
 			} else if (Input.GetKey (buttons.RStick_Left)) {
 				Vector3 bbb = transform.eulerAngles;

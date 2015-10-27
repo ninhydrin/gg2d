@@ -31,10 +31,11 @@ public class Sava_controler : MonoBehaviour
 	bool leader;
 	int myCost;
 
-
+	public float searchDest;
 	public float stopDest;
 	public float attackDest;
 	public float standDest;
+
 	Vector3 dest;
 	Vector3 tempDest;
 	float speed;
@@ -49,7 +50,7 @@ public class Sava_controler : MonoBehaviour
 
 	static int idleState = Animator.StringToHash ("Base Layer.Idle");
 	static int walkState = Animator.StringToHash ("Base Layer.Idle");
-	static int fightingState = Animator.StringToHash ("Base Layer.Idle");
+	static int fightingState = Animator.StringToHash ("Base Layer.Fighting");
 	static int damageState = Animator.StringToHash ("Base Layer.Damage");
 	static int downState = Animator.StringToHash ("Base Layer.Idle");
 	static int dieState = Animator.StringToHash ("Base Layer.Die");
@@ -77,7 +78,7 @@ public class Sava_controler : MonoBehaviour
 	{
 		if (HP > 0) {
 			currentBaseState = anim.GetCurrentAnimatorStateInfo (0);
-		
+			
 			nearEnemy = GetNearAlly (8f);
 			fighting = nearEnemy.Count != 0 ? true : false;
 
@@ -88,8 +89,8 @@ public class Sava_controler : MonoBehaviour
 					StartCoroutine ("WaitReport");
 				}
 			}
-			fighting = nearEnemy.Count != 0 ? true : false;
-			
+
+
 			if (fighting) {
 				agent.stoppingDistance = attackDest;
 				if (!Target) {
@@ -101,18 +102,21 @@ public class Sava_controler : MonoBehaviour
 				} else {
 					tempDest = Target.transform.position;
 				}
+
 				if (agent.remainingDistance <= agent.stoppingDistance) {
 					anim.SetBool ("Walk", false);				
 					anim.SetBool ("Fighting", true);
+					agent.Stop();
 					//transform.LookAt(Target.transform.position);
 					transform.rotation = Quaternion.Slerp (transform.rotation, Quaternion.LookRotation (Target.transform.position - transform.position), 0.1f);
-
-				} else {
+				} else if (currentBaseState.nameHash == walkState || currentBaseState.nameHash == fightingState){
 					anim.SetBool ("Fighting", false);					
 					anim.SetBool ("Walk", true);
+					agent.Resume();
 				}
 
 			} else {
+				agent.Resume();
 				anim.SetBool ("Fighting", false);	
 				Target = null;
 				agent.stoppingDistance = stopDest;
@@ -135,6 +139,7 @@ public class Sava_controler : MonoBehaviour
 					//transform.localPosition += (new Vector3 (a.x, 0, a.z) * speed);
 				}
 			}
+
 			if (dest != tempDest)
 				agent.SetDestination (tempDest);
 		} else {
