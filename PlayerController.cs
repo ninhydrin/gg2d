@@ -20,6 +20,8 @@ public class PlayerController : MonoBehaviour
 	Image[] itemSlot;
 	RectTransform itemSelector;
 	int itemPoint;
+	public int myNum;
+
 	int maxHP = 500;
 	int nowHP;
 	int maxTP = 100;
@@ -41,6 +43,7 @@ public class PlayerController : MonoBehaviour
 			itemSlot [i] = GameObject.Find ("Player_info/Item_slot/slot" + i.ToString ()).GetComponent<Image> ();
 		itemBox = new GameObject[6];
 		itemPoint = 0;
+		myNum = 1;
 	}
 	
 	Collider[] neighborhoodSava;

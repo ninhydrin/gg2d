@@ -9,8 +9,14 @@ public class Game_All_Init : MonoBehaviour
 	int ghostIncome;
 	int masterGhostIncome;
 	GameObject tera;
+
+	int playerNum=1;
+	Color[] playerColor;
+
 	ghost_base[] ghosts;
 	int[] ghostNum;
+
+
 	// Use this for initialization
 	void Start ()
 	{
@@ -38,6 +44,10 @@ public class Game_All_Init : MonoBehaviour
 				ghostNum[ghosts[i].dominator]++;
 			}
 		}
+	}
+	public void init(int pnum, Color[] pcolor){
+		playerNum = pnum;
+		playerColor = pcolor;
 	}
 	public int GetMyGhost(int a){
 		return ghostNum [a];

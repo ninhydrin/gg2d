@@ -13,6 +13,9 @@ public class MG_func : MonoBehaviour
 	bool canRecover;
 	int recF=0;
 
+	int myNum;
+	Color myColor;
+
 	public struct order
 	{
 		public int summonTime;
@@ -45,6 +48,7 @@ public class MG_func : MonoBehaviour
 	private GameObject player;
 	public RectTransform rt;
 	public GameObject prepareAction;
+
 	Transform mySava;
 	Transform savaSide;
 	ParticleSystem[] prepare;
@@ -178,6 +182,10 @@ public class MG_func : MonoBehaviour
 		minimap_icon_ob.transform.SetParent (GameObject.Find ("Minimap/Field").transform);
 		minimap_icon_ob.GetComponent<minimap_icon> ().init (prepare [targetPreNum].gameObject);
 		return minimap_icon_ob;
+	}
+	public void SetMyInfo(int myN,Color myC){
+		myNum = myN;
+		myColor = myC;
 	}
 	public void Damage(int a){
 		canRecover = false;

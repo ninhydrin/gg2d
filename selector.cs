@@ -18,6 +18,7 @@ public class selector : MonoBehaviour
 	int savaGroupNum;
 	bool coflag;
 	Mana_manager Mana;
+
 	public GameObject savant;
 	public bool cantReleasing;
 	public string myTag;
@@ -93,7 +94,7 @@ public class selector : MonoBehaviour
 		rt.anchoredPosition = init_pos;
 	}
 
-	public void summon (int point_sava,Vector2 dest, int teamnum = -100)
+	public void summon (int point_sava,Vector2 dest,int teamnum = -100)
 	{
 		organ_menu_entry theEntry = entry_list [point_sava].GetComponent<organ_menu_entry> ();
 		Mana.RemoveMana (theEntry.cost);
@@ -109,11 +110,6 @@ public class selector : MonoBehaviour
 			leader=false;
 		}
 		for (int i =0; i<theEntry.HowMany; i++) {
-			//GameObject sava = Instantiate (savant, init_pos, Quaternion.identity)as GameObject;
-			//sava.GetComponent<sava_base> ().init (theEntry.sava, gnum, leader, theEntry.maxHp, theEntry.map_icon, theEntry.minimap_icon, theEntry.sumonTime);
-			//sava.GetComponent<sava_base> ().SetDestination (dest);
-			//sava.transform.SetParent (GameObject.FindWithTag ("My_sava").transform);
-			//sava.GetComponent<sava_base> ().ob = theEntry.sava;
 			MG.Order (theEntry.sava,theEntry.sumonTime,leader,theEntry.map_icon,theEntry.minimap_icon,gnum,dest);
 			leader = false;			
 		}
