@@ -16,6 +16,8 @@ public class organ_MG : MonoBehaviour
 	Image mycolor;
 	organ_controller organC;
 	int myGroupNum;
+
+	bool startFlag;
 	// Use this for initialization
 	void Start ()
 	{
@@ -32,6 +34,10 @@ public class organ_MG : MonoBehaviour
 		imTarget = false;
 		mycolor = gameObject.GetComponent<Image> ();
 		myGroupNum = -10;
+	}
+	public void init (GameObject myMG){
+		MG = myMG;
+		startFlag = true;
 	}
 
 	void Update ()

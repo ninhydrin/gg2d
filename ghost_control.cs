@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.UI;
 
 public class ghost_control : MonoBehaviour
 {
@@ -7,137 +8,131 @@ public class ghost_control : MonoBehaviour
 	private Vector3 screenPoint;
 	public GameObject myOb;
 	private bool canShow;
-	private GameObject control_bar;
-	private GameObject control_barA;
-	private GameObject control_barB;
-	private GameObject control_barC;
-	private GameObject control_barD;
-	private GameObject control_barE;
-	private GameObject control_barF;
-
-	private int Power;
-	private int PowerA;
-	private int PowerB;
-	private int PowerC;
-	private int PowerD;
-	private int PowerE;
-	private int PowerF;
-
+	For_next forNext;
+	public GameObject control_barOb;
+	GameObject[] control_bar;
+	private int[] Power;
 	public int dominator;
 	public Color domiColor;
 	private float LenUnit;
 	private float barLength;
+	int playerNum;
+	bool cando;
+
 	void Start ()
 	{
-		control_bar = transform.FindChild ("Ghost_control_bar").gameObject;
-		control_barA = transform.FindChild ("Ghost_control_bar_A").gameObject;
-		control_barB = transform.FindChild ("Ghost_control_bar_B").gameObject;
-		control_barC = transform.FindChild ("Ghost_control_bar_C").gameObject;
-		control_barD = transform.FindChild ("Ghost_control_bar_D").gameObject;
-		control_barE = transform.FindChild ("Ghost_control_bar_E").gameObject;
-		control_barF = transform.FindChild ("Ghost_control_bar_F").gameObject;
-		canShow = false;
-		Power = 100;
-		barLength = control_bar.GetComponent<RectTransform> ().sizeDelta.x;
-		LenUnit = barLength / 100;
-
 	}
 	
 	void LateUpdate ()
 	{	
-
-		if (myOb != null) {
-			AdjustmentBar();
-			Vector3 aa = myOb.transform.position;
-			aa.y += 4f;
-			screenPoint = Camera.main.WorldToScreenPoint (aa);
-			//screenPoint = Camera.main.WorldToScreenPoint (myOb.transform.position);
-			if (screenPoint.z > 30 || screenPoint.z < 0)
-				canShow = false;
-			else
-				canShow = true;
-			if (canShow) {
-				ShowBar ();
-				transform.position = new Vector3 (screenPoint.x, screenPoint.y, 0);
+		if (cando) {
+			if (myOb != null) {
+				AdjustmentBar ();
+				Vector3 aa = myOb.transform.position;
+				aa.y += 4f;
+				screenPoint = Camera.main.WorldToScreenPoint (aa);
+				//screenPoint = Camera.main.WorldToScreenPoint (myOb.transform.position);
+				if (screenPoint.z > 30 || screenPoint.z < 0)
+					canShow = false;
+				else
+					canShow = true;
+				if (canShow) {
+					ShowBar ();
+					transform.position = new Vector3 (screenPoint.x, screenPoint.y, 0);
+				} else {
+					HideBar ();
+				}
 			} else {
 				HideBar ();
 			}
-		} else {
-			HideBar ();
+			for (int i=0; i<playerNum; i++) {
+				if (Power [i] >= 100) {
+					domiColor = Color.red;
+					dominator = i;
+				} else {
+					dominator = -1;
+				}
+			}
 		}
-		if (PowerA >= 100) {
-			domiColor = Color.red;
-			dominator=1;
-		} else {
-			dominator=-1;
-		}
-
 	}
 
-	public void init (GameObject target)
+	public void init (GameObject target, int pNum)
 	{
+		forNext = GameObject.Find ("ForNextScene").GetComponent<For_next> ();
 		myOb = target;
+		playerNum = pNum;
+
+		control_bar = new GameObject[playerNum + 1];
+		Power = new int[playerNum + 1];
+		Power [playerNum] = 100;
+		for (int i=0; i<playerNum+1; i++) {			
+			control_bar [i] = Instantiate (control_barOb);			
+				RectTransform rt = control_bar [i].GetComponent<RectTransform> ();
+			if(i==0){
+				rt.pivot = new Vector2(1f,0.5f);
+				rt.anchoredPosition= Vector2.right*rt.sizeDelta.x/2;
+			}else{
+				rt.anchoredPosition= Vector2.left*rt.sizeDelta.x/2;				
+			}
+			control_bar [i].transform.SetParent (transform);
+			control_bar [i].GetComponent<Image> ().color = forNext.players [i].playerColor;			
+		}
+		canShow = false;
+		barLength = control_bar [playerNum].GetComponent<RectTransform> ().sizeDelta.x;
+		LenUnit = barLength / 100;
+		cando = true;
+
 	}
 
 	void HideBar ()
 	{
 		GetComponent<UnityEngine.UI.Image> ().enabled = false;
-		control_bar.GetComponent<UnityEngine.UI.Image> ().enabled = false;
-		control_barA.GetComponent<UnityEngine.UI.Image> ().enabled = false;
-		control_barB.GetComponent<UnityEngine.UI.Image> ().enabled = false;
-		control_barC.GetComponent<UnityEngine.UI.Image> ().enabled = false;
-		control_barD.GetComponent<UnityEngine.UI.Image> ().enabled = false;
-		control_barE.GetComponent<UnityEngine.UI.Image> ().enabled = false;
-		control_barF.GetComponent<UnityEngine.UI.Image> ().enabled = false;
-
-		
+		for (int i =0; i<playerNum+1; i++)
+			control_bar [i].GetComponent<Image> ().enabled = false;
 	}
 
 	void ShowBar ()
 	{
 		GetComponent<UnityEngine.UI.Image> ().enabled = true;
-		control_bar.GetComponent<UnityEngine.UI.Image> ().enabled = true;
-		control_barA.GetComponent<UnityEngine.UI.Image> ().enabled = true;
-		control_barB.GetComponent<UnityEngine.UI.Image> ().enabled = true;
-		control_barC.GetComponent<UnityEngine.UI.Image> ().enabled = true;
-		control_barD.GetComponent<UnityEngine.UI.Image> ().enabled = true;
-		control_barE.GetComponent<UnityEngine.UI.Image> ().enabled = true;
-		control_barF.GetComponent<UnityEngine.UI.Image> ().enabled = true;
+		for (int i =0; i<playerNum+1; i++)		
+			control_bar [i].GetComponent<Image> ().enabled = true;
+	}
+
+	void AdjustmentBar ()
+	{
+		int sum = Power [playerNum];
+		float yy = control_bar [playerNum].GetComponent<RectTransform> ().sizeDelta.y;
 		
+		for (int i =0; i<playerNum; i++) {
+			control_bar [i].GetComponent<RectTransform> ().sizeDelta = new Vector2 (AdLen (sum, LenUnit), yy);
+			sum += Power [i];
+		}
 	}
-	void AdjustmentBar(){
-		int sum = PowerA;
-		float yy = control_bar.GetComponent<RectTransform> ().sizeDelta.y;
-		control_barA.GetComponent<RectTransform> ().sizeDelta = new Vector2 (AdLen(sum,LenUnit), yy);
-		sum += PowerB;
-		control_barB.GetComponent<RectTransform> ().sizeDelta = new Vector2 (AdLen(sum,LenUnit), yy);
-		sum += PowerC;
-		control_barC.GetComponent<RectTransform> ().sizeDelta = new Vector2 (AdLen(sum,LenUnit), yy);
-		sum += PowerD;
-		control_barD.GetComponent<RectTransform> ().sizeDelta = new Vector2 (AdLen(sum,LenUnit), yy);
-		sum += PowerE;
-		control_barE.GetComponent<RectTransform> ().sizeDelta = new Vector2 (AdLen(sum,LenUnit), yy);
-		sum += PowerF;
-		control_barF.GetComponent<RectTransform> ().sizeDelta = new Vector2 (AdLen(sum,LenUnit), yy);
-	}
-	float AdLen(int s,float l){
+
+	float AdLen (int s, float l)
+	{
 		if (s * l > barLength) {
 			return barLength;
 		} else {
-			return s*l;
+			return s * l;
 		}
 	}
-	public void Damage (int a,int team)
+
+	public void Damage (int a, int team)
 	{
-		if (team == 1) {
-			PowerA+=a;
-			if(Power<a){
-				a-=Power;
-			}else{
-				Power-=a;
+		Power [team] += a;
+		if (Power [team] > 100)
+			Power [team] = 100;
+		if (Power [playerNum] < a) {
+			Power [playerNum]=0;
+		} else {
+			Power [playerNum] -= a;
+		}
+		for (int i=0; i<playerNum; i++) {
+			if(i!=team){				
+				Power[i] = Power[i] < a ? 0:Power[i]-a/(playerNum-1);
 			}
 		}
-	
 	}
 
 	void OnTriggerEnter (Collider collider)

@@ -89,11 +89,18 @@ public class MG_func : MonoBehaviour
 
 		for (int i =0; i<6; i++) {
 			sava_queue [i] = new Queue<order> (){};
-			prepare [i] = (Instantiate (prepareAction, summonPos [i], Quaternion.identity) as GameObject).GetComponent<ParticleSystem> ();
+			GameObject a = Instantiate (prepareAction, summonPos [i], Quaternion.identity) as GameObject;
+			a.transform.SetParent(transform);
+			prepare [i] = a.GetComponent<ParticleSystem> ();
 			prepare [i].emissionRate = 0;
+			
 		}
 	}
-	
+	public void init (int num,Color co){
+		myNum = num;
+		myColor = co;
+	}
+
 	// Update is called once per frame
 	void Update ()
 	{
@@ -136,8 +143,7 @@ public class MG_func : MonoBehaviour
 		slip.MMicon.GetComponent<minimap_icon> ().init (theSava);
 		slip.sideHP.GetComponent<sava_side_info> ().SetOb (theSava);
 
-
-		theSava.GetComponent<Sava_controler> ().init (slip.Micon, slip.MMicon, slip.sideHP,MakeHeadHP (theSava),slip.gNum,slip.leader);
+		theSava.GetComponent<Sava_controler> ().init (slip.Micon, slip.MMicon, slip.sideHP,MakeHeadHP (theSava),slip.gNum,slip.leader,myNum);
 		theSava.GetComponent<Sava_controler> ().SetDestination (slip.dest);
 		theSava.transform.SetParent (mySava);
 		creating = false;
@@ -183,6 +189,7 @@ public class MG_func : MonoBehaviour
 		minimap_icon_ob.GetComponent<minimap_icon> ().init (prepare [targetPreNum].gameObject);
 		return minimap_icon_ob;
 	}
+
 	public void SetMyInfo(int myN,Color myC){
 		myNum = myN;
 		myColor = myC;

@@ -36,14 +36,16 @@ public class ghost_base : MonoBehaviour
 		}
 	}
 	
-	public void init (int num)
+	public void init (int num,int pNum)
 	{
 		myNum = num;
 		offset.x = ((transform.position.x - 250f) * 3f) / 5f;
 		offset.y = ((transform.position.z - 250f) * 3f) / 5f;
+
 		ghostHP = Instantiate (ghostHP_ob);
-		ghostHP.GetComponent<ghost_control> ().init (gameObject);
+		ghostHP.GetComponent<ghost_control> ().init (gameObject,pNum);
 		ghostHP.transform.SetParent (GameObject.Find ("Minimap").transform);
+
 		right = transform.FindChild ("Light").GetComponent<ParticleSystem> ();
 		ghostC = ghostHP.GetComponent<ghost_control> ();
 		right.enableEmission = false;

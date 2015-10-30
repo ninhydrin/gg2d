@@ -22,6 +22,7 @@ public class Sava_controler : MonoBehaviour
 		get;
 		private set;
 	} 
+
 	int myTeamNum;
 	int myGroupNum;
 	GameObject mapIcon;
@@ -151,13 +152,14 @@ public class Sava_controler : MonoBehaviour
 		
 		}
 	}
-	public void init (GameObject Mi,GameObject MMi,GameObject SS,GameObject HHP,int gnum,bool le){
+	public void init (GameObject Mi,GameObject MMi,GameObject SS,GameObject HHP,int gnum,bool le,int myNum){
 		mapIcon = Mi;
 		mMapIcon = MMi;
 		sideHP = SS;
 		headHP = HHP;
 		myGroupNum = gnum;
 		leader = le;
+		myTeamNum = myNum;
 	}
 
 

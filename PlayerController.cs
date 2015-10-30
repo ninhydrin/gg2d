@@ -12,6 +12,7 @@ public class PlayerController : MonoBehaviour
 	public bool targeting;
 	private GameObject MG;
 	public Vector3 acceleration = new Vector3 (0, -20f, 0);	// 加速度
+
 	public Button buttons;
 	public Color myColor;
 
@@ -43,7 +44,7 @@ public class PlayerController : MonoBehaviour
 			itemSlot [i] = GameObject.Find ("Player_info/Item_slot/slot" + i.ToString ()).GetComponent<Image> ();
 		itemBox = new GameObject[6];
 		itemPoint = 0;
-		myNum = 1;
+		myNum = 0;
 	}
 	
 	Collider[] neighborhoodSava;
