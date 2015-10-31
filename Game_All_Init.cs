@@ -6,7 +6,10 @@ public class Game_All_Init : MonoBehaviour
 	public GameObject ghost;
 	public GameObject MGOb;
 
+	public GameObject[] players;
+
 	GameObject masterGhost;
+	GameObject Player;
 	GameObject aGhost;
 	For_next forNext;
 	int ghostIncome;
@@ -23,9 +26,10 @@ public class Game_All_Init : MonoBehaviour
 	void Start ()
 	{
 		forNext=GameObject.Find("ForNextScene").GetComponent<For_next>();
-
+		
 		playerNum = forNext.playerNum;		
 		playerMGs = new GameObject[playerNum];
+		players = new GameObject[playerNum];
 
 		ghosts = new ghost_base[9];
 		int num = 1;
@@ -38,10 +42,13 @@ public class Game_All_Init : MonoBehaviour
 			}
 		}
 		masterGhost = GameObject.Find ("MGs");
-		for (int i = 0; i<playerNum; i++) {
+		Player = GameObject.Find("Player");
+		for (int i = 0; i<playerNum; i++) {			
 			playerMGs [i] = Instantiate (MGOb, new Vector3 (50 + 400 * i, 0, 50 + 400 * i), Quaternion.identity) as GameObject;
+			players[i]=Instantiate(forNext.players[i].playerOb,new Vector3(50+50*i,0,50+50*i),Quaternion.identity) as GameObject;
+
 			playerMGs [i].transform.Rotate (Vector3.right * -90);
-			playerMGs [i].GetComponent<MG_func>().init(i,forNext.players[i].playerColor);
+			playerMGs [i].GetComponent<MG_func>().init(players[i],(i+1).ToString()+"P_MG",i,forNext.players[i].playerColor);
 			playerMGs [i].transform.SetParent (masterGhost.transform);
 		}
 

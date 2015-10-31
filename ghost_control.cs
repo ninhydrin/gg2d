@@ -16,8 +16,9 @@ public class ghost_control : MonoBehaviour
 	public Color domiColor;
 	private float LenUnit;
 	private float barLength;
+
 	int playerNum;
-	bool cando;
+	bool cando,domiF;
 
 	void Start ()
 	{
@@ -45,13 +46,16 @@ public class ghost_control : MonoBehaviour
 			} else {
 				HideBar ();
 			}
+
 			for (int i=0; i<playerNum; i++) {
 				if (Power [i] >= 100) {
-					domiColor = Color.red;
+					domiColor = forNext.players[i].playerColor;
 					dominator = i;
-				} else {
-					dominator = -1;
+					domiF=true;
 				}
+			}
+			if(!domiF){
+				dominator=-1;
 			}
 		}
 	}

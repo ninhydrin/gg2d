@@ -2,17 +2,17 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.UI;
+
 public class MG_func : MonoBehaviour
 {
 	int HP = 1000;
-	int maxBarrier=100;
-	int barrier=100;
+	int maxBarrier = 100;
+	int barrier = 100;
 	RectTransform HPBar;
 	Text barrierOb;
 	float HPUnit;
 	bool canRecover;
-	int recF=0;
-
+	int recF = 0;
 	int myNum;
 	Color myColor;
 
@@ -27,7 +27,7 @@ public class MG_func : MonoBehaviour
 		public GameObject Micon;
 		public GameObject sideHP;
 
-		public order (int p1, GameObject p2, int gnum ,bool p3,GameObject Mi, GameObject MMi, GameObject side, Vector2 de)
+		public order (int p1, GameObject p2, int gnum, bool p3, GameObject Mi, GameObject MMi, GameObject side, Vector2 de)
 		{
 			summonTime = p1;
 			sava = p2;
@@ -35,20 +35,18 @@ public class MG_func : MonoBehaviour
 			Micon = Mi;
 			MMicon = MMi;
 			dest = de;
-			sideHP=side;
-			gNum=gnum;
+			sideHP = side;
+			gNum = gnum;
 		}
 	}
 	
 	
 	public GameObject headHP;
 	public GameObject sideHP;
-
 	Queue<order>[] sava_queue;
 	private GameObject player;
 	public RectTransform rt;
 	public GameObject prepareAction;
-
 	Transform mySava;
 	Transform savaSide;
 	ParticleSystem[] prepare;
@@ -57,7 +55,6 @@ public class MG_func : MonoBehaviour
 	Vector3[] summonPos;
 	int summonToken;
 	int orderToken;
-
 	Game_All_Init GameMaster;
 	// Use this for initialization
 	void Start ()
@@ -69,7 +66,7 @@ public class MG_func : MonoBehaviour
 		mySava = GameObject.FindWithTag ("My_sava").transform;
 		savaSide = GameObject.Find ("Player_info/Sava_side").transform;
 		HPBar = GameObject.Find ("Player_info/Player_MG_HP/MG_HP_bar").GetComponent<RectTransform> ();
-		HPUnit = HPBar.sizeDelta.x/HP;
+		HPUnit = HPBar.sizeDelta.x / HP;
 		barrierOb = GameObject.Find ("Player_info/Player_MG_HP/Barrier").GetComponent<Text> ();
 		creating = false;
 
@@ -90,15 +87,23 @@ public class MG_func : MonoBehaviour
 		for (int i =0; i<6; i++) {
 			sava_queue [i] = new Queue<order> (){};
 			GameObject a = Instantiate (prepareAction, summonPos [i], Quaternion.identity) as GameObject;
-			a.transform.SetParent(transform);
+			a.transform.SetParent (transform);
 			prepare [i] = a.GetComponent<ParticleSystem> ();
 			prepare [i].emissionRate = 0;
 			
 		}
+		player.GetComponent<PlayerController> ().myNum = myNum;
+		player.GetComponent<PlayerController> ().myColor = myColor;
 	}
-	public void init (int num,Color co){
+
+	public void init (GameObject p, string myTag, int num, Color co)
+	{
 		myNum = num;
 		myColor = co;
+		tag = myTag;
+		player = p;
+		player.GetComponent<PlayerController> ().myNum = myNum;
+		player.GetComponent<PlayerController> ().myColor = myColor;
 	}
 
 	// Update is called once per frame
@@ -115,14 +120,14 @@ public class MG_func : MonoBehaviour
 
 		if (canRecover && barrier < maxBarrier) {
 			recF++;
-			if(recF%50 == 0){
-				recF=0;
+			if (recF % 50 == 0) {
+				recF = 0;
 				barrier++;
 			}
-		}else if (barrier > maxBarrier) {
+		} else if (barrier > maxBarrier) {
 			recF++;
-			if(recF%20 == 0){
-				recF=0;
+			if (recF % 20 == 0) {
+				recF = 0;
 				barrier--;
 			}
 		}
@@ -143,7 +148,7 @@ public class MG_func : MonoBehaviour
 		slip.MMicon.GetComponent<minimap_icon> ().init (theSava);
 		slip.sideHP.GetComponent<sava_side_info> ().SetOb (theSava);
 
-		theSava.GetComponent<Sava_controler> ().init (slip.Micon, slip.MMicon, slip.sideHP,MakeHeadHP (theSava),slip.gNum,slip.leader,myNum);
+		theSava.GetComponent<Sava_controler> ().init (slip.Micon, slip.MMicon, slip.sideHP, MakeHeadHP (theSava), slip.gNum, slip.leader, myNum);
 		theSava.GetComponent<Sava_controler> ().SetDestination (slip.dest);
 		theSava.transform.SetParent (mySava);
 		creating = false;
@@ -153,7 +158,7 @@ public class MG_func : MonoBehaviour
 	{
 		prepare [orderToken].emissionRate = 100;
 		
-		sava_queue [orderToken].Enqueue (new order (sTime, ob, gNum,lea, createMapIcon (Mi, orderToken, gNum), createMinimapIcon (MMi, orderToken),createSideHP(ob,orderToken),dest));
+		sava_queue [orderToken].Enqueue (new order (sTime, ob, gNum, lea, createMapIcon (Mi, orderToken, gNum), createMinimapIcon (MMi, orderToken), createSideHP (ob, orderToken), dest));
 		orderToken = orderToken > 4 ? 0 : orderToken + 1;
 	}
 
@@ -164,13 +169,12 @@ public class MG_func : MonoBehaviour
 		headHP_ob.transform.SetParent (GameObject.Find ("Sava_info").transform);
 		return headHP_ob;
 	}
-	
 
-	GameObject createSideHP (GameObject ob,int pre)
+	GameObject createSideHP (GameObject ob, int pre)
 	{
 		GameObject sideHP_ob = Instantiate (sideHP) as GameObject;		
 		sideHP_ob.transform.SetParent (savaSide);
-		sideHP_ob.GetComponent<sava_side_info> ().init (ob,prepare[pre].gameObject);
+		sideHP_ob.GetComponent<sava_side_info> ().init (ob, prepare [pre].gameObject);
 		return sideHP_ob;
 	}
 
@@ -190,19 +194,25 @@ public class MG_func : MonoBehaviour
 		return minimap_icon_ob;
 	}
 
-	public void SetMyInfo(int myN,Color myC){
+	public void SetMyInfo (int myN, Color myC)
+	{
 		myNum = myN;
 		myColor = myC;
 	}
-	public void Damage(int a){
+
+	public void Damage (int a)
+	{
 		canRecover = false;
 		aa = 0;
 		StartCoroutine ("Recovery");
-		HP -= (int)(a*((100 - barrier)/100f));
+		HP -= (int)(a * ((100 - barrier) / 100f));
 		barrier -= 1;		
 	}
-	int aa=0;
-	IEnumerator Recovery(){
+
+	int aa = 0;
+
+	IEnumerator Recovery ()
+	{
 		while (aa<600) {
 			aa++;
 			yield return 0;

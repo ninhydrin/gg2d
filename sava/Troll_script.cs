@@ -31,8 +31,10 @@ public class Troll_script : MonoBehaviour
 				if (agent.remainingDistance <= agent.stoppingDistance) {
 					if (Random.value > 0.5) {
 						anim.SetBool ("Attack1", true);
+						transform.rotation = Quaternion.Slerp (transform.rotation, Quaternion.LookRotation (agent.destination - transform.position), 0.1f);
 					} else {
 						anim.SetBool ("Attack2", true);				
+						transform.rotation = Quaternion.Slerp (transform.rotation, Quaternion.LookRotation (agent.destination - transform.position), 0.1f);						
 					}		
 					canDo = false;
 					StartCoroutine (WaitDo ());

@@ -21,7 +21,7 @@ public class Sava_controler : MonoBehaviour
 	public int LV {
 		get;
 		private set;
-	} 
+	}
 
 	int myTeamNum;
 	int myGroupNum;
@@ -31,12 +31,10 @@ public class Sava_controler : MonoBehaviour
 	GameObject sideHP;
 	bool leader;
 	int myCost;
-
 	public float searchDest;
 	public float stopDest;
 	public float attackDest;
 	public float standDest;
-
 	Vector3 dest;
 	Vector3 tempDest;
 	float speed;
@@ -48,7 +46,6 @@ public class Sava_controler : MonoBehaviour
 	GameObject minimap;
 	sava_report toSubmission;
 	bool canReport;
-
 	static int idleState = Animator.StringToHash ("Base Layer.Idle");
 	static int walkState = Animator.StringToHash ("Base Layer.Idle");
 	static int fightingState = Animator.StringToHash ("Base Layer.Fighting");
@@ -80,7 +77,8 @@ public class Sava_controler : MonoBehaviour
 		if (HP > 0) {
 			currentBaseState = anim.GetCurrentAnimatorStateInfo (0);
 			
-			nearEnemy = GetNearAlly (8f);
+			//nearEnemy = GetNearAlly (8f);
+			nearEnemy = GetNearEnemy (8f);
 			fighting = nearEnemy.Count != 0 ? true : false;
 
 			if (nearEnemy.Count != 0 && !fighting && canReport) {
@@ -107,17 +105,17 @@ public class Sava_controler : MonoBehaviour
 				if (agent.remainingDistance <= agent.stoppingDistance) {
 					anim.SetBool ("Walk", false);				
 					anim.SetBool ("Fighting", true);
-					agent.Stop();
+					agent.Stop ();
 					//transform.LookAt(Target.transform.position);
 					transform.rotation = Quaternion.Slerp (transform.rotation, Quaternion.LookRotation (Target.transform.position - transform.position), 0.1f);
-				} else if (currentBaseState.nameHash == walkState || currentBaseState.nameHash == fightingState){
+				} else if (currentBaseState.nameHash == walkState || currentBaseState.nameHash == fightingState) {
 					anim.SetBool ("Fighting", false);					
 					anim.SetBool ("Walk", true);
-					agent.Resume();
+					agent.Resume ();
 				}
 
 			} else {
-				agent.Resume();
+				agent.Resume ();
 				anim.SetBool ("Fighting", false);	
 				Target = null;
 				agent.stoppingDistance = stopDest;
@@ -140,19 +138,26 @@ public class Sava_controler : MonoBehaviour
 					//transform.localPosition += (new Vector3 (a.x, 0, a.z) * speed);
 				}
 			}
+			if(currentBaseState.nameHash == damageState){
+				agent.Stop();
+			}else{
+				agent.Resume();
+			}
 
 			if (dest != tempDest)
 				agent.SetDestination (tempDest);
 		} else {
 			Destroy (agent);
 			Destroy (gameObject.GetComponent<Rigidbody> ());
-			imDead();
+			imDead ();
 			anim.SetBool ("Die", true);
 			anim.Play (dieState);
 		
 		}
 	}
-	public void init (GameObject Mi,GameObject MMi,GameObject SS,GameObject HHP,int gnum,bool le,int myNum){
+
+	public void init (GameObject Mi, GameObject MMi, GameObject SS, GameObject HHP, int gnum, bool le, int myNum)
+	{
 		mapIcon = Mi;
 		mMapIcon = MMi;
 		sideHP = SS;
@@ -161,7 +166,6 @@ public class Sava_controler : MonoBehaviour
 		leader = le;
 		myTeamNum = myNum;
 	}
-
 
 	HashSet<GameObject> GetNearAlly (float range)
 	{
@@ -178,7 +182,9 @@ public class Sava_controler : MonoBehaviour
 	{
 		HashSet<GameObject> c = new HashSet<GameObject> ();
 		Collider[] a = Physics.OverlapSphere (transform.position, range);
-		foreach (Collider b in a) {			
+		foreach (Collider b in a) {
+			if (b.gameObject.tag == "Ghost" && b.gameObject.GetComponent<ghost_base> ().dominator != myTeamNum)
+				c.Add(b.gameObject);
 			if (b.gameObject.tag == "Enemy_sava" || b.gameObject.tag == "Enemy_master")
 				c.Add (b.gameObject);
 		}
@@ -189,7 +195,9 @@ public class Sava_controler : MonoBehaviour
 	{
 		leader = a;
 	}
-	public void SetGnum(int num){
+
+	public void SetGnum (int num)
+	{
 		myGroupNum = num;
 	}
 
@@ -222,13 +230,17 @@ public class Sava_controler : MonoBehaviour
 	{
 		return leader;
 	}
-	public int GetGroupNum(){
+
+	public int GetGroupNum ()
+	{
 		return myGroupNum;
 	}
+
 	public Vector2 GetDestination ()
 	{
 		return dest;	
 	}
+
 	public void imDead ()
 	{		
 		EntrustLeader ();
@@ -238,14 +250,14 @@ public class Sava_controler : MonoBehaviour
 		Destroy (sideHP);
 		//Destroy (this);	
 		//Destroy (gameObject);
-		gameObject.tag="Die";
+		gameObject.tag = "Die";
 	}
 
 	public void EntrustLeader ()
 	{
 		if (leader) {
 			foreach (Transform child in GameObject.Find("My_sava").transform) {
-				if (child.GetComponent<Sava_controler> ().GetGroupNum () == myGroupNum && !child.GetComponent<Sava_controler> ().isLeader () &&child.gameObject.tag !="Die") {
+				if (child.GetComponent<Sava_controler> ().GetGroupNum () == myGroupNum && !child.GetComponent<Sava_controler> ().isLeader () && child.gameObject.tag != "Die") {
 					child.GetComponent<Sava_controler> ().SetLeader (true);
 					break;
 				}

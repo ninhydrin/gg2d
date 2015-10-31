@@ -26,7 +26,7 @@ public class ghost_base : MonoBehaviour
 	void Update ()
 	{
 
-		if (ghostC.dominator > 0 && !coF && dominator != ghostC.dominator) {
+		if (ghostC.dominator >= 0 && !coF && dominator != ghostC.dominator) {
 			coF = true;
 			StopCoroutine ("CanDominate");
 			StartCoroutine ("CanDominate", ghostC.dominator);

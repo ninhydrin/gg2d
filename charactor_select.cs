@@ -15,30 +15,31 @@ public class charactor_select : MonoBehaviour
 	public GameObject[] charactors = new GameObject[2];
 	public GameObject[] playerOb = new GameObject[3];
 	public Color[] charColor = new Color[6];
-
+	public int playerNum;
 	Color barC=Color.gray;
 	Image myFace;
 	Button buttons;
 	GameObject forNext;
 	bool setOk;
+
 	// Use this for initialization
 	void Start ()
 	{
 		buttons = GetComponent<Button> ();
 		myFace = GetComponent<Image> ();
 		charNum = charFace.Length;
-		cam1 = GameObject.Find ("Cam1");
+		cam1 = transform.FindChild("Cam").gameObject;
 		myColor = transform.FindChild ("Color").GetComponent<Image> ();
 		myTeam = transform.FindChild ("Team").GetComponent<Image> ();
 		
 		for (int i=0; i<charNum; i++) {
-			charactors [i] = Instantiate (charactors [i], new Vector3 (i * 30, 0, 0), Quaternion.identity) as GameObject;
+			charactors [i] = Instantiate (charactors [i], new Vector3 (i * 30,50*playerNum,0), Quaternion.identity) as GameObject;
 		}
 		forNext = GameObject.Find ("ForNextScene");
 		DontDestroyOnLoad (forNext);
 		myFace.sprite = charFace [seleP];
-	//	myColor.color = charColor [seleC];
-		cam1.transform.position = new Vector3 (30 * seleP, 2, 4);
+		myColor.color = charColor [seleC];
+		cam1.transform.position = new Vector3 (30 * seleP, 2+50*playerNum,4);
 	}
 	
 	// Update is called once per frame
@@ -83,7 +84,7 @@ public class charactor_select : MonoBehaviour
 
 			if (Input.GetButtonDown ("Jump")) {
 				setOk = true;
-				forNext.GetComponent<For_next> ().SetPlayer (0, playerOb [seleP], charColor[seleC], teamNum);
+				forNext.GetComponent<For_next> ().SetPlayer (playerNum, playerOb [seleP], charColor[seleC], teamNum);
 				charactors [seleP].transform.eulerAngles = Vector3.zero;				
 			}
 		} else {
@@ -100,7 +101,7 @@ public class charactor_select : MonoBehaviour
 	void SetCamPos ()
 	{
 		myFace.sprite = charFace [seleP];
-		cam1.transform.position = new Vector3 (30 * seleP, 2, 4);
+		cam1.transform.position = new Vector3 (30 * seleP, 2+50*playerNum,4);
 	}
 	IEnumerator LoadScene(){
 		forNext.GetComponent<For_next> ().SetPlayer (3, playerOb [seleP], barC, 5);
