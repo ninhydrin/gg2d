@@ -37,15 +37,17 @@ public class charactor_select : MonoBehaviour
 		}
 		forNext = GameObject.Find ("ForNextScene");
 		DontDestroyOnLoad (forNext);
-		myFace.sprite = charFace [seleP];
+
 		myColor.color = charColor [seleC];
-		cam1.transform.position = new Vector3 (30 * seleP, 2+50*playerNum,4);
+		SetCamPos ();
 	}
 	
 	// Update is called once per frame
 	void Update ()
 	{
+
 		if (!setOk) {
+			SetCamPos();
 			if (selector == 0) {
 				if (Input.GetKeyDown (buttons.LStick_Left)) {
 					seleP = seleP < 1 ? charNum - 1 : seleP - 1;

@@ -15,14 +15,12 @@ public class PlayerController : MonoBehaviour
 
 	public Button buttons;
 	public Color myColor;
-
 	public HashSet<GameObject> nearEnemy;
 	GameObject[] itemBox;
 	Image[] itemSlot;
 	RectTransform itemSelector;
 	int itemPoint;
 	public int myNum;
-
 	int maxHP = 500;
 	int nowHP;
 	int maxTP = 100;
@@ -44,9 +42,15 @@ public class PlayerController : MonoBehaviour
 			itemSlot [i] = GameObject.Find ("Player_info/Item_slot/slot" + i.ToString ()).GetComponent<Image> ();
 		itemBox = new GameObject[6];
 		itemPoint = 0;
-		myNum = 0;
 	}
-	
+
+	public void init (string mtg, int mNum, Color mC)
+	{
+		myNum = mNum;
+		myColor = mC;
+		tag = mtg;
+	}
+
 	Collider[] neighborhoodSava;
 	
 	void Update ()
@@ -132,12 +136,12 @@ public class PlayerController : MonoBehaviour
 		} else if (itemBox [a] == null) {
 			HashSet<GameObject> storeTarget = GetNearAlly (2f);
 			Transform storeSava = null;
-			if(storeTarget.Count != 0){
-				foreach(GameObject child in storeTarget){
+			if (storeTarget.Count != 0) {
+				foreach (GameObject child in storeTarget) {
 					print (child.transform.parent);
 					storeSava = child.transform.parent;
 				}
-				itemBox[a].GetComponent<item>().icon = storeSava.GetComponent<sava_base>().face;
+				itemBox [a].GetComponent<item> ().icon = storeSava.GetComponent<sava_base> ().face;
 			}
 		}
 	}
@@ -146,7 +150,8 @@ public class PlayerController : MonoBehaviour
 	{
 		return nowHP;
 	}
-	public int GetTP()
+
+	public int GetTP ()
 	{
 		return nowTP;
 	}
@@ -235,7 +240,6 @@ public class PlayerController : MonoBehaviour
 		}
 		canitem = true;
 	}
-	
 
 	HashSet<GameObject> GetNearAlly (float range)
 	{

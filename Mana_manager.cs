@@ -22,6 +22,7 @@ public class Mana_manager : MonoBehaviour
 		TextMana.text="600mana";
 		TextIncom.text=income.ToString()+ "mana";
 		GameMaster = GameObject.Find ("GameMaster").GetComponent<Game_All_Init> ();
+
 	}
 	
 	// Update is called once per frame

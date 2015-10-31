@@ -100,10 +100,10 @@ public class MG_func : MonoBehaviour
 	{
 		myNum = num;
 		myColor = co;
-		tag = myTag;
+		tag = myTag+"P_MG";
 		player = p;
-		player.GetComponent<PlayerController> ().myNum = myNum;
-		player.GetComponent<PlayerController> ().myColor = myColor;
+		player.GetComponent<PlayerController> ().init(myTag+"P_Master",myNum,myColor);
+
 	}
 
 	// Update is called once per frame
