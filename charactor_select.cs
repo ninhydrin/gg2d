@@ -117,11 +117,12 @@ public class charactor_select : Photon.MonoBehaviour
 	{
 		if (stream.isWriting) {
 			//データの送信
+			stream.SendNext(transform.position);
 			stream.SendNext (seleP);
 			stream.SendNext (seleC);
 			stream.SendNext (seleT);
 			stream.SendNext (setOk);
-			stream.SendNext(cam1);
+
 			
 		} else {
 			//データの受信
@@ -130,7 +131,7 @@ public class charactor_select : Photon.MonoBehaviour
 			seleC = (int)stream.ReceiveNext ();
 			seleT = (int)stream.ReceiveNext ();
 			setOk = (bool)stream.ReceiveNext ();
-			cam1 = (GameObject)stream.ReceiveNext();
+
 			
 			
 		}
