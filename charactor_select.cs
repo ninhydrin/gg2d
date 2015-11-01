@@ -90,14 +90,12 @@ public class charactor_select : Photon.MonoBehaviour
 				if (Input.GetButtonDown ("Jump")) {
 					setOk = true;
 					forNext.GetComponent<For_next> ().SetPlayer (photonView.ownerId - 1, playerOb [seleP], charColor [seleC], teamNum, seleC);
-					charactors [seleP].transform.eulerAngles = Vector3.zero;				
+					charactors [seleP].transform.eulerAngles = Vector3.zero;
+					forNext.GetComponent<For_next>().ok[photonView.ownerId-1]=true;
 				}
 			} else {
-				if (Input.GetButtonDown ("Jump")) {
-					StartCoroutine (LoadScene ());
-					//Application.LoadLevel ("Main");
-				}
 				if (Input.GetKeyDown (KeyCode.L)) {
+					forNext.GetComponent<For_next>().ok[photonView.ownerId-1]=false;					
 					setOk = false;
 				}
 			}
@@ -132,30 +130,6 @@ public class charactor_select : Photon.MonoBehaviour
 			
 			
 		}
-	}
-	
-	IEnumerator LoadScene ()
-	{
-		Text loadingText = GameObject.Find ("Text").GetComponent<Text> ();
-		AsyncOperation async = Application.LoadLevelAsync ("Main");
-		async.allowSceneActivation = false;    // シーン遷移をしない
-		
-		while (async.progress < 0.9f) {
-			Debug.Log (async.progress);
-			loadingText.text = (async.progress * 100).ToString ("F0") + "%";
-			//loadingBar.fillAmount = async.progress;
-			yield return new WaitForEndOfFrame ();
-		}
-		
-		Debug.Log ("Scene Loaded");
-		
-		loadingText.text = "100%";
-		//loadingBar.fillAmount = 1;
-		
-		yield return new WaitForSeconds (1);
-		
-		async.allowSceneActivation = true;    // シーン遷移許可
-		
 	}
 	
 }
