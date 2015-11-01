@@ -21,11 +21,14 @@ public class charactor_select : Photon.MonoBehaviour
 	Image myFace;
 	Button buttons;
 	GameObject forNext;
-	bool setOk;
+	public bool setOk;
+		
+
 
 	// Use this for initialization
 	void Start ()
 	{
+		transform.parent.SetParent (GameObject.Find ("Players").transform);
 		buttons = GetComponent<Button> ();
 		myFace = GetComponent<Image> ();
 		charNum = charFace.Length;
@@ -42,7 +45,7 @@ public class charactor_select : Photon.MonoBehaviour
 
 		forNext = GameObject.Find ("ForNextScene");
 		DontDestroyOnLoad (forNext);
-
+ 
 		myColor.color = charColor [seleC];
 		SetCamPos ();
 		
@@ -91,15 +94,16 @@ public class charactor_select : Photon.MonoBehaviour
 					setOk = true;
 					forNext.GetComponent<For_next> ().SetPlayer (photonView.ownerId - 1, playerOb [seleP], charColor [seleC], teamNum, seleC);
 					charactors [seleP].transform.eulerAngles = Vector3.zero;
-					forNext.GetComponent<For_next>().ok[photonView.ownerId-1]=true;
 				}
 			} else {
+
 				if (Input.GetKeyDown (KeyCode.L)) {
-					forNext.GetComponent<For_next>().ok[photonView.ownerId-1]=false;					
+					forNext.GetComponent<For_next> ().ok [photonView.ownerId - 1] = false;					
 					setOk = false;
 				}
 			}
 		}
+		forNext.GetComponent<For_next> ().ok [photonView.ownerId - 1] = setOk;
 	}
 
 	void SetCamPos ()
@@ -112,7 +116,7 @@ public class charactor_select : Photon.MonoBehaviour
 	{
 		if (stream.isWriting) {
 			//データの送信
-			stream.SendNext(transform.position);
+			stream.SendNext (transform.position);
 			stream.SendNext (seleP);
 			stream.SendNext (seleC);
 			stream.SendNext (seleT);

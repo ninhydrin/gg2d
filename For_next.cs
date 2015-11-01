@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
+
 public class For_next : MonoBehaviour
 {
 
@@ -11,7 +12,7 @@ public class For_next : MonoBehaviour
 	public string[] minimapMaster;
 	public GameObject[] savaIcon;
 	public bool[] ok;
-
+	bool flag;
 	public struct playerInfo
 	{
 		public GameObject playerOb;
@@ -36,23 +37,27 @@ public class For_next : MonoBehaviour
 		playerNum = 2;
 		ok = new bool[playerNum];
 	}
-	
+
+
 	// Update is called once per frame
 	void Update ()
 	{
-
+		if (!flag) {
+			int count = 0;
+			for (int i = 0; i<playerNum; i++) {
+				if (ok [i])
+					count++;
+			}
+			if(count == playerNum){
+				flag = true;
+				StartCoroutine(LoadScene());
+			}
+		}
 	}
 
 	public void SetPlayer (int pNum, GameObject pOb, Color pCo, int tNum, int cNum)
 	{
 		players [pNum] = new playerInfo (pOb, pCo, tNum, cNum);
-		bool a = true;
-		for (int i=0; i<playerNum; i++) {
-			if (!ok [i])
-				a = false;
-		}
-		if (a)
-			StartCoroutine (LoadScene ());
 	}
 
 	IEnumerator LoadScene ()
