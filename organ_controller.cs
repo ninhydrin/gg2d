@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class organ_controller : MonoBehaviour
+public class organ_controller : Photon.MonoBehaviour
 {
 	PlayerController playerC;
 	public bool ismenu;
@@ -60,234 +60,236 @@ public class organ_controller : MonoBehaviour
 	// Update is called once per frame
 	void Update ()
 	{
-		if (playerC.organ) {		
-			organCanvas.enabled = true;
-			if (!canSell2) {
-				StartCoroutine ("ItemSellCoolTime");
-				canSell2 = true;
-			}
+		if (photonView.isMine) {
+			if (playerC.organ) {		
+				organCanvas.enabled = true;
+				if (!canSell2) {
+					StartCoroutine ("ItemSellCoolTime");
+					canSell2 = true;
+				}
 
 		
-			if (ismenu) {										//メニュー表示中
-				menu.GetComponent<image_slide> ().SlideIn ();
-				menu.GetComponent<UnityEngine.Canvas> ().enabled = true;			
+				if (ismenu) {										//メニュー表示中
+					menu.GetComponent<image_slide> ().SlideIn ();
+					menu.GetComponent<UnityEngine.Canvas> ().enabled = true;			
 
-				if (Input.GetKeyDown (buttons.LStick_Right)) {
-					istype++;
-					if (istype > 3)
-						istype = 0;					
-				}
-				if (Input.GetKeyDown (buttons.LStick_Left)) {
-					istype--;
-					if (istype < 0)
-						istype = 3;					
-				}
-				for (int i=0; i<4; i++) {
-					if (i == istype) {
-						menu_list [i].GetComponent<UnityEngine.Canvas> ().enabled = true;
-					} else {
-						menu_list [i].GetComponent<UnityEngine.Canvas> ().enabled = false;
+					if (Input.GetKeyDown (buttons.LStick_Right)) {
+						istype++;
+						if (istype > 3)
+							istype = 0;					
 					}
-				}
-
-				if (Input.GetKeyDown (buttons.LStick_Down)) {
-					menu_list [istype].GetComponent<selector> ().Down ();
-				}
-				if (Input.GetKeyDown (buttons.LStick_Up)) {
-					menu_list [istype].GetComponent<selector> ().Up ();			
-				}
-				if (Input.GetKeyDown (buttons.B_Button)) {
-					MenuClose ();
-				}
-				if (istype == 0) {
-					if (Input.GetKeyDown (buttons.A_Button)) {
-
-						if (menu_list [istype].GetComponent<selector> ().isLocked ()) {
-							if (menu_list [istype].GetComponent<selector> ().CanRelease ()) {
-
-								menu_list [istype].GetComponent<selector> ().Release ();
-							} else {
-
-							}
+					if (Input.GetKeyDown (buttons.LStick_Left)) {
+						istype--;
+						if (istype < 0)
+							istype = 3;					
+					}
+					for (int i=0; i<4; i++) {
+						if (i == istype) {
+							menu_list [i].GetComponent<UnityEngine.Canvas> ().enabled = true;
 						} else {
-							if (menu_list [istype].GetComponent<selector> ().CanBuy ()) {
-								point_samon = menu_list [istype].GetComponent<selector> ().point;
-								summoning = true;
-								ismenu = false;					
-								MenuClose ();
-								cursorC.SetMBdest (true);
-								//	menu.GetComponent<UnityEngine.Canvas> ().enabled = false;
-								AllListClose ();
-								destStack.Clear ();
-								interchange = Vector2.one * -10000f;
-								destStack.Push(interchange);
+							menu_list [i].GetComponent<UnityEngine.Canvas> ().enabled = false;
+						}
+					}
 
+					if (Input.GetKeyDown (buttons.LStick_Down)) {
+						menu_list [istype].GetComponent<selector> ().Down ();
+					}
+					if (Input.GetKeyDown (buttons.LStick_Up)) {
+						menu_list [istype].GetComponent<selector> ().Up ();			
+					}
+					if (Input.GetKeyDown (buttons.B_Button)) {
+						MenuClose ();
+					}
+					if (istype == 0) {
+						if (Input.GetKeyDown (buttons.A_Button)) {
+
+							if (menu_list [istype].GetComponent<selector> ().isLocked ()) {
+								if (menu_list [istype].GetComponent<selector> ().CanRelease ()) {
+
+									menu_list [istype].GetComponent<selector> ().Release ();
+								} else {
+
+								}
 							} else {
+								if (menu_list [istype].GetComponent<selector> ().CanBuy ()) {
+									point_samon = menu_list [istype].GetComponent<selector> ().point;
+									summoning = true;
+									ismenu = false;					
+									MenuClose ();
+									cursorC.SetMBdest (true);
+									//	menu.GetComponent<UnityEngine.Canvas> ().enabled = false;
+									AllListClose ();
+									destStack.Clear ();
+									interchange = Vector2.one * -10000f;
+									destStack.Push (interchange);
+
+								} else {
 
 
+								}
 							}
 						}
-					}
-					if (Input.GetKeyDown (buttons.Y_Button)) {
-						if (menu_list [istype].GetComponent<selector> ().ReleasingNow ()) {
-							menu_list [istype].GetComponent<selector> ().UnRelease ();
+						if (Input.GetKeyDown (buttons.Y_Button)) {
+							if (menu_list [istype].GetComponent<selector> ().ReleasingNow ()) {
+								menu_list [istype].GetComponent<selector> ().UnRelease ();
+							}
 						}
-					}
-				} else if (istype == 1) {
-					if (Input.GetKeyDown (buttons.A_Button)) {
-						int k = playerC.IsEmp ();
-						print (k);
-						if (menu_list [istype].GetComponent<selector> ().CanBuy () && k != -1) {
-							GameObject itembuy = menu_list [istype].GetComponent<selector> ().Buy ();
-							playerC.AddItem (k, itembuy);
-							playerC.SetItemSprite (k, itembuy.GetComponent<item> ().icon);
+					} else if (istype == 1) {
+						if (Input.GetKeyDown (buttons.A_Button)) {
+							int k = playerC.IsEmp ();
+							print (k);
+							if (menu_list [istype].GetComponent<selector> ().CanBuy () && k != -1) {
+								GameObject itembuy = menu_list [istype].GetComponent<selector> ().Buy ();
+								playerC.AddItem (k, itembuy);
+								playerC.SetItemSprite (k, itembuy.GetComponent<item> ().icon);
+							}
 						}
-					}
 
-				} else if (istype == 2) {
-					if (Input.GetKeyDown (buttons.A_Button)) {
-						int k = playerC.IsEmp ();
-						print (k);
-						if (menu_list [istype].GetComponent<selector> ().CanBuy () && k != -1) {
-							GameObject itembuy = menu_list [istype].GetComponent<selector> ().Buy ();
-							playerC.AddItem (k, itembuy);
-							playerC.SetItemSprite (k, itembuy.GetComponent<item> ().icon);
+					} else if (istype == 2) {
+						if (Input.GetKeyDown (buttons.A_Button)) {
+							int k = playerC.IsEmp ();
+							print (k);
+							if (menu_list [istype].GetComponent<selector> ().CanBuy () && k != -1) {
+								GameObject itembuy = menu_list [istype].GetComponent<selector> ().Buy ();
+								playerC.AddItem (k, itembuy);
+								playerC.SetItemSprite (k, itembuy.GetComponent<item> ().icon);
+							}
 						}
-					}
-				} else if (istype == 3) {
+					} else if (istype == 3) {
 						
-				}
-
-
-			} else if (summoning) {								//召喚準備中
-
-				if (cursorC.isTarget () > 0) {           //グループ化
-					targetGroup = cursorC.isTarget ();
-					cursorC.SetMBdest (false);
-					cursorC.SetMBisGroup (true);
-					if (Input.GetKeyDown (buttons.A_Button)) {
-						menu_list [istype].GetComponent<selector> ().summon (point_samon, GetDest (targetGroup), cursorC.isTarget ());
-						summoning = false;
-						cursorC.SetMBisGroup (false);
-						cursorC.SetMBgroup (true);
 					}
-				} else {//目的地設定
-					targetGroup = 0;
-					cursorC.SetMBdest (true);
-					cursorC.SetMBisGroup (false);
-					if (Input.GetKeyDown (buttons.A_Button) && cursorC.isTarget() < 0) {
+
+
+				} else if (summoning) {								//召喚準備中
+
+					if (cursorC.isTarget () > 0) {           //グループ化
+						targetGroup = cursorC.isTarget ();
+						cursorC.SetMBdest (false);
+						cursorC.SetMBisGroup (true);
+						if (Input.GetKeyDown (buttons.A_Button)) {
+							menu_list [istype].GetComponent<selector> ().summon (point_samon, GetDest (targetGroup), cursorC.isTarget ());
+							summoning = false;
+							cursorC.SetMBisGroup (false);
+							cursorC.SetMBgroup (true);
+						}
+					} else {//目的地設定
+						targetGroup = 0;
+						cursorC.SetMBdest (true);
+						cursorC.SetMBisGroup (false);
+						if (Input.GetKeyDown (buttons.A_Button) && cursorC.isTarget () < 0) {
+							cursorC.SetMBmove (false);
+							cursorC.SetMBmarch (true);
+							menu_list [istype].GetComponent<selector> ().summon (point_samon, cursorC.RealPos ());
+							summoning = false;
+						} 
+					}
+
+					if (Input.GetKeyDown (buttons.B_Button) || Input.GetKeyDown (buttons.Pad_Left)) {
 						cursorC.SetMBmove (false);
-						cursorC.SetMBmarch (true);
-						menu_list [istype].GetComponent<selector> ().summon (point_samon, cursorC.RealPos ());
+						cursorC.SetMBcancel (true);
+						targetGroup = 0;
 						summoning = false;
-					} 
-				}
-
-				if (Input.GetKeyDown (buttons.B_Button) || Input.GetKeyDown (buttons.Pad_Left)) {
-					cursorC.SetMBmove (false);
-					cursorC.SetMBcancel (true);
-					targetGroup = 0;
-					summoning = false;
-				}
+					}
 
 
 
 
-			} else if (savaDictSetting) {							//既存サーヴァントの目的地設定
+				} else if (savaDictSetting) {							//既存サーヴァントの目的地設定
 
 				
 
-				if (cursorC.isTarget () > 0 && targetGroup != cursorC.isTarget ()) { //グループ化
-					cursorC.SetMBdest (false);					
-					cursorC.SetMBisGroup (true);
-					if (Input.GetKeyDown (buttons.A_Button)) {
-						ConnectGroup (cursorC.isTarget ());
-						savaDictSetting = false;	
+					if (cursorC.isTarget () > 0 && targetGroup != cursorC.isTarget ()) { //グループ化
+						cursorC.SetMBdest (false);					
+						cursorC.SetMBisGroup (true);
+						if (Input.GetKeyDown (buttons.A_Button)) {
+							ConnectGroup (cursorC.isTarget ());
+							savaDictSetting = false;	
+							cursorC.SetMBisGroup (false);
+							cursorC.SetMBgroup (true);
+						}
+					} else {    //目的地設定
+						cursorC.SetMBdest (true);
+						cursorC.SetMBisGroup (false);					
+						if (Input.GetKeyDown (buttons.A_Button) && cursorC.isTarget () < 0) {
+
+							DictSet (cursorC.RealPos ());
+							savaDictSetting = false;
+							cursorC.SetMBmove (true);
+						}
+					}
+
+
+					if (Input.GetKeyDown (buttons.B_Button) || Input.GetKeyDown (buttons.Pad_Left)) {
+						cursorC.SetMBdest (false);
 						cursorC.SetMBisGroup (false);
-						cursorC.SetMBgroup (true);
-					}
-				} else {    //目的地設定
-					cursorC.SetMBdest (true);
-					cursorC.SetMBisGroup (false);					
-					if (Input.GetKeyDown (buttons.A_Button) && cursorC.isTarget() < 0) {
-
-						DictSet (cursorC.RealPos ());
+						cursorC.SetMBcancel (true);
 						savaDictSetting = false;
-						cursorC.SetMBmove (true);
 					}
-				}
-
-
-				if (Input.GetKeyDown (buttons.B_Button) || Input.GetKeyDown (buttons.Pad_Left)) {
-					cursorC.SetMBdest (false);
-					cursorC.SetMBisGroup (false);
-					cursorC.SetMBcancel (true);
-					savaDictSetting = false;
-				}
 
 
 
 
-			} else if (itemSell) {										//アイテム売却画面
-				if (Input.GetKeyDown (buttons.B_Button)) {
-					cursorC.SetMBdest (true);
-					itemSell = false;
-				}
+				} else if (itemSell) {										//アイテム売却画面
+					if (Input.GetKeyDown (buttons.B_Button)) {
+						cursorC.SetMBdest (true);
+						itemSell = false;
+					}
 			
 
 
-			} else {													//何もしていない状態
-				if (Input.GetKey (buttons.RB)) {
-					if (cursorC.isTarget () > 0) {
-						cursorC.SetMBdest (true);
-						if (Input.GetKeyDown (buttons.A_Button)) {
-							Discharge ();
+				} else {													//何もしていない状態
+					if (Input.GetKey (buttons.RB)) {
+						if (cursorC.isTarget () > 0) {
+							cursorC.SetMBdest (true);
+							if (Input.GetKeyDown (buttons.A_Button)) {
+								Discharge ();
+							}
+						} else {
+							cursorC.SetMBdest (false);
 						}
 					} else {
 						cursorC.SetMBdest (false);
-					}
-				} else {
-					cursorC.SetMBdest (false);
-					if (Input.GetKeyDown (buttons.A_Button)) { 
-						if (cursorC.isTarget () > 0) {
-							cursorC.SetMBdest (true);
-							targetGroup = cursorC.isTarget ();
-							savaDictSetting = true;
-							SelectTarget ();
-							interchange = Vector2.one * -10000f;
+						if (Input.GetKeyDown (buttons.A_Button)) { 
+							if (cursorC.isTarget () > 0) {
+								cursorC.SetMBdest (true);
+								targetGroup = cursorC.isTarget ();
+								savaDictSetting = true;
+								SelectTarget ();
+								interchange = Vector2.one * -10000f;
 					
+							}
+				
+						} else if (Input.GetKeyDown (buttons.Y_Button)) {
+							itemSell = true;
 						}
 				
-					} else if (Input.GetKeyDown (buttons.Y_Button)) {
-						itemSell = true;
-					}
-				
-					MenuClose ();
-					if (Input.GetKeyDown (buttons.X_Button)) {
-						if (!summoning) {
-							ismenu = true;
-							istype = 0;
+						MenuClose ();
+						if (Input.GetKeyDown (buttons.X_Button)) {
+							if (!summoning) {
+								ismenu = true;
+								istype = 0;
+							}
 						}
-					}
-					if (Input.GetKeyDown (buttons.B_Button)) {
-						playerC.organ = false;
-					}
+						if (Input.GetKeyDown (buttons.B_Button)) {
+							playerC.organ = false;
+						}
 
-					if (Input.GetKeyDown (buttons.LT)) {
+						if (Input.GetKeyDown (buttons.LT)) {
 
+						}
 					}
 				}
-			}
 						
 
-		} else {										//オルガンを閉じている状態
-			MenuClose ();
-			organCanvas.enabled = false;
-			GameObject.Find ("Menu").GetComponent<UnityEngine.Canvas> ().enabled = false;
-			AllListClose ();
-			summoning = false;
-			canSell = false;
-			canSell2 = false;
+			} else {										//オルガンを閉じている状態
+				MenuClose ();
+				organCanvas.enabled = false;
+				GameObject.Find ("Menu").GetComponent<UnityEngine.Canvas> ().enabled = false;
+				AllListClose ();
+				summoning = false;
+				canSell = false;
+				canSell2 = false;
+			}
 		}
 	}
 		
