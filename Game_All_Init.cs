@@ -46,6 +46,13 @@ public class Game_All_Init : MonoBehaviour
 		}
 		masterGhost = GameObject.Find ("MGs");
 		Player = GameObject.Find("Player");
+		playerMGs [0] = Instantiate (MGOb, new Vector3 (50 , 0, 50 ), Quaternion.identity) as GameObject;
+		players[0]=Instantiate(forNext.players[0].playerOb,new Vector3(50,0,50),Quaternion.identity) as GameObject;
+		
+		playerMGs [0].transform.Rotate (Vector3.right * -90);
+		playerMGs [0].GetComponent<MG_func>().init(players[0],1.ToString(),0,forNext.players[0].playerColor);
+		playerMGs [0].transform.SetParent (masterGhost.transform);
+		/*
 		for (int i = 0; i<playerNum; i++) {			
 			playerMGs [i] = Instantiate (MGOb, new Vector3 (50 + 400 * i, 0, 50 + 400 * i), Quaternion.identity) as GameObject;
 			players[i]=Instantiate(forNext.players[i].playerOb,new Vector3(50+50*i,0,50+50*i),Quaternion.identity) as GameObject;
@@ -54,6 +61,7 @@ public class Game_All_Init : MonoBehaviour
 			playerMGs [i].GetComponent<MG_func>().init(players[i],(i+1).ToString(),i,forNext.players[i].playerColor);
 			playerMGs [i].transform.SetParent (masterGhost.transform);
 		}
+		*/
 
 	}
 	
