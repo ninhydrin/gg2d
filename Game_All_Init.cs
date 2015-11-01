@@ -24,7 +24,7 @@ public class Game_All_Init : MonoBehaviour
 	
 
 	// Use this for initialization
-	void Start ()
+	void Awake ()
 	{
 		forNext=GameObject.Find("ForNextScene").GetComponent<For_next>();
 		
@@ -45,10 +45,10 @@ public class Game_All_Init : MonoBehaviour
 			}
 		}
 		masterGhost = GameObject.Find ("MGs");
-		Player = GameObject.Find("Player");
+		//Player = GameObject.Find("Player");
 		playerMGs [0] = Instantiate (MGOb, new Vector3 (50 , 0, 50 ), Quaternion.identity) as GameObject;
 		players[0]=PhotonNetwork.Instantiate("UP",new Vector3(50,0,50),Quaternion.identity,0) as GameObject;
-		
+		Player = players [0];
 		playerMGs [0].transform.Rotate (Vector3.right * -90);
 		playerMGs [0].GetComponent<MG_func>().init(players[0],1.ToString(),0,forNext.players[0].playerColor);
 		playerMGs [0].transform.SetParent (masterGhost.transform);

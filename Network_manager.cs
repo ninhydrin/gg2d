@@ -29,9 +29,10 @@ public class Network_manager : Photon.PunBehaviour
 	
 	public override void OnJoinedRoom()
 	{
-		GameObject monster = PhotonNetwork.Instantiate("monsterprefab", Vector3.zero, Quaternion.identity, 0);
-		monster.GetComponent<myThirdPersonController>().isControllable = true;
-		myPhotonView = monster.GetComponent<PhotonView>();
+
+		GameObject selectChar = PhotonNetwork.Instantiate("CharaSele", Vector3.zero, Quaternion.identity, 0);
+		//monster.GetComponent<myThirdPersonController>().isControllable = true;
+		myPhotonView = selectChar.GetComponent<PhotonView> ();//monster.GetComponent<PhotonView>();
 	}
 	
 	public void OnGUI()

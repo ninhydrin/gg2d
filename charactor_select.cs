@@ -2,13 +2,15 @@
 using System.Collections;
 using UnityEngine.UI;
 
-public class charactor_select : MonoBehaviour
+public class charactor_select : Photon.MonoBehaviour
 {
 
 	int charNum = 3;
 	int colorNum = 6;
 	int teamNum=4;
+
 	int seleP,seleC,seleT,selector;
+
 	GameObject cam1;
 	Image myColor,myTeam;
 	public Sprite[] charFace = new Sprite[3];
@@ -45,57 +47,58 @@ public class charactor_select : MonoBehaviour
 	// Update is called once per frame
 	void Update ()
 	{
-
-		if (!setOk) {
-			SetCamPos();
-			if (selector == 0) {
-				if (Input.GetKeyDown (buttons.LStick_Left)) {
-					seleP = seleP < 1 ? charNum - 1 : seleP - 1;
-					charactors [seleP].transform.eulerAngles = Vector3.zero;
-					SetCamPos ();
-				} else if (Input.GetKeyDown (buttons.LStick_Right)) {
-					seleP = seleP > charNum - 2 ? 0 : seleP + 1;
-					charactors [seleP].transform.eulerAngles = Vector3.zero;
-					SetCamPos ();
+		if (photonView.isMine) {
+			if (!setOk) {
+				SetCamPos ();
+				if (selector == 0) {
+					if (Input.GetKeyDown (buttons.LStick_Left)) {
+						seleP = seleP < 1 ? charNum - 1 : seleP - 1;
+						charactors [seleP].transform.eulerAngles = Vector3.zero;
+						SetCamPos ();
+					} else if (Input.GetKeyDown (buttons.LStick_Right)) {
+						seleP = seleP > charNum - 2 ? 0 : seleP + 1;
+						charactors [seleP].transform.eulerAngles = Vector3.zero;
+						SetCamPos ();
+					}
+				} else if (selector == 1) {
+					if (Input.GetKeyDown (buttons.LStick_Left)) {
+						seleC = seleC < 1 ? colorNum - 1 : seleC - 1;
+						myColor.color = charColor [seleC];
+					} else if (Input.GetKeyDown (buttons.LStick_Right)) {
+						seleC = seleC > colorNum - 2 ? 0 : seleC + 1;
+						myColor.color = charColor [seleC];					
+					}
+				} else if (selector == 2) {
+					if (Input.GetKeyDown (buttons.LStick_Left)) {
+						seleT = seleT < 1 ? teamNum - 1 : seleT - 1;					
+					} else if (Input.GetKeyDown (buttons.LStick_Right)) {
+						seleT = seleT > teamNum - 2 ? 0 : seleT + 1;
+					}
 				}
-			} else if (selector == 1) {
-				if (Input.GetKeyDown (buttons.LStick_Left)) {
-					seleC = seleC < 1 ? colorNum - 1 : seleC - 1;
-					myColor.color = charColor [seleC];
-				} else if (Input.GetKeyDown (buttons.LStick_Right)) {
-					seleC = seleC > colorNum - 2 ? 0 : seleC + 1;
-					myColor.color = charColor [seleC];					
+
+				if (Input.GetKeyDown (buttons.LStick_Down)) {
+					selector = selector < 1 ? 2 : selector - 1;				
+				} else if (Input.GetKeyDown (buttons.LStick_Up)) {
+					selector = selector > 1 ? 0 : selector + 1;		
 				}
-			} else if (selector == 2) {
-				if (Input.GetKeyDown (buttons.LStick_Left)) {
-					seleT = seleT < 1 ? teamNum - 1 : seleT - 1;					
-				} else if (Input.GetKeyDown (buttons.LStick_Right)) {
-					seleT = seleT > teamNum - 2 ? 0 : seleT + 1;
+
+				for (int i =0; i<charNum; i++) {
+					charactors [i].transform.Rotate (Vector3.up * Time.deltaTime * 10);
 				}
-			}
 
-			if (Input.GetKeyDown (buttons.LStick_Down)) {
-				selector = selector < 1 ?  2: selector-1;				
-			} else if (Input.GetKeyDown (buttons.LStick_Up)) {
-				selector = selector > 1 ?  0: selector+1;		
-			}
-
-			for (int i =0; i<charNum; i++) {
-				charactors [i].transform.Rotate (Vector3.up * Time.deltaTime * 10);
-			}
-
-			if (Input.GetButtonDown ("Jump")) {
-				setOk = true;
-				forNext.GetComponent<For_next> ().SetPlayer (playerNum, playerOb [seleP], charColor[seleC], teamNum);
-				charactors [seleP].transform.eulerAngles = Vector3.zero;				
-			}
-		} else {
-			if (Input.GetButtonDown ("Jump")) {
-				StartCoroutine(LoadScene());
-				//Application.LoadLevel ("Main");
-			}
-			if (Input.GetKeyDown (KeyCode.L)) {
-				setOk = false;
+				if (Input.GetButtonDown ("Jump")) {
+					setOk = true;
+					forNext.GetComponent<For_next> ().SetPlayer (playerNum, playerOb [seleP], charColor [seleC], teamNum);
+					charactors [seleP].transform.eulerAngles = Vector3.zero;				
+				}
+			} else {
+				if (Input.GetButtonDown ("Jump")) {
+					StartCoroutine (LoadScene ());
+					//Application.LoadLevel ("Main");
+				}
+				if (Input.GetKeyDown (KeyCode.L)) {
+					setOk = false;
+				}
 			}
 		}
 	}
@@ -105,6 +108,26 @@ public class charactor_select : MonoBehaviour
 		myFace.sprite = charFace [seleP];
 		cam1.transform.position = new Vector3 (30 * seleP, 2+50*playerNum,4);
 	}
+	void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info) {
+		if (stream.isWriting) {
+			//データの送信
+			stream.SendNext(seleP);
+			stream.SendNext(seleC);
+			stream.SendNext(seleT);
+			stream.SendNext(setOk);
+			
+		} else {
+			//データの受信
+			transform.position = (Vector3)stream.ReceiveNext();
+			seleP=(int)stream.ReceiveNext();
+			seleC=(int)stream.ReceiveNext();
+			seleT=(int)stream.ReceiveNext();
+			setOk=(bool)stream.ReceiveNext();
+			
+			
+		}
+	}
+	
 	IEnumerator LoadScene(){
 		forNext.GetComponent<For_next> ().SetPlayer (3, playerOb [seleP], barC, 5);
 		Text loadingText = GameObject.Find ("Text").GetComponent<Text> ();
