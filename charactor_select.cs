@@ -35,7 +35,7 @@ public class charactor_select : Photon.MonoBehaviour
 		myTeam = transform.FindChild ("Team").GetComponent<Image> ();
 		
 		for (int i=0; i<charNum; i++) {
-			charactors [i] = Instantiate (charactors [i], new Vector3 (i * 30,50*playerNum,0), Quaternion.identity) as GameObject;
+			charactors [i] = Instantiate (charactors [i], new Vector3 (i * 30,50*photonView.ownerId,0), Quaternion.identity) as GameObject;
 		}
 		forNext = GameObject.Find ("ForNextScene");
 		DontDestroyOnLoad (forNext);
@@ -47,6 +47,7 @@ public class charactor_select : Photon.MonoBehaviour
 	// Update is called once per frame
 	void Update ()
 	{
+		
 		if (photonView.isMine) {
 			if (!setOk) {
 				SetCamPos ();
@@ -106,7 +107,7 @@ public class charactor_select : Photon.MonoBehaviour
 	void SetCamPos ()
 	{
 		myFace.sprite = charFace [seleP];
-		cam1.transform.position = new Vector3 (30 * seleP, 2+50*playerNum,4);
+		cam1.transform.position = new Vector3 (30 * seleP, 2+50*photonView.ownerId,4);
 	}
 	void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info) {
 		if (stream.isWriting) {
