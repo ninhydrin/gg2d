@@ -26,7 +26,7 @@ public class Network_manager : Photon.PunBehaviour
 	{
 		PhotonNetwork.CreateRoom(null);
 	}
-	
+
 	public override void OnJoinedRoom()
 	{
 

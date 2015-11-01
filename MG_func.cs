@@ -40,7 +40,8 @@ public class MG_func : MonoBehaviour
 		}
 	}
 	
-	
+	GameObject minimapMG;
+	GameObject mapMG;
 	public GameObject headHP;
 	public GameObject sideHP;
 	Queue<order>[] sava_queue;
@@ -100,9 +101,10 @@ public class MG_func : MonoBehaviour
 	{
 		myNum = num;
 		myColor = co;
-		tag = myTag+"P_MG";
+		tag = myTag;
 		player = p;
-		player.GetComponent<PlayerController> ().init(myTag+"P_Master",myNum,myColor);
+
+		player.GetComponent<PlayerController> ().init(myTag,myNum,myColor);
 
 	}
 

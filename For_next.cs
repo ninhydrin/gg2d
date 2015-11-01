@@ -5,6 +5,12 @@ public class For_next : MonoBehaviour
 {
 
 	public int playerNum;
+	public GameObject[] mapMG;
+	public GameObject[] minimapMG;
+	public GameObject[] mapMaster;
+	public GameObject[] minimapMaster;
+	public GameObject[] savaIcon;
+	
 
 	public struct playerInfo
 	{
