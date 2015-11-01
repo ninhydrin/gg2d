@@ -89,7 +89,7 @@ public class charactor_select : Photon.MonoBehaviour
 
 				if (Input.GetButtonDown ("Jump")) {
 					setOk = true;
-					forNext.GetComponent<For_next> ().SetPlayer (playerNum, playerOb [seleP], charColor [seleC], teamNum);
+					forNext.GetComponent<For_next> ().SetPlayer (0, playerOb [seleP], charColor [seleC], teamNum,seleC);
 					charactors [seleP].transform.eulerAngles = Vector3.zero;				
 				}
 			} else {
@@ -130,7 +130,6 @@ public class charactor_select : Photon.MonoBehaviour
 	}
 	
 	IEnumerator LoadScene(){
-		forNext.GetComponent<For_next> ().SetPlayer (3, playerOb [seleP], barC, 5);
 		Text loadingText = GameObject.Find ("Text").GetComponent<Text> ();
 		AsyncOperation async = Application.LoadLevelAsync("Main");
 		async.allowSceneActivation = false;    // シーン遷移をしない

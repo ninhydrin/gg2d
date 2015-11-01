@@ -34,7 +34,7 @@ public class CameraController : MonoBehaviour
 		//transform.localRotation.x = ;
 		player = GameObject.FindWithTag ("Player");
 		playerC = player.GetComponent<PlayerController> ();
-		CP = GameObject.Find ("Player/Camera_Pos").transform;
+		CP = player.transform.FindChild("Camera_Pos");
 		LOP = player.transform.FindChild ("LockOnPos");
 		DefaultPos = player.transform.FindChild ("DefaultPos");
 		BDPos = player.transform.FindChild ("BD_Pos");

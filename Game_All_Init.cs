@@ -11,6 +11,9 @@ public class Game_All_Init : MonoBehaviour
 	GameObject aGhost;
 	GameObject Ghost;
 	GameObject MG;
+	GameObject mapMG;
+	GameObject minimapMG;
+
 	For_next forNext;
 	int ghostIncome;
 	int masterGhostIncome;
@@ -43,16 +46,33 @@ public class Game_All_Init : MonoBehaviour
 			}
 		}*/
 		masterGhost = GameObject.Find ("MGs");
-		//Player = GameObject.Find("Player");
-		MG = Instantiate (MGOb, new Vector3 (50, 0, 50), Quaternion.identity) as GameObject;
-		Player = PhotonNetwork.Instantiate ("UP", new Vector3 (50, 0, 50), Quaternion.identity, 0) as GameObject;
-		print ("ok");
+		MakeMG ();
+
+		minimapMG = PhotonNetwork.Instantiate ("miniMG", new Vector3 (50, 0, 50), Quaternion.identity,0) as GameObject;		
+
+		
+		mapMG = PhotonNetwork.Instantiate (forNext.mapMG [forNext.players [0].colorNum], Vector3.zero, Quaternion.identity, 0);
+		//mapMG = PhotonNetwork.Instantiate ("OrganMG", Vector3.zero, Quaternion.identity, 0);
+		mapMG.GetComponent<organ_MG> ().init (MG);
+		mapMG.transform.SetParent(GameObject.Find("Organ/Map").transform);
+		float x = (MG.transform.position.x - 250f) / 5f;
+		float y = (MG.transform.position.z - 250f) / 5f;
+
+		minimapMG.GetComponent<RectTransform> ().anchoredPosition = new Vector2 (x, y);
+		minimapMG.transform.SetParent(GameObject.Find("Minimap/Field").transform);
+		
+	}
+	void MakeMG(){
+		MG = PhotonNetwork.Instantiate ("MG", new Vector3 (50, 0, 50), Quaternion.identity,0) as GameObject;
 		MG.transform.Rotate (Vector3.right * -90);
+		Player = PhotonNetwork.Instantiate ("UP", new Vector3 (50, 0, 50), Quaternion.identity, 0) as GameObject;		
 		MG.GetComponent<MG_func> ().init (Player, "Player", 0, forNext.players [0].playerColor);
 		MG.transform.SetParent (masterGhost.transform);
 	}
-	
+
+
 	// Update is called once per frame
+	/*
 	void Update ()
 	{
 		ghostNum = new int[2];
@@ -67,4 +87,5 @@ public class Game_All_Init : MonoBehaviour
 	{
 		return ghostNum [a];
 	}
+	*/
 }

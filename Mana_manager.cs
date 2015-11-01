@@ -30,7 +30,7 @@ public class Mana_manager : MonoBehaviour
 	{
 		int a = (int)GameObject.FindWithTag ("Time").GetComponent<Timelimit> ().RemainingTime;
 
-		int b=GameMaster.GetMyGhost (1);
+		int b = 1;//int b=GameMaster.GetMyGhost (1);
 		income = 20 * (b + 1);
 		if (a % 10 == 0 && flag) {
 			mana += income;

@@ -46,7 +46,6 @@ public class MG_func : MonoBehaviour
 	public GameObject sideHP;
 	Queue<order>[] sava_queue;
 	private GameObject player;
-	public RectTransform rt;
 	public GameObject prepareAction;
 	Transform mySava;
 	Transform savaSide;
@@ -61,9 +60,8 @@ public class MG_func : MonoBehaviour
 	void Start ()
 	{
 		GameMaster = GameObject.Find ("GameMaster").GetComponent<Game_All_Init> ();
-		player = GameObject.FindWithTag ("Player");		
-		rt = GetComponent<RectTransform> ();
 		sava_queue = new Queue<order>[6];
+
 		mySava = GameObject.FindWithTag ("My_sava").transform;
 		savaSide = GameObject.Find ("Player_info/Sava_side").transform;
 		HPBar = GameObject.Find ("Player_info/Player_MG_HP/MG_HP_bar").GetComponent<RectTransform> ();
@@ -71,19 +69,12 @@ public class MG_func : MonoBehaviour
 		barrierOb = GameObject.Find ("Player_info/Player_MG_HP/Barrier").GetComponent<Text> ();
 		creating = false;
 
-
+		/*
 		float x = (transform.position.x - 250f) / 5f;
 		float y = (transform.position.z - 250f) / 5f;
 		GameObject.Find ("MyMG").GetComponent<RectTransform> ().anchoredPosition = new Vector2 (x, y);
-
-		summonPos = new Vector3[6];
-		summonPos [0] = new Vector3 (35f, 2f, 50f);
-		summonPos [1] = new Vector3 (40f, 2f, 50f);
-		summonPos [2] = new Vector3 (45f, 2f, 50f);
-		summonPos [3] = new Vector3 (50f, 2f, 45f);
-		summonPos [4] = new Vector3 (50f, 2f, 40f);
-		summonPos [5] = new Vector3 (50f, 2f, 35f);
-		prepare = new ParticleSystem[6];
+*/
+		CreatePreparePos ();
 
 		for (int i =0; i<6; i++) {
 			sava_queue [i] = new Queue<order> (){};
@@ -101,10 +92,11 @@ public class MG_func : MonoBehaviour
 	{
 		myNum = num;
 		myColor = co;
-		tag = myTag;
+		tag = myTag+"MG";
 		player = p;
-
-		player.GetComponent<PlayerController> ().init(myTag,myNum,myColor);
+		player.GetComponent<PlayerController> ().myNum = myNum;
+		player.GetComponent<PlayerController> ().myColor = myColor;
+		player.GetComponent<PlayerController> ().init (myTag, myNum, myColor);
 
 	}
 
@@ -209,6 +201,16 @@ public class MG_func : MonoBehaviour
 		StartCoroutine ("Recovery");
 		HP -= (int)(a * ((100 - barrier) / 100f));
 		barrier -= 1;		
+	}
+	void CreatePreparePos(){
+		summonPos = new Vector3[6];
+		summonPos [0] = new Vector3 (35f, 2f, 50f);
+		summonPos [1] = new Vector3 (40f, 2f, 50f);
+		summonPos [2] = new Vector3 (45f, 2f, 50f);
+		summonPos [3] = new Vector3 (50f, 2f, 45f);
+		summonPos [4] = new Vector3 (50f, 2f, 40f);
+		summonPos [5] = new Vector3 (50f, 2f, 35f);
+		prepare = new ParticleSystem[6];
 	}
 
 	int aa = 0;

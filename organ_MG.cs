@@ -42,25 +42,26 @@ public class organ_MG : MonoBehaviour
 
 	void Update ()
 	{
+		if (startFlag) {
+			if (organC.savaDictSetting || organC.summoning) {
+				float inter = Vector2.Distance (cursorRt.anchoredPosition, rt.anchoredPosition);
 
-		if (organC.savaDictSetting || organC.summoning) {
-			float inter = Vector2.Distance (cursorRt.anchoredPosition, rt.anchoredPosition);
+				if (inter < 15f && (cursorC.isTarget () == 0 || (imTarget && cursorC.isTarget () == -10)) && !cursorC.isMoving ()) {
+					if (!imTarget) {
+						imTarget = true;
+						StartCoroutine (OnCursor ());
+					}
+					cursorC.TargetingNum (myGroupNum);
+					cursorC.MoveTo (rt.anchoredPosition, myGroupNum, gameObject);		
 
-			if (inter < 15f && (cursorC.isTarget () == 0 || (imTarget && cursorC.isTarget () == -10)) && !cursorC.isMoving ()) {
-				if (!imTarget) {
-					imTarget = true;
-					StartCoroutine (OnCursor ());
+				} else if (inter > 15f) {
+					if (imTarget)
+						cursorC.TargetingNum ();
+					imTarget = false;
 				}
-				cursorC.TargetingNum (myGroupNum);
-				cursorC.MoveTo (rt.anchoredPosition, myGroupNum, gameObject);		
-
-			} else if (inter > 15f) {
-				if (imTarget)
-					cursorC.TargetingNum();
+			} else {
 				imTarget = false;
 			}
-		} else {
-			imTarget = false;
 		}
 	}
 

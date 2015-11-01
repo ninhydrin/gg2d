@@ -5,10 +5,10 @@ public class For_next : MonoBehaviour
 {
 
 	public int playerNum;
-	public GameObject[] mapMG;
-	public GameObject[] minimapMG;
-	public GameObject[] mapMaster;
-	public GameObject[] minimapMaster;
+	public string[] mapMG;
+	public string[] minimapMG;
+	public string[] mapMaster;
+	public string[] minimapMaster;
 	public GameObject[] savaIcon;
 	
 
@@ -17,12 +17,14 @@ public class For_next : MonoBehaviour
 		public GameObject playerOb;
 		public Color playerColor;
 		public int teamNum;
+		public int colorNum;
 
-		public playerInfo (GameObject pOb, Color pCo, int tNum)
+		public playerInfo ( GameObject pOb, Color pCo, int tNum,int cNum)
 		{
 			playerOb = pOb;
 			playerColor = pCo;
 			teamNum = tNum;
+			colorNum = cNum;
 		}
 
 	}
@@ -39,7 +41,7 @@ public class For_next : MonoBehaviour
 	{
 	
 	}
-	public void SetPlayer(int pNum,GameObject pOb,Color pCo,int tNum){
-		players [pNum] = new playerInfo (pOb, pCo, tNum);
+	public void SetPlayer(int pNum,GameObject pOb,Color pCo,int tNum,int cNum){
+		players [pNum] = new playerInfo (pOb, pCo, tNum,cNum);
 	}
 }
