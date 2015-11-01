@@ -32,6 +32,7 @@ public class charactor_select : Photon.MonoBehaviour
 		cam1 = transform.FindChild ("Cam").gameObject;
 		myColor = transform.FindChild ("Color").GetComponent<Image> ();
 		myTeam = transform.FindChild ("Team").GetComponent<Image> ();
+
 		rt = GetComponent<RectTransform> ();
 		rt.anchoredPosition = new Vector2 (-180 + (photonView.ownerId - 1) * 360, 65);
 		cam1.GetComponent<Camera> ().rect = new Rect (0.07f + (photonView.ownerId - 1) * 0.5f, 0, 0.3f, 0.5f);
@@ -50,27 +51,23 @@ public class charactor_select : Photon.MonoBehaviour
 	// Update is called once per frame
 	void Update ()
 	{
-		
+		SetCamPos ();
+		myColor.color = charColor [seleC];
 		if (photonView.isMine) {
 			if (!setOk) {
-				SetCamPos ();
 				if (selector == 0) {
 					if (Input.GetKeyDown (buttons.LStick_Left)) {
 						seleP = seleP < 1 ? charNum - 1 : seleP - 1;
 						charactors [seleP].transform.eulerAngles = Vector3.zero;
-						SetCamPos ();
 					} else if (Input.GetKeyDown (buttons.LStick_Right)) {
 						seleP = seleP > charNum - 2 ? 0 : seleP + 1;
 						charactors [seleP].transform.eulerAngles = Vector3.zero;
-						SetCamPos ();
 					}
 				} else if (selector == 1) {
 					if (Input.GetKeyDown (buttons.LStick_Left)) {
 						seleC = seleC < 1 ? colorNum - 1 : seleC - 1;
-						myColor.color = charColor [seleC];
 					} else if (Input.GetKeyDown (buttons.LStick_Right)) {
 						seleC = seleC > colorNum - 2 ? 0 : seleC + 1;
-						myColor.color = charColor [seleC];					
 					}
 				} else if (selector == 2) {
 					if (Input.GetKeyDown (buttons.LStick_Left)) {
