@@ -47,7 +47,7 @@ public class Game_All_Init : MonoBehaviour
 		masterGhost = GameObject.Find ("MGs");
 		Player = GameObject.Find("Player");
 		playerMGs [0] = Instantiate (MGOb, new Vector3 (50 , 0, 50 ), Quaternion.identity) as GameObject;
-		players[0]=Instantiate(forNext.players[0].playerOb,new Vector3(50,0,50),Quaternion.identity) as GameObject;
+		players[0]=PhotonNetwork.Instantiate("UP",new Vector3(50,0,50),Quaternion.identity,0) as GameObject;
 		
 		playerMGs [0].transform.Rotate (Vector3.right * -90);
 		playerMGs [0].GetComponent<MG_func>().init(players[0],1.ToString(),0,forNext.players[0].playerColor);
