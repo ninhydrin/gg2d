@@ -13,6 +13,7 @@ public class charactor_select : Photon.MonoBehaviour
 
 	GameObject cam1;
 	Image myColor,myTeam;
+	RectTransform rt;
 	public Sprite[] charFace = new Sprite[3];
 	public GameObject[] charactors = new GameObject[2];
 	public GameObject[] playerOb = new GameObject[3];
@@ -33,10 +34,12 @@ public class charactor_select : Photon.MonoBehaviour
 		cam1 = transform.FindChild("Cam").gameObject;
 		myColor = transform.FindChild ("Color").GetComponent<Image> ();
 		myTeam = transform.FindChild ("Team").GetComponent<Image> ();
-		
+		rt = GetComponent<RectTransform> ();
+		rt.anchoredPosition = new Vector2 (-180 + (photonView.ownerId - 1) * 360, 65);
 		for (int i=0; i<charNum; i++) {
 			charactors [i] = Instantiate (charactors [i], new Vector3 (i * 30,50*photonView.ownerId,0), Quaternion.identity) as GameObject;
 		}
+
 		forNext = GameObject.Find ("ForNextScene");
 		DontDestroyOnLoad (forNext);
 
@@ -89,7 +92,7 @@ public class charactor_select : Photon.MonoBehaviour
 
 				if (Input.GetButtonDown ("Jump")) {
 					setOk = true;
-					forNext.GetComponent<For_next> ().SetPlayer (0, playerOb [seleP], charColor [seleC], teamNum,seleC);
+					forNext.GetComponent<For_next> ().SetPlayer (photonView.ownerId-1, playerOb [seleP], charColor [seleC], teamNum,seleC);
 					charactors [seleP].transform.eulerAngles = Vector3.zero;				
 				}
 			} else {

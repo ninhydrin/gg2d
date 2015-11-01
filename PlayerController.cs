@@ -3,14 +3,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.UI;
 
-public class PlayerController : MonoBehaviour
+public class PlayerController : Photon.MonoBehaviour
 {
 	public float speed;
 	public Terrain terra;
 	public  bool organ;
 	public  bool menu;
 	public bool targeting;
-	private GameObject MG;
 	public Vector3 acceleration = new Vector3 (0, -20f, 0);	// 加速度
 
 	public Button buttons;
@@ -32,7 +31,6 @@ public class PlayerController : MonoBehaviour
 	{
 		organ = false;
 		GameObject.Find ("Organ").GetComponent<UnityEngine.Canvas> ().enabled = false;
-		MG = GameObject.FindWithTag ("PlayerMG");
 		buttons = GameObject.Find ("Player_info").GetComponent<Button> ();
 		nowHP = maxHP;
 		nowTP = maxTP / 2;
@@ -60,66 +58,66 @@ public class PlayerController : MonoBehaviour
 		float moveU = 0.0f;
 		float sle;
 		
-		
-		if (!organ) {
-			if (!canitem2) {
-				canitem2 = true;
-				StartCoroutine ("ItemCoolTime", 90);
-			}
+		if (photonView.isMine) {
+			if (!organ) {
+				if (!canitem2) {
+					canitem2 = true;
+					StartCoroutine ("ItemCoolTime", 90);
+				}
 
-			sle = transform.position [1] - Terrain.activeTerrain.SampleHeight (transform.position);
+				sle = transform.position [1] - Terrain.activeTerrain.SampleHeight (transform.position);
 
-			if (Input.GetButtonDown ("Jump") && sle < 0.6) {
-				moveU = 100.0f;
-			}
+				if (Input.GetButtonDown ("Jump") && sle < 0.6) {
+					moveU = 100.0f;
+				}
 	
 //			Vector3 movement = new Vector3 (moveH, moveU, moveV);
 
 //			GetComponent<Rigidbody> ().AddForce (movement * speed * Time.deltaTime);
 
-			if (Input.GetKeyDown (buttons.Pad_Left)) {
-				organ = true;
-			}
-			if (Input.GetKeyDown (buttons.B_Button)) {			
-				UseItem (itemPoint);
-			}
+				if (Input.GetKeyDown (buttons.Pad_Left)) {
+					organ = true;
+				}
+				if (Input.GetKeyDown (buttons.B_Button)) {			
+					UseItem (itemPoint);
+				}
 
-			if (Input.GetKeyDown (buttons.RB)) {
-				itemPoint = (itemPoint > 4) ? 0 : itemPoint + 1;
-				MoveItemSelector ();
-			} else if (Input.GetKeyDown (buttons.LB)) {			
-				itemPoint = (itemPoint < 1) ? 5 : itemPoint - 1;
-				MoveItemSelector ();				
-			}				
+				if (Input.GetKeyDown (buttons.RB)) {
+					itemPoint = (itemPoint > 4) ? 0 : itemPoint + 1;
+					MoveItemSelector ();
+				} else if (Input.GetKeyDown (buttons.LB)) {			
+					itemPoint = (itemPoint < 1) ? 5 : itemPoint - 1;
+					MoveItemSelector ();				
+				}				
 
-			if (Input.GetKey (buttons.RT)) {
-				nearEnemy = GetNeighborhoodEnemy (transform.position, 10);
-				if (nearEnemy.Count != 0) {
-					targeting = true;
+				if (Input.GetKey (buttons.RT)) {
+					nearEnemy = GetNeighborhoodEnemy (transform.position, 10);
+					if (nearEnemy.Count != 0) {
+						targeting = true;
+					} else {
+						targeting = false;
+					}
 				} else {
 					targeting = false;
-				}
+					//nearEnemy.Clear();
+				} 
+
+
+
+
 			} else {
+				canitem = false;
+				canitem2 = false;
 				targeting = false;
-				//nearEnemy.Clear();
+				if (Input.GetKeyDown (buttons.Pad_Left)) {
+					//organ = false;
+				}
 			} 
 
-
-
-
-		} else {
-			canitem = false;
-			canitem2 = false;
-			targeting = false;
-			if (Input.GetKeyDown (buttons.Pad_Left)) {
-				//organ = false;
-			}
-		} 
-
-		if (Input.GetKeyDown (KeyCode.E)) {
+			if (Input.GetKeyDown (KeyCode.E)) {
 		
+			}
 		}
-
 	}
 
 	void MoveItemSelector ()
