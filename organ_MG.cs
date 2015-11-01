@@ -9,6 +9,7 @@ public class organ_MG : MonoBehaviour
 	private GameObject MG;
 	private Vector2 offset;
 	public GameObject map;
+
 	GameObject cursor;
 	RectTransform cursorRt;
 	cursor_controller cursorC;

@@ -33,7 +33,7 @@ public class For_next : MonoBehaviour
 	void Start ()
 	{
 		players = new playerInfo[4];
-		playerNum = 2;
+		playerNum = 6;
 	}
 	
 	// Update is called once per frame

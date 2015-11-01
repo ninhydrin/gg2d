@@ -7,19 +7,17 @@ public class charactor_select : Photon.MonoBehaviour
 
 	int charNum = 3;
 	int colorNum = 6;
-	int teamNum=4;
-
-	int seleP,seleC,seleT,selector;
-
+	int teamNum = 4;
+	int seleP, seleC, seleT, selector;
 	GameObject cam1;
-	Image myColor,myTeam;
+	Image myColor, myTeam;
 	RectTransform rt;
 	public Sprite[] charFace = new Sprite[3];
 	public GameObject[] charactors = new GameObject[2];
 	public GameObject[] playerOb = new GameObject[3];
 	public Color[] charColor = new Color[6];
 	public int playerNum;
-	Color barC=Color.gray;
+	Color barC = Color.gray;
 	Image myFace;
 	Button buttons;
 	GameObject forNext;
@@ -31,13 +29,14 @@ public class charactor_select : Photon.MonoBehaviour
 		buttons = GetComponent<Button> ();
 		myFace = GetComponent<Image> ();
 		charNum = charFace.Length;
-		cam1 = transform.FindChild("Cam").gameObject;
+		cam1 = transform.FindChild ("Cam").gameObject;
 		myColor = transform.FindChild ("Color").GetComponent<Image> ();
 		myTeam = transform.FindChild ("Team").GetComponent<Image> ();
 		rt = GetComponent<RectTransform> ();
 		rt.anchoredPosition = new Vector2 (-180 + (photonView.ownerId - 1) * 360, 65);
+		cam1.GetComponent<Camera> ().rect = new Rect (0.07f + (photonView.ownerId - 1) * 0.5f, 0, 0.3f, 0.5f);
 		for (int i=0; i<charNum; i++) {
-			charactors [i] = Instantiate (charactors [i], new Vector3 (i * 30,50*photonView.ownerId,0), Quaternion.identity) as GameObject;
+			charactors [i] = Instantiate (charactors [i], new Vector3 (i * 30, 50 * photonView.ownerId, 0), Quaternion.identity) as GameObject;
 		}
 
 		forNext = GameObject.Find ("ForNextScene");
@@ -45,6 +44,7 @@ public class charactor_select : Photon.MonoBehaviour
 
 		myColor.color = charColor [seleC];
 		SetCamPos ();
+		
 	}
 	
 	// Update is called once per frame
@@ -92,7 +92,7 @@ public class charactor_select : Photon.MonoBehaviour
 
 				if (Input.GetButtonDown ("Jump")) {
 					setOk = true;
-					forNext.GetComponent<For_next> ().SetPlayer (photonView.ownerId-1, playerOb [seleP], charColor [seleC], teamNum,seleC);
+					forNext.GetComponent<For_next> ().SetPlayer (photonView.ownerId - 1, playerOb [seleP], charColor [seleC], teamNum, seleC);
 					charactors [seleP].transform.eulerAngles = Vector3.zero;				
 				}
 			} else {
@@ -110,46 +110,51 @@ public class charactor_select : Photon.MonoBehaviour
 	void SetCamPos ()
 	{
 		myFace.sprite = charFace [seleP];
-		cam1.transform.position = new Vector3 (30 * seleP, 2+50*photonView.ownerId,4);
+		cam1.transform.position = new Vector3 (30 * seleP, 2 + 50 * photonView.ownerId, 4);
 	}
-	void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info) {
+
+	void OnPhotonSerializeView (PhotonStream stream, PhotonMessageInfo info)
+	{
 		if (stream.isWriting) {
 			//データの送信
-			stream.SendNext(seleP);
-			stream.SendNext(seleC);
-			stream.SendNext(seleT);
-			stream.SendNext(setOk);
+			stream.SendNext (seleP);
+			stream.SendNext (seleC);
+			stream.SendNext (seleT);
+			stream.SendNext (setOk);
+			stream.SendNext(cam1);
 			
 		} else {
 			//データの受信
-			transform.position = (Vector3)stream.ReceiveNext();
-			seleP=(int)stream.ReceiveNext();
-			seleC=(int)stream.ReceiveNext();
-			seleT=(int)stream.ReceiveNext();
-			setOk=(bool)stream.ReceiveNext();
+			transform.position = (Vector3)stream.ReceiveNext ();
+			seleP = (int)stream.ReceiveNext ();
+			seleC = (int)stream.ReceiveNext ();
+			seleT = (int)stream.ReceiveNext ();
+			setOk = (bool)stream.ReceiveNext ();
+			cam1 = (GameObject)stream.ReceiveNext();
 			
 			
 		}
 	}
 	
-	IEnumerator LoadScene(){
+	IEnumerator LoadScene ()
+	{
 		Text loadingText = GameObject.Find ("Text").GetComponent<Text> ();
-		AsyncOperation async = Application.LoadLevelAsync("Main");
+		AsyncOperation async = Application.LoadLevelAsync ("Main");
 		async.allowSceneActivation = false;    // シーン遷移をしない
 		
 		while (async.progress < 0.9f) {
-			Debug.Log(async.progress);
-			loadingText.text = (async.progress * 100).ToString("F0") + "%";
+			Debug.Log (async.progress);
+			loadingText.text = (async.progress * 100).ToString ("F0") + "%";
 			//loadingBar.fillAmount = async.progress;
-			yield return new WaitForEndOfFrame();
+			yield return new WaitForEndOfFrame ();
 		}
 		
-		Debug.Log("Scene Loaded");
+		Debug.Log ("Scene Loaded");
 		
 		loadingText.text = "100%";
 		//loadingBar.fillAmount = 1;
 		
-		yield return new WaitForSeconds(1);
+		yield return new WaitForSeconds (1);
 		
 		async.allowSceneActivation = true;    // シーン遷移許可
 		
