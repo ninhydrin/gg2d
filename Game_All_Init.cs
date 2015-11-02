@@ -35,7 +35,7 @@ public class Game_All_Init : MonoBehaviour
 
 		ghosts = new ghost_base[9];
 		int num = 1;
-		/*
+
 		for (int i = 0; i<3; i++) {
 			for (int j=0; j<3; j++) {
 				aGhost = Instantiate (ghost, new Vector3 (125 + i * 125, 0, 125 + j * 125), Quaternion.identity) as GameObject;
@@ -44,7 +44,8 @@ public class Game_All_Init : MonoBehaviour
 				aGhost.GetComponent<ghost_base> ().init (num, playerNum);
 				num++;
 			}
-		}*/
+		}
+
 		masterGhost = GameObject.Find ("MGs");
 		MakeMG ();
 

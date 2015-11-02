@@ -34,7 +34,7 @@ public class For_next : MonoBehaviour
 	void Start ()
 	{
 		players = new playerInfo[4];
-		playerNum = 2;
+		playerNum = 1;
 		ok = new bool[playerNum];
 	}
 
