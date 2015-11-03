@@ -92,7 +92,7 @@ public class charactor_select : Photon.MonoBehaviour
 
 				if (Input.GetButtonDown ("Jump")) {
 					setOk = true;
-					forNext.GetComponent<For_next> ().SetPlayer (photonView.ownerId - 1, playerOb [seleP], charColor [seleC], teamNum, seleC);
+					forNext.GetComponent<For_next> ().SetPlayer (PhotonNetwork.player.ID, playerOb [seleP], charColor [seleC], teamNum, seleC);
 					charactors [seleP].transform.eulerAngles = Vector3.zero;
 				}
 			} else {
@@ -103,7 +103,8 @@ public class charactor_select : Photon.MonoBehaviour
 				}
 			}
 		}
-		print (PhotonNetwork.player.ID);
+	
+		
 		forNext.GetComponent<For_next> ().ok [photonView.ownerId - 1] = setOk;
 	}
 

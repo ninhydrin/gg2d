@@ -1,19 +1,20 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine.UI;
 
 public class For_next : MonoBehaviour
 {
-
+	
 	public int playerNum;
 	public string[] mapMG;
 	public string[] minimapMG;
 	public string[] mapMaster;
 	public string[] minimapMaster;
 	public GameObject[] savaIcon;
-	public bool[] ok;
+	int[] idToid;
 	int myid;
-	int id;
+
 	bool flag;
 
 	public struct playerInfo
@@ -32,15 +33,17 @@ public class For_next : MonoBehaviour
 		}
 
 	}
-	public playerInfo[] players;
+	public Dictionary<int, playerInfo> players;
+	public Dictionary<int, bool> ok;
+	
 	// Use this for initialization
 	void Start ()
 	{
-		players = new playerInfo[4];
+		players = new Dictionary<int,playerInfo> ();
+		ok = new Dictionary<int,bool> ();
+		
 		playerNum = 1;
-		myid = -1;
-		id = 0;
-		ok = new bool[playerNum];
+
 	}
 
 
@@ -49,11 +52,24 @@ public class For_next : MonoBehaviour
 	{
 		if (!flag) {
 			int count = 0;
-			for (int i = 0; i<playerNum; i++) {
-				if (ok [i])
-					count++;
+			PhotonPlayer [] player = PhotonNetwork.playerList;
+			for (int i = 0; i < player.Length; i++) {
+				if(ok.ContainsKey(player [i].ID))
+					if(ok[player [i].ID])
+						count++;
 			}
 			if (count == playerNum) {
+				idToid = new int[playerNum];
+				for (int i = 0; i < player.Length; i++) {
+					idToid[i] = player[i].ID; 
+				}
+				System.Array.Sort(idToid);
+				for (int i = 0; i < player.Length; i++) {
+					if(idToid[i] == PhotonNetwork.player.ID){
+						myid=i;
+						break;
+					}
+				}
 				flag = true;
 				StartCoroutine (LoadScene ());
 			}
@@ -62,9 +78,7 @@ public class For_next : MonoBehaviour
 
 	public void SetPlayer (int pNum, GameObject pOb, Color pCo, int tNum, int cNum)
 	{
-	
 		players [pNum] = new playerInfo (pOb, pCo, tNum, cNum);
-
 	}
 
 	IEnumerator LoadScene ()
