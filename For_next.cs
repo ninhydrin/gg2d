@@ -14,7 +14,6 @@ public class For_next : MonoBehaviour
 	public GameObject[] savaIcon;
 	int[] idToid;
 	int myid;
-
 	bool flag;
 
 	public struct playerInfo
@@ -33,17 +32,17 @@ public class For_next : MonoBehaviour
 		}
 
 	}
+	Transform playerList;
 	public Dictionary<int, playerInfo> players;
-	public Dictionary<int, bool> ok;
 	
 	// Use this for initialization
 	void Start ()
 	{
+		playerList = GameObject.Find ("Players").transform;
 		players = new Dictionary<int,playerInfo> ();
-		ok = new Dictionary<int,bool> ();
 		
 		playerNum = 2;
-
+		idToid = new int[playerNum];
 	}
 
 
@@ -53,21 +52,20 @@ public class For_next : MonoBehaviour
 		if (!flag) {
 			int count = 0;
 			PhotonPlayer [] player = PhotonNetwork.playerList;
-			for (int i = 0; i < player.Length; i++) {
-				if(ok.ContainsKey(player [i].ID))
-					if(ok[player [i].ID])
-						count++;
+			foreach (Transform child in playerList) {
+				if (child.FindChild ("Pinfo").GetComponent<charactor_select> ().setOk)
+					count++;
 			}
 			if (count == playerNum) {
-				idToid = new int[playerNum];
 				for (int i = 0; i < player.Length; i++) {
-					idToid[i] = player[i].ID; 
+					idToid [i] = player [i].ID; 
 				}
-				System.Array.Sort(idToid);
+				System.Array.Sort (idToid);
+				int a=0;
 				for (int i = 0; i < player.Length; i++) {
-					if(idToid[i] == PhotonNetwork.player.ID){
-						myid=i;
-						break;
+					players[i]=players[idToid[i]];
+					if (idToid [i] == PhotonNetwork.player.ID) {
+						myid = i;
 					}
 				}
 				flag = true;
@@ -78,8 +76,8 @@ public class For_next : MonoBehaviour
 
 	public void SetPlayer (int pNum, GameObject pOb, Color pCo, int tNum, int cNum)
 	{
-		players [pNum] = new playerInfo (pOb, pCo, tNum, cNum);
-		ok [pNum] = true;
+		print (pNum);
+		players[pNum] = new playerInfo (pOb, pCo, tNum, cNum);
 	}
 
 	IEnumerator LoadScene ()

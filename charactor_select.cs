@@ -91,21 +91,18 @@ public class charactor_select : Photon.MonoBehaviour
 				}
 
 				if (Input.GetButtonDown ("Jump")) {
-					setOk = true;
 					forNext.GetComponent<For_next> ().SetPlayer (PhotonNetwork.player.ID, playerOb [seleP], charColor [seleC], teamNum, seleC);
-					charactors [seleP].transform.eulerAngles = Vector3.zero;
+					setOk = true;
 				}
 			} else {
 
 				if (Input.GetKeyDown (KeyCode.L)) {
-					forNext.GetComponent<For_next> ().ok [PhotonNetwork.player.ID] = false;					
 					setOk = false;
 				}
 			}
 		}
-	
+		forNext.GetComponent<For_next> ().SetPlayer (photonView.ownerId, playerOb [seleP], charColor [seleC], teamNum, seleC);
 		
-		forNext.GetComponent<For_next> ().ok [photonView.ownerId - 1] = setOk;
 	}
 
 	void SetCamPos ()
