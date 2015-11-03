@@ -15,7 +15,7 @@ public class For_next : MonoBehaviour
 	int[] idToid;
 	public int myid;
 	public Color myCo;
-	int gnum=0;
+	int gnum = 0;
 	bool flag;
 
 	public struct playerInfo
@@ -63,12 +63,12 @@ public class For_next : MonoBehaviour
 					idToid [i] = player [i].ID; 
 				}
 				System.Array.Sort (idToid);
-				int a=0;
+				int a = 0;
 				for (int i = 0; i < player.Length; i++) {
-					players[i]=players[idToid[i]];
+					players [i] = players [idToid [i]];
 					if (idToid [i] == PhotonNetwork.player.ID) {
 						myid = i;
-						myCo = players[i].playerColor;
+						myCo = players [i].playerColor;
 					}
 				}
 				flag = true;
@@ -80,12 +80,15 @@ public class For_next : MonoBehaviour
 	public void SetPlayer (int pNum, GameObject pOb, Color pCo, int tNum, int cNum)
 	{
 
-		players[pNum] = new playerInfo (pOb, pCo, tNum, cNum);
+		players [pNum] = new playerInfo (pOb, pCo, tNum, cNum);
 	}
-	public int getGNum(){
+
+	public int getGNum ()
+	{
 		gnum++;
 		return gnum - 1;
 	}
+
 	IEnumerator LoadScene ()
 	{
 		Text loadingText = GameObject.Find ("Text").GetComponent<Text> ();
@@ -100,8 +103,23 @@ public class For_next : MonoBehaviour
 		}
 		
 		Debug.Log ("Scene Loaded");
+
 		
 		loadingText.text = "100%";
+		PhotonPlayer [] player = PhotonNetwork.playerList;
+		foreach (Transform child in playerList) {
+			if (child.FindChild ("Pinfo").GetComponent<charactor_select> ().photonView.isMine)
+				child.FindChild ("Pinfo").GetComponent<charactor_select> ().startOk = true;
+				
+		}
+		int count = 0;
+		while (count != playerNum) {
+			count = 0;
+			foreach (Transform child in playerList) {
+				if (child.FindChild ("Pinfo").GetComponent<charactor_select> ().startOk)
+					count++;				
+			}
+		}
 		//loadingBar.fillAmount = 1;
 		
 		yield return new WaitForSeconds (1);

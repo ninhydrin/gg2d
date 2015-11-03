@@ -85,7 +85,7 @@ public class Game_All_Init : Photon.MonoBehaviour
 		
 		for (int i = 0; i<3; i++) {
 			for (int j=0; j<3; j++) {
-				aGhost = Instantiate (ghost, new Vector3 (125 + i * 125, 0, 125 + j * 125), Quaternion.identity) as GameObject;
+				aGhost = PhotonNetwork.Instantiate ("Ghost", new Vector3 (125 + i * 125, 0, 125 + j * 125), Quaternion.identity,0) as GameObject;
 				ghosts [num - 1] = aGhost.GetComponent<ghost_base> ();
 				num++;
 			}

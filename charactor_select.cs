@@ -23,7 +23,7 @@ public class charactor_select : Photon.MonoBehaviour
 	GameObject forNext;
 	public bool setOk;
 		
-
+	public bool startOk;
 
 	// Use this for initialization
 	void Start ()
