@@ -98,7 +98,7 @@ public class charactor_select : Photon.MonoBehaviour
 			} else {
 
 				if (Input.GetKeyDown (KeyCode.L)) {
-					forNext.GetComponent<For_next> ().ok [photonView.ownerId - 1] = false;					
+					forNext.GetComponent<For_next> ().ok [PhotonNetwork.player.ID] = false;					
 					setOk = false;
 				}
 			}

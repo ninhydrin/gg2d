@@ -42,7 +42,7 @@ public class For_next : MonoBehaviour
 		players = new Dictionary<int,playerInfo> ();
 		ok = new Dictionary<int,bool> ();
 		
-		playerNum = 1;
+		playerNum = 2;
 
 	}
 
@@ -79,6 +79,7 @@ public class For_next : MonoBehaviour
 	public void SetPlayer (int pNum, GameObject pOb, Color pCo, int tNum, int cNum)
 	{
 		players [pNum] = new playerInfo (pOb, pCo, tNum, cNum);
+		ok [pNum] = true;
 	}
 
 	IEnumerator LoadScene ()
