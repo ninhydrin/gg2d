@@ -3,12 +3,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.UI;
 
-public class MG_func : MonoBehaviour
+public class MG_func : Photon.MonoBehaviour
 {
 	int HP = 1000;
 	int maxBarrier = 100;
 	int barrier = 100;
-
 	RectTransform HPBar;
 	Text barrierOb;
 	float HPUnit;
@@ -61,19 +60,19 @@ public class MG_func : MonoBehaviour
 	For_next forNext;
 	// Use this for initialization
 
-	void Awake(){
+	void Awake ()
+	{
 		forNext = GameObject.Find ("ForNextScene").GetComponent<For_next> ();	
 		myNum = forNext.myid;
 		myColor = forNext.myCo;
-		tag = myNum.ToString ()+"P_MG";
-		myParent = GameObject.Find("MGList");	
-		transform.SetParent(myParent.transform);
+		tag = myNum.ToString () + "P_MG";
+		myParent = GameObject.Find ("MGList");	
+		transform.SetParent (myParent.transform);
 	}
-
 
 	void Start ()
 	{			
-		player = GameObject.Find(myNum.ToString()+"P_Master");
+		player = GameObject.Find (myNum.ToString () + "P_Master");
 
 		GameMaster = GameObject.Find ("GameMaster").GetComponent<Game_All_Init> ();
 		sava_queue = new Queue<order>[6];
@@ -147,7 +146,7 @@ public class MG_func : MonoBehaviour
 
 	GameObject MakeHeadHP (GameObject me)
 	{
-		GameObject headHP_ob = Instantiate (headHP);
+		GameObject headHP_ob = PhotonNetwork.Instantiate ("Sava_HP_LV", Vector3.zero, Quaternion.identity, 0) as GameObject;		
 		headHP_ob.GetComponent<sava_head_HPLV> ().init (me);
 		headHP_ob.transform.SetParent (GameObject.Find ("Sava_info").transform);
 		return headHP_ob;
@@ -163,7 +162,7 @@ public class MG_func : MonoBehaviour
 
 	public GameObject createMapIcon (GameObject map_icon, int targetPreNum, int gNum)
 	{
-		GameObject map_icon_ob = Instantiate (map_icon)as GameObject;
+		GameObject map_icon_ob = PhotonNetwork.Instantiate ("kinsetsu",Vector3.zero,Quaternion.identity,0) as GameObject;		
 		map_icon_ob.transform.SetParent (GameObject.Find ("Organ/Map/Organ_sava").transform);
 		map_icon_ob.GetComponent<mapicon> ().init (prepare [targetPreNum].gameObject, gNum);
 		return map_icon_ob;
@@ -171,7 +170,7 @@ public class MG_func : MonoBehaviour
 	
 	public GameObject createMinimapIcon (GameObject minimap_icon, int targetPreNum)
 	{
-		GameObject minimap_icon_ob = Instantiate (minimap_icon) as GameObject;
+		GameObject minimap_icon_ob = PhotonNetwork.Instantiate ("minimap_A",Vector3.zero,Quaternion.identity,0) as GameObject;		
 		minimap_icon_ob.transform.SetParent (GameObject.Find ("Minimap/Field").transform);
 		minimap_icon_ob.GetComponent<minimap_icon> ().init (prepare [targetPreNum].gameObject);
 		return minimap_icon_ob;
@@ -191,7 +190,9 @@ public class MG_func : MonoBehaviour
 		HP -= (int)(a * ((100 - barrier) / 100f));
 		barrier -= 1;		
 	}
-	void CreatePreparePos(){
+
+	void CreatePreparePos ()
+	{
 		summonPos = new Vector3[6];
 		summonPos [0] = new Vector3 (35f, 2f, 50f);
 		summonPos [1] = new Vector3 (40f, 2f, 50f);
@@ -202,7 +203,7 @@ public class MG_func : MonoBehaviour
 		prepare = new ParticleSystem[6];
 		for (int i =0; i<6; i++) {
 			sava_queue [i] = new Queue<order> (){};
-			GameObject a = PhotonNetwork.Instantiate ("Prepare", summonPos [i], Quaternion.identity,0) as GameObject;
+			GameObject a = PhotonNetwork.Instantiate ("Prepare", summonPos [i], Quaternion.identity, 0) as GameObject;
 			a.transform.SetParent (transform);
 			prepare [i] = a.GetComponent<ParticleSystem> ();
 			prepare [i].emissionRate = 0;

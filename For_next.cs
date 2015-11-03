@@ -43,7 +43,7 @@ public class For_next : MonoBehaviour
 		playerList = GameObject.Find ("Players").transform;
 		players = new Dictionary<int,playerInfo> ();
 		
-		playerNum = 1;
+		playerNum = 2;
 		idToid = new int[playerNum];
 	}
 

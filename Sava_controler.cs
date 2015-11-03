@@ -165,7 +165,7 @@ public class Sava_controler : MonoBehaviour
 		myGroupNum = gnum;
 		leader = le;
 		myTeamNum = myNum;
-		tag = (myNum).ToString()+"P_Sava";
+		gameObject.tag = (myNum).ToString()+"P_Sava";
 	}
 
 	HashSet<GameObject> GetNearAlly (float range)
@@ -173,7 +173,7 @@ public class Sava_controler : MonoBehaviour
 		HashSet<GameObject> c = new HashSet<GameObject> ();
 		Collider[] a = Physics.OverlapSphere (transform.position, range);
 		foreach (Collider b in a) {
-			if (b.gameObject.tag == "My_sava" || b.gameObject.tag == "Player" || b.gameObject.tag == "My_master")
+			if (b.gameObject.tag ==  myTeamNum.ToString()+"P_Sava" || b.gameObject.tag == myTeamNum.ToString()+ "P_Master" ||b.gameObject.tag == myTeamNum.ToString()+"P_MG")
 				c.Add (b.gameObject);
 		}
 		return c;
