@@ -22,6 +22,7 @@ public class ghost_control : MonoBehaviour
 
 	void Start ()
 	{
+		GetComponent<RectTransform> ().localScale = new Vector3 (1, 1, 0);		
 	}
 	
 	void LateUpdate ()
@@ -65,7 +66,6 @@ public class ghost_control : MonoBehaviour
 		forNext = GameObject.Find ("ForNextScene").GetComponent<For_next> ();
 		myOb = target;
 		playerNum = pNum;
-
 		control_bar = new GameObject[playerNum + 1];
 		Power = new int[playerNum + 1];
 		Power [playerNum] = 100;

@@ -23,6 +23,7 @@ public class organ_MG : MonoBehaviour
 	void Start ()
 	{
 		rt = GetComponent<RectTransform> ();
+		rt.localScale = new Vector3 (1f, 1f, 0);
 		MG = GameObject.FindWithTag ("PlayerMG");
 		organC = GameObject.FindWithTag ("Player").GetComponent<organ_controller> ();
 		offset = rt.anchoredPosition;

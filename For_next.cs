@@ -13,6 +13,7 @@ public class For_next : MonoBehaviour
 	public GameObject[] savaIcon;
 	public bool[] ok;
 	bool flag;
+
 	public struct playerInfo
 	{
 		public GameObject playerOb;
@@ -34,7 +35,7 @@ public class For_next : MonoBehaviour
 	void Start ()
 	{
 		players = new playerInfo[4];
-		playerNum = 1;
+		playerNum = 2;
 		ok = new bool[playerNum];
 	}
 

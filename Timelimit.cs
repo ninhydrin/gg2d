@@ -100,10 +100,17 @@ public class Timelimit: MonoBehaviour
 	/// 駆動中または有効になっていない場合はFalse、
 	/// 時間に来たらTrueを返す。
 	/// </summary>
+	/// 
+	bool toInit = true;
+	float aaaa;
 	public bool Update ()
 	{
 		if (IsEnable) {
-			CurrentTime += Time.deltaTime;
+			if (toInit) {
+				aaaa = (float)PhotonNetwork.time;
+				toInit = false;
+			}
+			CurrentTime = ((float)PhotonNetwork.time-aaaa);//Time.deltaTime;
 			transform.GetComponent<UnityEngine.UI.Text> ().text = Tomin ((int)RemainingTime);
 			if (CurrentTime >= LimitTime) {
 				CurrentTime = 0;
