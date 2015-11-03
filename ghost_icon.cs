@@ -14,49 +14,57 @@ public class ghost_icon : MonoBehaviour
 	bool imTarget;
 	int myGroupNum;
 	Color defaultColor = Color.gray;
+
+	For_next forNext;
+	bool cando;
 	// Use this for initialization
 	void Start ()
 	{
-		rt = transform.GetComponent<RectTransform> ();
-		organC = GameObject.FindWithTag ("Player").GetComponent<organ_controller> ();
+		forNext = GameObject.Find ("ForNextScene").GetComponent<For_next> ();		
+		organC = GameObject.FindWithTag (forNext.myid.ToString()+"P_Master").GetComponent<organ_controller> ();
 		cursorC = GameObject.Find ("Organ/Map/Organ_Cursor").GetComponent<cursor_controller> ();
 		cursorRt = GameObject.Find ("Organ/Map/Organ_Cursor").GetComponent<RectTransform> ();
 		myColor = GetComponent<Image> ();
+		transform.SetSiblingIndex (0);
 	}
 	
 	// Update is called once per frame
 	void Update ()
 	{
-		myColor.color = ghostB.dominator >= 0 ? ghostB.domiColor : defaultColor;
+		if (cando) {
+			myColor.color = ghostB.dominator >= 0 ? ghostB.domiColor : defaultColor;
 
-		if (organC.savaDictSetting || organC.summoning) {
-			float inter = Vector2.Distance (cursorRt.anchoredPosition, rt.anchoredPosition);
+			if (organC.savaDictSetting || organC.summoning) {
+				float inter = Vector2.Distance (cursorRt.anchoredPosition, rt.anchoredPosition);
 
-			if (inter < 15f && (cursorC.isTarget () == 0 || (imTarget && cursorC.isTarget () == myGroupNum)) && !cursorC.isMoving ()) {
-				if (!imTarget) {
-					imTarget = true;
-				}
-				cursorC.TargetingNum (myGroupNum);
-				cursorC.MoveTo (rt.anchoredPosition, myGroupNum, gameObject);		
+				if (inter < 15f && (cursorC.isTarget () == 0 || (imTarget && cursorC.isTarget () == myGroupNum)) && !cursorC.isMoving ()) {
+					if (!imTarget) {
+						imTarget = true;
+					}
+					cursorC.TargetingNum (myGroupNum);
+					cursorC.MoveTo (rt.anchoredPosition, myGroupNum, gameObject);		
 				
-			} else if (inter > 15f) {
-				if (imTarget)
-					cursorC.TargetingNum ();
+				} else if (inter > 15f) {
+					if (imTarget)
+						cursorC.TargetingNum ();
+					imTarget = false;
+				}
+			} else {
 				imTarget = false;
 			}
-		} else {
-			imTarget = false;
 		}
 	}
 
 	public void init (int num, Vector2 offset, ghost_base a)
 	{
-		rt = transform.GetComponent<RectTransform> ();
+
 		myNum = num;
 		transform.FindChild ("Number").GetComponent<UnityEngine.UI.Text> ().text = num.ToString ();
+		rt = transform.GetComponent<RectTransform> ();		
 		rt.anchoredPosition = offset;
 		ghostB = a;
 		myGroupNum = -10 - num;
+		cando = true;
 	}
 
 }

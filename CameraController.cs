@@ -15,13 +15,16 @@ public class CameraController : MonoBehaviour
 	Transform DefaultPos;
 	Transform LOP;
 	GameObject[] nearEnemy;
+	For_next forNext;
 	Transform BDPos;
 	bool pTarget;
 	float turnTime;
+	int myNum;
 	// Use this for initialization
 	void Start ()
 	{
-		
+		forNext = GameObject.Find ("ForNextScene").GetComponent<For_next> ();
+		myNum = forNext.myid;
 		buttons = GameObject.Find ("Player_info").GetComponent<Button> ();
 		x = 8f;
 		y = 6f;
@@ -32,7 +35,7 @@ public class CameraController : MonoBehaviour
 		offset = new Vector3 (0f, y, z);
 		lockOn = new Vector3 (0f, yy, zz);
 		//transform.localRotation.x = ;
-		player = GameObject.FindWithTag ("Player");
+		player = GameObject.FindWithTag (myNum.ToString()+"P_Master");
 		playerC = player.GetComponent<PlayerController> ();
 		CP = player.transform.FindChild("Camera_Pos");
 		LOP = player.transform.FindChild ("LockOnPos");

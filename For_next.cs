@@ -13,7 +13,9 @@ public class For_next : MonoBehaviour
 	public string[] minimapMaster;
 	public GameObject[] savaIcon;
 	int[] idToid;
-	int myid;
+	public int myid;
+	public Color myCo;
+	int gnum=0;
 	bool flag;
 
 	public struct playerInfo
@@ -41,7 +43,7 @@ public class For_next : MonoBehaviour
 		playerList = GameObject.Find ("Players").transform;
 		players = new Dictionary<int,playerInfo> ();
 		
-		playerNum = 2;
+		playerNum = 1;
 		idToid = new int[playerNum];
 	}
 
@@ -66,6 +68,7 @@ public class For_next : MonoBehaviour
 					players[i]=players[idToid[i]];
 					if (idToid [i] == PhotonNetwork.player.ID) {
 						myid = i;
+						myCo = players[i].playerColor;
 					}
 				}
 				flag = true;
@@ -76,10 +79,13 @@ public class For_next : MonoBehaviour
 
 	public void SetPlayer (int pNum, GameObject pOb, Color pCo, int tNum, int cNum)
 	{
-		print (pNum);
+
 		players[pNum] = new playerInfo (pOb, pCo, tNum, cNum);
 	}
-
+	public int getGNum(){
+		gnum++;
+		return gnum - 1;
+	}
 	IEnumerator LoadScene ()
 	{
 		Text loadingText = GameObject.Find ("Text").GetComponent<Text> ();

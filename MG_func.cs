@@ -57,9 +57,24 @@ public class MG_func : MonoBehaviour
 	int summonToken;
 	int orderToken;
 	Game_All_Init GameMaster;
+	GameObject myParent;
+	For_next forNext;
 	// Use this for initialization
+
+	void Awake(){
+		forNext = GameObject.Find ("ForNextScene").GetComponent<For_next> ();	
+		myNum = forNext.myid;
+		myColor = forNext.myCo;
+		tag = myNum.ToString ()+"P_MG";
+		myParent = GameObject.Find("MGList");	
+		transform.SetParent(myParent.transform);
+	}
+
+
 	void Start ()
-	{
+	{			
+		player = GameObject.Find(myNum.ToString()+"P_Master");
+
 		GameMaster = GameObject.Find ("GameMaster").GetComponent<Game_All_Init> ();
 		sava_queue = new Queue<order>[6];
 
@@ -70,27 +85,7 @@ public class MG_func : MonoBehaviour
 		barrierOb = GameObject.Find ("Player_info/Player_MG_HP/Barrier").GetComponent<Text> ();
 		creating = false;
 
-		/*
-		float x = (transform.position.x - 250f) / 5f;
-		float y = (transform.position.z - 250f) / 5f;
-		GameObject.Find ("MyMG").GetComponent<RectTransform> ().anchoredPosition = new Vector2 (x, y);
-*/
 		CreatePreparePos ();
-
-
-		//player.GetComponent<PlayerController> ().myNum = myNum;
-		//player.GetComponent<PlayerController> ().myColor = myColor;
-	}
-
-	public void init (GameObject p, string myTag, int num, Color co)
-	{
-		myNum = num;
-		myColor = co;
-		tag = myTag+"MG";
-		player = p;
-		player.GetComponent<PlayerController> ().myNum = myNum;
-		player.GetComponent<PlayerController> ().myColor = myColor;
-		player.GetComponent<PlayerController> ().init (myTag, myNum, myColor);
 
 	}
 

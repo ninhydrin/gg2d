@@ -18,6 +18,8 @@ public class cursor_controller : MonoBehaviour
 	public float mapSize;
 
 	organ_controller organC;
+	For_next forNext;
+
 	private Image MBdest;
 	private Text MBdestT;
 	private Image MBcancel;
@@ -48,7 +50,9 @@ public class cursor_controller : MonoBehaviour
 	void Start ()
 	{
 		rt = GetComponent<RectTransform> ();
-		player = GameObject.FindWithTag ("Player");
+		forNext = GameObject.Find ("ForNextScene").GetComponent<For_next> ();
+		
+		player = GameObject.FindWithTag (forNext.myid.ToString()+"P_Master");
 		organC = player.GetComponent<organ_controller> ();
 		MBdestT = transform.FindChild ("Message_dest/Text").GetComponent<Text> ();
 		MBdest = transform.FindChild ("Message_dest").GetComponent<Image> ();
@@ -117,8 +121,7 @@ public class cursor_controller : MonoBehaviour
 		} else {
 			offset = rt.anchoredPosition = new Vector2 (0, 0);
 			targetG = 0;
-		}
-		
+		}	
 
 	}
 

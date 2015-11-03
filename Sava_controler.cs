@@ -165,7 +165,7 @@ public class Sava_controler : MonoBehaviour
 		myGroupNum = gnum;
 		leader = le;
 		myTeamNum = myNum;
-		tag = (myNum+1).ToString()+"P_Sava";
+		tag = (myNum).ToString()+"P_Sava";
 	}
 
 	HashSet<GameObject> GetNearAlly (float range)

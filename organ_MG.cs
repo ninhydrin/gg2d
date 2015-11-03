@@ -9,7 +9,7 @@ public class organ_MG : MonoBehaviour
 	private GameObject MG;
 	private Vector2 offset;
 	public GameObject map;
-
+	GameObject myParent;
 	GameObject cursor;
 	RectTransform cursorRt;
 	cursor_controller cursorC;
@@ -17,15 +17,20 @@ public class organ_MG : MonoBehaviour
 	Image mycolor;
 	organ_controller organC;
 	int myGroupNum;
-
+	For_next forNext;
 	bool startFlag;
 	// Use this for initialization
 	void Start ()
 	{
+		forNext = GameObject.Find ("ForNextScene").GetComponent<For_next> ();		
 		rt = GetComponent<RectTransform> ();
 		rt.localScale = new Vector3 (1f, 1f, 0);
-		MG = GameObject.FindWithTag ("PlayerMG");
-		organC = GameObject.FindWithTag ("Player").GetComponent<organ_controller> ();
+		MG = GameObject.FindWithTag (forNext.myid.ToString () + "P_MG");
+
+		myParent = GameObject.Find ("Organ/Map");
+		transform.SetParent (myParent.transform);
+
+		organC = GameObject.FindWithTag (forNext.myid.ToString () + "P_Master").GetComponent<organ_controller> ();
 		offset = rt.anchoredPosition;
 		offset.x = (MG.transform.position.x - 250f) * 0.6f;
 		offset.y = (MG.transform.position.z - 250f) * 0.6f;
@@ -36,35 +41,32 @@ public class organ_MG : MonoBehaviour
 		imTarget = false;
 		mycolor = gameObject.GetComponent<Image> ();
 		myGroupNum = -10;
-	}
-	public void init (GameObject myMG){
-		MG = myMG;
-		startFlag = true;
+		transform.SetSiblingIndex (0);
 	}
 
 	void Update ()
 	{
-		if (startFlag) {
-			if (organC.savaDictSetting || organC.summoning) {
-				float inter = Vector2.Distance (cursorRt.anchoredPosition, rt.anchoredPosition);
 
-				if (inter < 15f && (cursorC.isTarget () == 0 || (imTarget && cursorC.isTarget () == -10)) && !cursorC.isMoving ()) {
-					if (!imTarget) {
-						imTarget = true;
-						StartCoroutine (OnCursor ());
-					}
-					cursorC.TargetingNum (myGroupNum);
-					cursorC.MoveTo (rt.anchoredPosition, myGroupNum, gameObject);		
+		if (organC.savaDictSetting || organC.summoning) {
+			float inter = Vector2.Distance (cursorRt.anchoredPosition, rt.anchoredPosition);
 
-				} else if (inter > 15f) {
-					if (imTarget)
-						cursorC.TargetingNum ();
-					imTarget = false;
+			if (inter < 15f && (cursorC.isTarget () == 0 || (imTarget && cursorC.isTarget () == -10)) && !cursorC.isMoving ()) {
+				if (!imTarget) {
+					imTarget = true;
+					StartCoroutine (OnCursor ());
 				}
-			} else {
+				cursorC.TargetingNum (myGroupNum);
+				cursorC.MoveTo (rt.anchoredPosition, myGroupNum, gameObject);		
+
+			} else if (inter > 15f) {
+				if (imTarget)
+					cursorC.TargetingNum ();
 				imTarget = false;
 			}
+		} else {
+			imTarget = false;
 		}
+
 	}
 
 	private IEnumerator OnCursor ()

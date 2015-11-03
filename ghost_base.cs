@@ -14,12 +14,34 @@ public class ghost_base : MonoBehaviour
 	public int  dominator;
 	public Color domiColor;
 	bool coF;
-	ghost_control ghostC;
 
+	GameObject myParent;
+	ghost_control ghostC;
+	For_next forNext;
 	// Use this for initialization
 	void Start ()
 	{
-	
+		myParent = GameObject.Find("GhostList");
+		transform.SetParent (myParent.transform);
+		forNext = GameObject.Find ("ForNextScene").GetComponent<For_next> ();	
+
+		ghostHP = Instantiate (ghostHP_ob);
+		ghostHP.GetComponent<ghost_control> ().init (gameObject,forNext.playerNum);
+		ghostHP.transform.SetParent (GameObject.Find ("Minimap").transform);
+
+		right = transform.FindChild ("Light").GetComponent<ParticleSystem> ();
+		offset.x = ((transform.position.x - 250f) * 3f) / 5f;
+		offset.y = ((transform.position.z - 250f) * 3f) / 5f;
+		
+		
+		ghostC = ghostHP.GetComponent<ghost_control> ();
+		right.enableEmission = false;
+
+		mapicon = Instantiate (mapicon_ob, offset, Quaternion.identity) as GameObject;	
+		mapicon.transform.SetParent (GameObject.Find ("Map").transform);
+		myNum = forNext.getGNum ();
+		mapicon.GetComponent<ghost_icon> ().init (myNum, offset,this);
+
 	}
 	
 	// Update is called once per frame
@@ -34,26 +56,6 @@ public class ghost_base : MonoBehaviour
 		if (dominator != ghostC.dominator) {
 			SetParticle(false,-1,ghostC.domiColor);
 		}
-	}
-	
-	public void init (int num,int pNum)
-	{
-		myNum = num;
-		offset.x = ((transform.position.x - 250f) * 3f) / 5f;
-		offset.y = ((transform.position.z - 250f) * 3f) / 5f;
-
-		ghostHP = Instantiate (ghostHP_ob);
-		ghostHP.GetComponent<ghost_control> ().init (gameObject,pNum);
-		ghostHP.transform.SetParent (GameObject.Find ("Minimap").transform);
-
-		right = transform.FindChild ("Light").GetComponent<ParticleSystem> ();
-		ghostC = ghostHP.GetComponent<ghost_control> ();
-		right.enableEmission = false;
-		mapicon = Instantiate (mapicon_ob, offset, Quaternion.identity) as GameObject;	
-		mapicon.transform.SetParent (GameObject.Find ("Map").transform);
-		mapicon.GetComponent<ghost_icon> ().init (num, offset,this);
-
-
 	}
 
 	public void Damage (int da, int t)

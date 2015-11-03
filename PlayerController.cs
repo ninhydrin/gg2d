@@ -27,8 +27,18 @@ public class PlayerController : Photon.MonoBehaviour
 	bool canitem;
 	bool canitem2;
 
+	For_next forNext;
+	GameObject myParent;
+	void Awake(){
+		forNext = GameObject.Find ("ForNextScene").GetComponent<For_next> ();
+		myNum = forNext.myid;
+		myColor = forNext.myCo;
+		tag = myNum.ToString()+"P_Master";
+	}
 	void Start ()
 	{
+		myParent = GameObject.Find("PlayerList");
+		transform.SetParent (myParent.transform);
 		organ = false;
 		GameObject.Find ("Organ").GetComponent<UnityEngine.Canvas> ().enabled = false;
 		buttons = GameObject.Find ("Player_info").GetComponent<Button> ();
@@ -41,13 +51,7 @@ public class PlayerController : Photon.MonoBehaviour
 		itemBox = new GameObject[6];
 		itemPoint = 0;
 	}
-
-	public void init (string mtg, int mNum, Color mC)
-	{
-		myNum = mNum;
-		myColor = mC;
-		tag = mtg;
-	}
+	
 
 	Collider[] neighborhoodSava;
 	

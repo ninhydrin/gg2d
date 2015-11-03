@@ -10,10 +10,12 @@ public class show_player_info : MonoBehaviour
 	RectTransform myTP;
 	float HPLenUnit;
 	float TPLenUnit;
+	For_next forNext;
 	// Use this for initialization
 	void Start ()
 	{
-		myPlayer = GameObject.FindWithTag ("Player");
+		forNext = GameObject.Find ("ForNextScene").GetComponent<For_next> ();		
+		myPlayer = GameObject.FindWithTag (forNext.myid+"P_Master");
 		pcon = myPlayer.GetComponent<PlayerController> ();
 		myHP = transform.FindChild ("Player_HP").GetComponent<RectTransform> ();
 		myTP = transform.FindChild ("Player_TP").GetComponent<RectTransform> ();

@@ -16,60 +16,60 @@ public class mapicon : MonoBehaviour
 	Image mycolor;
 	organ_controller myorgan;
 	int myGroupNum;
-
+	For_next forNext;
+	bool cando;
 	// Use this for initialization
 	void Start ()
 	{
-		rt = GetComponent<RectTransform> ();
-		cursor = GameObject.Find ("Organ_Cursor");
-		cursorC = cursor.GetComponent<cursor_controller> ();
-		cursorRt = cursor.GetComponent<RectTransform> ();
-		inter = 0f;
-		imTarget = false;
-		mycolor = gameObject.GetComponent<Image> ();
-		myorgan = GameObject.FindWithTag ("Player").GetComponent<organ_controller> ();
-	
+		transform.SetSiblingIndex (0);
 	}
 	
 	// Update is called once per frame
 	void Update ()
-	{
-		if (myOb == null) {
-			Destroy (this.gameObject);
-		} else {
+	{if (cando) {
+			if (myOb == null) {
+				Destroy (this.gameObject);
+			} else {
 
-			inter = Vector2.Distance (cursorRt.anchoredPosition, rt.anchoredPosition);
+				inter = Vector2.Distance (cursorRt.anchoredPosition, rt.anchoredPosition);
 
-			if (inter < 8f && (cursorC.isTarget () <= 0 || (imTarget && cursorC.isTarget () == myGroupNum)) && !cursorC.isMoving ()) {
-				if (!imTarget) {
-					imTarget = true;
-					StartCoroutine (OnCursor ());
+				if (inter < 8f && (cursorC.isTarget () <= 0 || (imTarget && cursorC.isTarget () == myGroupNum)) && !cursorC.isMoving ()) {
+					if (!imTarget) {
+						imTarget = true;
+						StartCoroutine (OnCursor ());
+					}
+					cursorC.TargetingNum (myGroupNum);
+					cursorC.MoveTo (rt.anchoredPosition, myGroupNum, gameObject);	
+
+				} else if (inter > 6f) {
+					if (imTarget)
+						cursorC.TargetingNum ();
+					imTarget = false;
 				}
-				cursorC.TargetingNum (myGroupNum);
-				cursorC.MoveTo (rt.anchoredPosition, myGroupNum, gameObject);	
-
-			} else if (inter > 6f) {
-				if (imTarget)
-					cursorC.TargetingNum ();
-				imTarget = false;
-			}
 						
 
-			iMove ();
+				iMove ();
+			}
 		}
 	}
 
 	public void init (GameObject nicon, int num=-100)
 	{
+		forNext = GameObject.Find ("ForNextScene").GetComponent<For_next> ();			
 		myOb = nicon;
-//		myObBase = nicon.transform.parent.GetComponent<sava_base>();
 		myObC = nicon.GetComponent<Sava_controler> ();
 		rt = GetComponent<RectTransform> ();
 		offset.x = ((nicon.transform.position.x - 250f) * 3f) / 5f;
 		offset.y = ((nicon.transform.position.z - 250f) * 3f) / 5f;
 		rt.anchoredPosition = offset;
 		if (num != -100)
-			myGroupNum = num;				
+			myGroupNum = num;	
+		cursor = GameObject.Find ("Organ_Cursor");
+		cursorC = cursor.GetComponent<cursor_controller> ();
+		cursorRt = cursor.GetComponent<RectTransform> ();
+		mycolor = gameObject.GetComponent<Image> ();
+		myorgan = GameObject.FindWithTag (forNext.myid.ToString()+"P_Master").GetComponent<organ_controller> ();
+		cando = true;
 	}
 
 	private IEnumerator OnCursor ()

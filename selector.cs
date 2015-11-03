@@ -19,6 +19,8 @@ public class selector : MonoBehaviour
 	bool coflag;
 	Mana_manager Mana;
 
+	For_next forNext;
+
 	public GameObject savant;
 	public bool cantReleasing;
 	public string myTag;
@@ -27,6 +29,7 @@ public class selector : MonoBehaviour
 
 	void Start ()
 	{
+		forNext = GameObject.Find ("ForNextScene").GetComponent<For_next> ();		
 		entrys = transform.FindChild ("Entry_list");
 		entry_num = entrys.childCount;
 		rt = transform.FindChild ("Menu_selector").GetComponent<RectTransform> ();
@@ -37,7 +40,7 @@ public class selector : MonoBehaviour
 
 		updown = 21f;
 		point = 0;
-		MG = GameObject.FindGameObjectWithTag ("PlayerMG").GetComponent<MG_func> ();
+		MG = GameObject.FindGameObjectWithTag (forNext.myid.ToString()+"P_MG").GetComponent<MG_func> ();
 
 		entry_list = new Transform [entry_num];
 		int count = 0;
@@ -48,7 +51,7 @@ public class selector : MonoBehaviour
 			count++;
 		
 		}
-		organ = GameObject.FindWithTag ("Player").GetComponent<organ_controller> ();
+		organ = GameObject.FindWithTag (forNext.myid.ToString()+ "P_Master").GetComponent<organ_controller> ();
 		init_pos = new Vector2 (0f, -20f);
 		rt.anchoredPosition = init_pos;
 		savaGroupNum = 1;
