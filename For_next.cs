@@ -12,6 +12,8 @@ public class For_next : MonoBehaviour
 	public string[] minimapMaster;
 	public GameObject[] savaIcon;
 	public bool[] ok;
+	int myid;
+	int id;
 	bool flag;
 
 	public struct playerInfo
@@ -35,7 +37,9 @@ public class For_next : MonoBehaviour
 	void Start ()
 	{
 		players = new playerInfo[4];
-		playerNum = 2;
+		playerNum = 1;
+		myid = -1;
+		id = 0;
 		ok = new bool[playerNum];
 	}
 
@@ -49,16 +53,18 @@ public class For_next : MonoBehaviour
 				if (ok [i])
 					count++;
 			}
-			if(count == playerNum){
+			if (count == playerNum) {
 				flag = true;
-				StartCoroutine(LoadScene());
+				StartCoroutine (LoadScene ());
 			}
 		}
 	}
 
 	public void SetPlayer (int pNum, GameObject pOb, Color pCo, int tNum, int cNum)
 	{
+	
 		players [pNum] = new playerInfo (pOb, pCo, tNum, cNum);
+
 	}
 
 	IEnumerator LoadScene ()

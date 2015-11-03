@@ -8,6 +8,7 @@ public class MG_func : MonoBehaviour
 	int HP = 1000;
 	int maxBarrier = 100;
 	int barrier = 100;
+
 	RectTransform HPBar;
 	Text barrierOb;
 	float HPUnit;
@@ -77,8 +78,8 @@ public class MG_func : MonoBehaviour
 		CreatePreparePos ();
 
 
-		player.GetComponent<PlayerController> ().myNum = myNum;
-		player.GetComponent<PlayerController> ().myColor = myColor;
+		//player.GetComponent<PlayerController> ().myNum = myNum;
+		//player.GetComponent<PlayerController> ().myColor = myColor;
 	}
 
 	public void init (GameObject p, string myTag, int num, Color co)

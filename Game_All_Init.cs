@@ -13,6 +13,7 @@ public class Game_All_Init : MonoBehaviour
 	GameObject ghostList;
 	GameObject miniMap;
 	GameObject organMap;
+	GameObject MGHP;
 
 	GameObject Player;
 	GameObject aGhost;
@@ -48,6 +49,7 @@ public class Game_All_Init : MonoBehaviour
 		MakeMG ();
 		MakeMapMG ();
 		MakeMiniMG ();
+		MakeMGHP();
 		
 	}
 
@@ -74,6 +76,9 @@ public class Game_All_Init : MonoBehaviour
 		mapMG.GetComponent<RectTransform>().localScale = new Vector3 (1f,1f,0);
 		mapMG.GetComponent<organ_MG> ().init (MG);
 		mapMG.transform.SetParent (organMap.transform);
+	}
+	void MakeMGHP(){
+		MGHP = PhotonNetwork.Instantiate ("Player_MG_HP", new Vector3 (5f, 5f, 0f), Quaternion.identity, 0);
 	}
 	void MakeGhost(){
 		ghosts = new ghost_base[9];

@@ -103,6 +103,7 @@ public class charactor_select : Photon.MonoBehaviour
 				}
 			}
 		}
+		print (PhotonNetwork.player.ID);
 		forNext.GetComponent<For_next> ().ok [photonView.ownerId - 1] = setOk;
 	}
 
