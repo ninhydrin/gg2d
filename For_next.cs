@@ -106,6 +106,7 @@ public class For_next : MonoBehaviour
 
 		
 		loadingText.text = "100%";
+		/*
 		PhotonPlayer [] player = PhotonNetwork.playerList;
 		foreach (Transform child in playerList) {
 			if (child.FindChild ("Pinfo").GetComponent<charactor_select> ().photonView.isMine)
@@ -119,9 +120,10 @@ public class For_next : MonoBehaviour
 				if (child.FindChild ("Pinfo").GetComponent<charactor_select> ().startOk)
 					count++;				
 			}
+			yield return 0;
 		}
 		//loadingBar.fillAmount = 1;
-		
+		*/
 		yield return new WaitForSeconds (1);
 		
 		async.allowSceneActivation = true;    // シーン遷移許可

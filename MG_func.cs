@@ -66,12 +66,13 @@ public class MG_func : Photon.MonoBehaviour
 		myNum = forNext.myid;
 		myColor = forNext.myCo;
 		tag = myNum.ToString () + "P_MG";
-		myParent = GameObject.Find ("MGList");	
-		transform.SetParent (myParent.transform);
+
 	}
 
 	void Start ()
-	{			
+	{		
+		myParent = GameObject.Find ("MGList");	
+		transform.SetParent (myParent.transform);	
 		player = GameObject.Find (myNum.ToString () + "P_Master");
 
 		GameMaster = GameObject.Find ("GameMaster").GetComponent<Game_All_Init> ();

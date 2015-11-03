@@ -29,12 +29,14 @@ public class PlayerController : Photon.MonoBehaviour
 
 	For_next forNext;
 	GameObject myParent;
+
 	void Awake(){
 		forNext = GameObject.Find ("ForNextScene").GetComponent<For_next> ();
 		myNum = forNext.myid;
 		myColor = forNext.myCo;
 		tag = myNum.ToString()+"P_Master";
 	}
+
 	void Start ()
 	{
 		myParent = GameObject.Find("PlayerList");
