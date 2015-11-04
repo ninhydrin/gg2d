@@ -12,6 +12,7 @@ public class For_next : MonoBehaviour
 	public string[] mapMaster;
 	public string[] minimapMaster;
 	public GameObject[] savaIcon;
+	GameObject commons;
 	int[] idToid;
 	public int myid;
 	public Color myCo;
@@ -42,9 +43,11 @@ public class For_next : MonoBehaviour
 	{
 		playerList = GameObject.Find ("Players").transform;
 		players = new Dictionary<int,playerInfo> ();
-		
-		playerNum = 2;
+		commons = PhotonNetwork.Instantiate("Commons",Vector3.zero,Quaternion.identity,0);
+
+		playerNum = 1;
 		idToid = new int[playerNum];
+		DontDestroyOnLoad (commons);		
 		DontDestroyOnLoad (gameObject);
 		DontDestroyOnLoad (GameObject.Find("PlayerList"));
 		DontDestroyOnLoad (GameObject.Find("MGList"));
