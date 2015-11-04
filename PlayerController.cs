@@ -39,19 +39,19 @@ public class PlayerController : Photon.MonoBehaviour
 
 	void Start ()
 	{
-		myParent = GameObject.Find("PlayerList");
-		transform.SetParent (myParent.transform);
 		organ = false;
-		GameObject.Find ("Organ").GetComponent<UnityEngine.Canvas> ().enabled = false;
-		buttons = GameObject.Find ("Player_info").GetComponent<Button> ();
-		nowHP = maxHP;
-		nowTP = maxTP / 2;
-		itemSelector = GameObject.Find ("Player_info/Item_slot/Item_selector").GetComponent<RectTransform> ();
-		itemSlot = new Image[6];
-		for (int i =0; i<6; i++)
-			itemSlot [i] = GameObject.Find ("Player_info/Item_slot/slot" + i.ToString ()).GetComponent<Image> ();
-		itemBox = new GameObject[6];
-		itemPoint = 0;
+		if (photonView.isMine) {
+			GameObject.Find ("Organ").GetComponent<UnityEngine.Canvas> ().enabled = false;
+			buttons = GameObject.Find ("ForNextScene").GetComponent<Button> ();
+			nowHP = maxHP;
+			nowTP = maxTP / 2;
+			itemSelector = GameObject.Find ("Player_info/Item_slot/Item_selector").GetComponent<RectTransform> ();
+			itemSlot = new Image[6];
+			for (int i =0; i<6; i++)
+				itemSlot [i] = GameObject.Find ("Player_info/Item_slot/slot" + i.ToString ()).GetComponent<Image> ();
+			itemBox = new GameObject[6];
+			itemPoint = 0;
+		}
 	}
 	
 
@@ -59,6 +59,7 @@ public class PlayerController : Photon.MonoBehaviour
 	
 	void Update ()
 	{
+
 		float moveH = Input.GetAxis ("Horizontal");
 		float moveV = Input.GetAxis ("Vertical");
 		float moveU = 0.0f;

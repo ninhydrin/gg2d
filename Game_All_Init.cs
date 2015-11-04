@@ -6,6 +6,7 @@ public class Game_All_Init : Photon.MonoBehaviour
 	public GameObject ghost;
 	public GameObject MGOb;
 	public GameObject[] players;
+	public GameObject Mana;
 	GameObject MGList;
 	GameObject playerList;
 	GameObject ghostList;
@@ -47,13 +48,15 @@ public class Game_All_Init : Photon.MonoBehaviour
 		MakeMG ();
 		MakeMapMG ();
 		MakeMiniMG ();
-		MakeMGHP ();
-		
-	}
 
+	}
+	void MakeMGHP(){
+		MGHP = PhotonNetwork.Instantiate ("MG_HP", new Vector3 (-225f, -65f, 0), Quaternion.identity, 0) as GameObject;
+		MGHP.tag = myPNum.ToString()+"P_HP";
+	}
 	void MakeMG ()
 	{
-		MG = PhotonNetwork.Instantiate ("MG", new Vector3 (50, 0, 50), Quaternion.identity, 0) as GameObject;
+		MG = PhotonNetwork.Instantiate ("MG", new Vector3 (30, 0, 30), Quaternion.identity, 0) as GameObject;
 		MG.transform.Rotate (Vector3.right * -90);
 		Player = PhotonNetwork.Instantiate ("UP", new Vector3 (50, 0, 50), Quaternion.identity, 0) as GameObject;
 	}
@@ -66,16 +69,14 @@ public class Game_All_Init : Photon.MonoBehaviour
 		minimapMG.GetComponent<RectTransform> ().anchoredPosition = new Vector2 (x, y);
 		minimapMG.GetComponent<RectTransform> ().localScale = new Vector3 (1f, 1f, 0);		
 	}
+	void MakeMana(){
+		Instantiate (Mana);
+	}
 
 	void MakeMapMG ()
 	{
 		mapMG = PhotonNetwork.Instantiate (forNext.mapMG [forNext.players [0].colorNum], Vector3.zero, Quaternion.identity, 0);
 		mapMG.GetComponent<RectTransform> ().localScale = new Vector3 (1f, 1f, 0);
-	}
-
-	void MakeMGHP ()
-	{
-		MGHP = PhotonNetwork.Instantiate ("Player_MG_HP", new Vector3 (5f, 5f, 0f), Quaternion.identity, 0);
 	}
 
 	void MakeGhost ()

@@ -32,29 +32,31 @@ public class organ_controller : Photon.MonoBehaviour
 	// Use this for initialization
 	void Start ()
 	{
-		targetGroup = -10;
-		summoning = false;
-		savaDictSetting = false;
-		itemSell = false;
-		canSell = false;
-		canSell2 = false;
-		playerC = GetComponent<PlayerController> ();
-		menu = GameObject.Find ("Menu");
-		menu.GetComponent<UnityEngine.Canvas> ().enabled = false;
-		organCanvas = GameObject.Find ("Organ").GetComponent<UnityEngine.Canvas> ();
-		mySava = GameObject.Find ("Organ/Map/Organ_sava");
-		ismenu = false;
-		menu_list = new Transform[4];
-		istype = 0;
+		if (photonView.isMine) {
+			targetGroup = -10;
+			summoning = false;
+			savaDictSetting = false;
+			itemSell = false;
+			canSell = false;
+			canSell2 = false;
+			playerC = GetComponent<PlayerController> ();
+			menu = GameObject.Find ("Menu");
+			menu.GetComponent<UnityEngine.Canvas> ().enabled = false;
+			organCanvas = GameObject.Find ("Organ").GetComponent<UnityEngine.Canvas> ();
+			mySava = GameObject.Find ("Organ/Map/Organ_sava");
+			ismenu = false;
+			menu_list = new Transform[4];
+			istype = 0;
 
-		foreach (Transform child in menu.transform) {
-			menu_list [istype] = child;
-			istype++;			
+			foreach (Transform child in menu.transform) {
+				menu_list [istype] = child;
+				istype++;			
+			}
+			istype = 0;
+			buttons = GameObject.Find ("Player_info").GetComponent<Button> ();
+			cursorC = GameObject.Find ("Organ_Cursor").GetComponent<cursor_controller> ();
+			destStack = new Stack<Vector2> (){};
 		}
-		istype = 0;
-		buttons = GameObject.Find ("Player_info").GetComponent<Button> ();
-		cursorC = GameObject.Find ("Organ_Cursor").GetComponent<cursor_controller> ();
-		destStack = new Stack<Vector2> (){};
 	}
 	
 	// Update is called once per frame

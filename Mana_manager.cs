@@ -9,7 +9,7 @@ public class Mana_manager : MonoBehaviour
 	bool flag;
 	Text TextMana;
 	Text TextIncom;
-	Game_All_Init GameMaster;
+
 	int Mynum;
 	// Use this for initialization
 	void Start ()
@@ -21,7 +21,7 @@ public class Mana_manager : MonoBehaviour
 		TextIncom = transform.FindChild ("Income").GetComponent<UnityEngine.UI.Text> ();
 		TextMana.text="600mana";
 		TextIncom.text=income.ToString()+ "mana";
-		GameMaster = GameObject.Find ("GameMaster").GetComponent<Game_All_Init> ();
+
 
 	}
 	

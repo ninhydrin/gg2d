@@ -45,6 +45,11 @@ public class For_next : MonoBehaviour
 		
 		playerNum = 2;
 		idToid = new int[playerNum];
+		DontDestroyOnLoad (gameObject);
+		DontDestroyOnLoad (GameObject.Find("PlayerList"));
+		DontDestroyOnLoad (GameObject.Find("MGList"));
+		DontDestroyOnLoad (GameObject.Find("GhostList"));
+				
 	}
 
 
@@ -91,8 +96,11 @@ public class For_next : MonoBehaviour
 
 	IEnumerator LoadScene ()
 	{
+
 		Text loadingText = GameObject.Find ("Text").GetComponent<Text> ();
 		AsyncOperation async = Application.LoadLevelAsync ("Main");
+		
+
 		async.allowSceneActivation = false;    // シーン遷移をしない
 		
 		while (async.progress < 0.9f) {
@@ -106,7 +114,7 @@ public class For_next : MonoBehaviour
 
 		
 		loadingText.text = "100%";
-		/*
+	
 		PhotonPlayer [] player = PhotonNetwork.playerList;
 		foreach (Transform child in playerList) {
 			if (child.FindChild ("Pinfo").GetComponent<charactor_select> ().photonView.isMine)
@@ -123,10 +131,9 @@ public class For_next : MonoBehaviour
 			yield return 0;
 		}
 		//loadingBar.fillAmount = 1;
-		*/
+
 		yield return new WaitForSeconds (1);
 		
 		async.allowSceneActivation = true;    // シーン遷移許可
-		
 	}
 }
