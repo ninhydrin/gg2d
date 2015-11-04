@@ -35,7 +35,7 @@ public class Game_All_Init : Photon.MonoBehaviour
 	// Use this for initialization
 	void Awake ()
 	{
-		common = GameObject.Find ("Commons").GetComponent<commons> ();
+		common = GameObject.FindWithTag("commons").GetComponent<commons> ();
 		forNext = GameObject.Find ("ForNextScene").GetComponent<For_next> ();
 		myPNum = forNext.myid;
 		common.ok[myPNum] = true;

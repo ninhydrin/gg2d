@@ -31,6 +31,7 @@ public class Network_manager : Photon.PunBehaviour
 	{
 
 		GameObject selectChar = PhotonNetwork.Instantiate("CharaSele", Vector3.zero, Quaternion.identity, 0);
+		DontDestroyOnLoad (PhotonNetwork.Instantiate("Commons",Vector3.zero,Quaternion.identity,0));
 		//monster.GetComponent<myThirdPersonController>().isControllable = true;
 		myPhotonView = selectChar.GetComponent<PhotonView> ();//monster.GetComponent<PhotonView>();
 	}

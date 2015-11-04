@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.UI;
 
-public class For_next : MonoBehaviour
+public class For_next : Photon.MonoBehaviour
 {
 	
 	public int playerNum;
@@ -43,7 +43,6 @@ public class For_next : MonoBehaviour
 	{
 		playerList = GameObject.Find ("Players").transform;
 		players = new Dictionary<int,playerInfo> ();
-		commons = PhotonNetwork.Instantiate("Commons",Vector3.zero,Quaternion.identity,0);
 
 		playerNum = 1;
 		idToid = new int[playerNum];
