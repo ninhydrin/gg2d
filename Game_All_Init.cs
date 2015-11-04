@@ -18,6 +18,7 @@ public class Game_All_Init : Photon.MonoBehaviour
 	GameObject MG;
 	GameObject mapMG;
 	GameObject minimapMG;
+	commons common;
 
 	int myPNum;
 	For_next forNext;
@@ -34,8 +35,10 @@ public class Game_All_Init : Photon.MonoBehaviour
 	// Use this for initialization
 	void Awake ()
 	{
+		common = GameObject.Find ("Commons").GetComponent<commons> ();
 		forNext = GameObject.Find ("ForNextScene").GetComponent<For_next> ();
 		myPNum = forNext.myid;
+		common.ok[myPNum] = true;
 		playerList = GameObject.Find ("PlayerList");
 		MGList = GameObject.Find ("MGList");
 
@@ -77,7 +80,9 @@ public class Game_All_Init : Photon.MonoBehaviour
 	void MakeMapMG ()
 	{
 		mapMG = PhotonNetwork.Instantiate (forNext.mapMG [forNext.players [0].colorNum], Vector3.zero, Quaternion.identity, 0);
+
 		mapMG.GetComponent<RectTransform> ().localScale = new Vector3 (1f, 1f, 0);
+
 	}
 
 	void MakeGhost ()
