@@ -19,6 +19,8 @@ public class organ_MG : MonoBehaviour
 	int myGroupNum;
 	For_next forNext;
 	bool startFlag;
+
+	bool cando;
 	// Use this for initialization
 	void Start ()
 	{
@@ -26,11 +28,8 @@ public class organ_MG : MonoBehaviour
 		rt = GetComponent<RectTransform> ();
 		rt.localScale = new Vector3 (1f, 1f, 0);
 		MG = GameObject.FindWithTag (forNext.myid.ToString () + "P_MG");
-		/*
-		myParent = GameObject.Find ("Organ/Map");
-		transform.SetParent (myParent.transform);
-*/
 		organC = GameObject.FindWithTag (forNext.myid.ToString () + "P_Master").GetComponent<organ_controller> ();
+		StartCoroutine(WaitInit())
 		offset = rt.anchoredPosition;
 		offset.x = (MG.transform.position.x - 250f) * 0.6f;
 		offset.y = (MG.transform.position.z - 250f) * 0.6f;
@@ -46,27 +45,37 @@ public class organ_MG : MonoBehaviour
 
 	void Update ()
 	{
+		if (cando) {
+			if (organC.savaDictSetting || organC.summoning) {
+				float inter = Vector2.Distance (cursorRt.anchoredPosition, rt.anchoredPosition);
 
-		if (organC.savaDictSetting || organC.summoning) {
-			float inter = Vector2.Distance (cursorRt.anchoredPosition, rt.anchoredPosition);
+				if (inter < 15f && (cursorC.isTarget () == 0 || (imTarget && cursorC.isTarget () == -10)) && !cursorC.isMoving ()) {
+					if (!imTarget) {
+						imTarget = true;
+						StartCoroutine (OnCursor ());
+					}
+					cursorC.TargetingNum (myGroupNum);
+					cursorC.MoveTo (rt.anchoredPosition, myGroupNum, gameObject);		
 
-			if (inter < 15f && (cursorC.isTarget () == 0 || (imTarget && cursorC.isTarget () == -10)) && !cursorC.isMoving ()) {
-				if (!imTarget) {
-					imTarget = true;
-					StartCoroutine (OnCursor ());
+				} else if (inter > 15f) {
+					if (imTarget)
+						cursorC.TargetingNum ();
+					imTarget = false;
 				}
-				cursorC.TargetingNum (myGroupNum);
-				cursorC.MoveTo (rt.anchoredPosition, myGroupNum, gameObject);		
-
-			} else if (inter > 15f) {
-				if (imTarget)
-					cursorC.TargetingNum ();
+			} else {
 				imTarget = false;
 			}
-		} else {
-			imTarget = false;
 		}
-
+	}
+	IEnumerator WaitInit(){
+		commons common = GameObject.FindWithTag ("commons").GetComponent<commons> ();
+		forNext = GameObject.Find ("ForNextScene").GetComponent<For_next> ();		
+		while (common.ok[forNext.myid]) {
+			yield return 0;
+		}
+		myParent = GameObject.Find ("Organ/Map");
+		transform.SetParent (myParent.transform);
+		cando = true;
 	}
 
 	private IEnumerator OnCursor ()

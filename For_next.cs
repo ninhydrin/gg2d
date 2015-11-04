@@ -44,7 +44,7 @@ public class For_next : Photon.MonoBehaviour
 		playerList = GameObject.Find ("Players").transform;
 		players = new Dictionary<int,playerInfo> ();
 
-		playerNum = 1;
+		playerNum = 2;
 		idToid = new int[playerNum];
 		DontDestroyOnLoad (commons);		
 		DontDestroyOnLoad (gameObject);
