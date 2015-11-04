@@ -118,20 +118,7 @@ public class For_next : Photon.MonoBehaviour
 		loadingText.text = "100%";
 	
 		PhotonPlayer [] player = PhotonNetwork.playerList;
-		foreach (Transform child in playerList) {
-			if (child.FindChild ("Pinfo").GetComponent<charactor_select> ().photonView.isMine)
-				child.FindChild ("Pinfo").GetComponent<charactor_select> ().startOk = true;
-				
-		}
-		int count = 0;
-		while (count != playerNum) {
-			count = 0;
-			foreach (Transform child in playerList) {
-				if (child.FindChild ("Pinfo").GetComponent<charactor_select> ().startOk)
-					count++;				
-			}
-			yield return 0;
-		}
+	
 		//loadingBar.fillAmount = 1;
 
 		yield return new WaitForSeconds (1);
