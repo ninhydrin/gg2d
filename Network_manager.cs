@@ -5,52 +5,50 @@ public class Network_manager : Photon.PunBehaviour
 	private PhotonView myPhotonView;
 	
 	// Use this for initialization
-	public void Start()
+	public void Start ()
 	{
-		PhotonNetwork.ConnectUsingSettings("0.1");
+		PhotonNetwork.ConnectUsingSettings ("0.1");
 	}
 	
-	public override void OnJoinedLobby()
+	public override void OnJoinedLobby ()
 	{
-		Debug.Log("JoinRandom");
-		PhotonNetwork.JoinRandomRoom();
+		Debug.Log ("JoinRandom");
+		PhotonNetwork.JoinRandomRoom ();
 	}
 	
-	public override void OnConnectedToMaster()
+	public override void OnConnectedToMaster ()
 	{
 		// when AutoJoinLobby is off, this method gets called when PUN finished the connection (instead of OnJoinedLobby())
-		PhotonNetwork.JoinRandomRoom();
+		PhotonNetwork.JoinRandomRoom ();
 	}
 	
-	public void OnPhotonRandomJoinFailed()
+	public void OnPhotonRandomJoinFailed ()
 	{
-		PhotonNetwork.CreateRoom(null);
+		PhotonNetwork.CreateRoom (null);
 	}
 
-	public override void OnJoinedRoom()
+	public override void OnJoinedRoom ()
 	{
 
-		GameObject selectChar = PhotonNetwork.Instantiate("CharaSele", Vector3.zero, Quaternion.identity, 0);
-		DontDestroyOnLoad (PhotonNetwork.Instantiate("Commons",Vector3.zero,Quaternion.identity,0));
+		GameObject selectChar = PhotonNetwork.Instantiate ("CharaSele", Vector3.zero, Quaternion.identity, 0);
+		if (PhotonNetwork.masterClient)
+			DontDestroyOnLoad (PhotonNetwork.Instantiate ("Commons", Vector3.zero, Quaternion.identity, 0));
 		//monster.GetComponent<myThirdPersonController>().isControllable = true;
 		myPhotonView = selectChar.GetComponent<PhotonView> ();//monster.GetComponent<PhotonView>();
 	}
 	
-	public void OnGUI()
+	public void OnGUI ()
 	{
-		GUILayout.Label(PhotonNetwork.connectionStateDetailed.ToString());
+		GUILayout.Label (PhotonNetwork.connectionStateDetailed.ToString ());
 		
-		if (PhotonNetwork.connectionStateDetailed == PeerState.Joined)
-		{
+		if (PhotonNetwork.connectionStateDetailed == PeerState.Joined) {
 			bool shoutMarco = GameLogic.playerWhoIsIt == PhotonNetwork.player.ID;
 			
-			if (shoutMarco && GUILayout.Button("Marco!"))
-			{
-				myPhotonView.RPC("Marco", PhotonTargets.All);
+			if (shoutMarco && GUILayout.Button ("Marco!")) {
+				myPhotonView.RPC ("Marco", PhotonTargets.All);
 			}
-			if (!shoutMarco && GUILayout.Button("Polo!"))
-			{
-				myPhotonView.RPC("Polo", PhotonTargets.All);
+			if (!shoutMarco && GUILayout.Button ("Polo!")) {
+				myPhotonView.RPC ("Polo", PhotonTargets.All);
 			}
 		}
 	}
