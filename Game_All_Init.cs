@@ -113,7 +113,7 @@ public class Game_All_Init : Photon.MonoBehaviour
 			}
 			yield return 0;
 		}
-
+		print ("ok");
 		organMap = GameObject.Find ("Organ/Map");
 		miniMap = GameObject.Find ("Minimap/Field");
 		playerNum = forNext.playerNum;
@@ -123,6 +123,7 @@ public class Game_All_Init : Photon.MonoBehaviour
 		MakeMG ();
 		MakeMapMG ();
 		MakeMiniMG ();
+		common.myOk = true;
 	}
 	// Update is called once per frame
 	/*

@@ -24,6 +24,8 @@ public class selector : MonoBehaviour
 	public GameObject savant;
 	public bool cantReleasing;
 	public string myTag;
+
+	private bool cando;
 	// Use this for initialization
 
 
@@ -40,7 +42,6 @@ public class selector : MonoBehaviour
 
 		updown = 21f;
 		point = 0;
-		MG = GameObject.FindGameObjectWithTag (forNext.myid.ToString()+"P_MG").GetComponent<MG_func> ();
 
 		entry_list = new Transform [entry_num];
 		int count = 0;
@@ -51,28 +52,40 @@ public class selector : MonoBehaviour
 			count++;
 		
 		}
-		organ = GameObject.FindWithTag (forNext.myid.ToString()+ "P_Master").GetComponent<organ_controller> ();
 		init_pos = new Vector2 (0f, -20f);
 		rt.anchoredPosition = init_pos;
 		savaGroupNum = 1;
 		coflag = false;
 		cantReleasing = false;
+		StartCoroutine (WaitInit ());
 	}
 	
 	// Update is called once per frame
 	void Update ()
 	{
-		if (!organ.ismenu) {
-			rt.anchoredPosition = init_pos;
-			point = 0;
+		if (cando) {
+			if (!organ.ismenu) {
+				rt.anchoredPosition = init_pos;
+				point = 0;
+			}
+			if (GetComponent<Canvas> ().enabled && !coflag) {
+				StartCoroutine (ImSelected ());
+				coflag = true;
+			}
+			if (!GetComponent<Canvas> ().enabled) {
+				coflag = false;
+			}
 		}
-		if (GetComponent<Canvas> ().enabled && !coflag) {
-			StartCoroutine (ImSelected ());
-			coflag = true;
+	}
+	IEnumerator WaitInit(){
+		commons common = GameObject.FindWithTag ("commons").GetComponent<commons> ();
+		forNext = GameObject.Find ("ForNextScene").GetComponent<For_next> ();		
+		while (!common.myOk) {
+			yield return 0;
 		}
-		if (!GetComponent<Canvas> ().enabled) {
-			coflag = false;
-		}
+		MG = GameObject.FindGameObjectWithTag (forNext.myid.ToString()+"P_MG").GetComponent<MG_func> ();		
+		organ = GameObject.FindWithTag (forNext.myid.ToString()+ "P_Master").GetComponent<organ_controller> ();	
+		cando = true;
 	}
 
 	public void Down ()

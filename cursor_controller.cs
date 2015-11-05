@@ -43,7 +43,7 @@ public class cursor_controller : MonoBehaviour
 	private Text MBisgroupT;
 	private Image MBisgroupI;
 
-
+	private bool cando;
 
 	// Use this for initialization
 	
@@ -51,8 +51,9 @@ public class cursor_controller : MonoBehaviour
 	{
 		rt = GetComponent<RectTransform> ();
 		forNext = GameObject.Find ("ForNextScene").GetComponent<For_next> ();
-		player = GameObject.FindWithTag (forNext.myid.ToString()+"P_Master");
-		organC = player.GetComponent<organ_controller> ();
+		StartCoroutine (WaitInit ());
+		//player = GameObject.FindWithTag (forNext.myid.ToString()+"P_Master");
+		//organC = player.GetComponent<organ_controller> ();
 
 		MBdestT = transform.FindChild ("Message_dest/Text").GetComponent<Text> ();
 		MBdest = transform.FindChild ("Message_dest").GetComponent<Image> ();
@@ -90,41 +91,51 @@ public class cursor_controller : MonoBehaviour
 	// Update is called once per frame
 	void Update ()
 	{
-	
-		if (player.GetComponent<PlayerController> ().organ) {		
-			if (!organC.ismenu || organC.summoning ||organC.savaDictSetting) {
+	if (cando) {
+			if (player.GetComponent<PlayerController> ().organ) {		
+				if (!organC.ismenu || organC.summoning || organC.savaDictSetting) {
 								
-				moveH = Input.GetAxis ("Horizontal");
-				moveV = Input.GetAxis ("Vertical");
-				moveH = offset.x + moveH * cursor_speed - tox;
-				moveV = offset.y + moveV * cursor_speed - toy;
+					moveH = Input.GetAxis ("Horizontal");
+					moveV = Input.GetAxis ("Vertical");
+					moveH = offset.x + moveH * cursor_speed - tox;
+					moveV = offset.y + moveV * cursor_speed - toy;
 
-				if (moveH > mapSize) {
-					moveH = mapSize;
-				} else if (moveH < -mapSize) {
-					moveH = -mapSize;
-				}
-				if (moveV > mapSize) {
-					moveV = mapSize;
-				} else if (moveV < -mapSize) {
-					moveV = -mapSize;
-				}
+					if (moveH > mapSize) {
+						moveH = mapSize;
+					} else if (moveH < -mapSize) {
+						moveH = -mapSize;
+					}
+					if (moveV > mapSize) {
+						moveV = mapSize;
+					} else if (moveV < -mapSize) {
+						moveV = -mapSize;
+					}
 				
-				offset = new Vector2 (moveH, moveV);
-				rt.anchoredPosition = offset;
-				tox = 0f;
-				toy = 0f;
-			}else{
-				targetG=0;
-			}
+					offset = new Vector2 (moveH, moveV);
+					rt.anchoredPosition = offset;
+					tox = 0f;
+					toy = 0f;
+				} else {
+					targetG = 0;
+				}
 
-		} else {
-			offset = rt.anchoredPosition = new Vector2 (0, 0);
-			targetG = 0;
-		}	
-
+			} else {
+				offset = rt.anchoredPosition = new Vector2 (0, 0);
+				targetG = 0;
+			}	
+		}
 	}
 
+	IEnumerator WaitInit(){
+		commons common = GameObject.FindWithTag ("commons").GetComponent<commons> ();
+		forNext = GameObject.Find ("ForNextScene").GetComponent<For_next> ();		
+		while (!common.myOk) {
+			yield return 0;
+		}
+		player = GameObject.FindWithTag (forNext.myid.ToString()+"P_Master");
+		organC = player.GetComponent<organ_controller> ();
+		cando = true;
+	}
 	public Vector2 LocalPos ()
 	{
 		return rt.anchoredPosition;

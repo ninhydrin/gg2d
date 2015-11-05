@@ -69,7 +69,7 @@ public class organ_MG : MonoBehaviour
 	IEnumerator WaitInit(){
 		commons common = GameObject.FindWithTag ("commons").GetComponent<commons> ();
 		forNext = GameObject.Find ("ForNextScene").GetComponent<For_next> ();		
-		while (!common.ok[forNext.myid]) {
+		while (!common.myOk) {
 			yield return 0;
 		}
 		myParent = GameObject.Find ("Organ/Map");
