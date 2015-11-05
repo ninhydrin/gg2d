@@ -20,7 +20,7 @@ public class CameraController : MonoBehaviour
 	bool pTarget;
 	float turnTime;
 	int myNum;
-
+	commons common;
 	private bool cando;
 	// Use this for initialization
 	void Start ()
@@ -36,12 +36,13 @@ public class CameraController : MonoBehaviour
 		zz = -5f;
 		offset = new Vector3 (0f, y, z);
 		lockOn = new Vector3 (0f, yy, zz);
+		StartCoroutine (WaitInit ());
 		//transform.localRotation.x = ;
 
 		
 	}
 	IEnumerator WaitInit(){
-		commons common = GameObject.FindWithTag ("commons").GetComponent<commons> ();
+		common = GameObject.FindWithTag ("commons").GetComponent<commons> ();
 		forNext = GameObject.Find ("ForNextScene").GetComponent<For_next> ();		
 		while (!common.myOk) {
 			yield return 0;

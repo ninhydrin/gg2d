@@ -202,6 +202,7 @@ public class MG_func : Photon.MonoBehaviour
 
 	void CreatePreparePos ()
 	{
+		print ("aa");
 		summonPos = new Vector3[6];
 		summonPos [0] = new Vector3 (35f, 2f, 50f);
 		summonPos [1] = new Vector3 (40f, 2f, 50f);
@@ -212,7 +213,7 @@ public class MG_func : Photon.MonoBehaviour
 		prepare = new ParticleSystem[6];
 		for (int i =0; i<6; i++) {
 			sava_queue [i] = new Queue<order> (){};
-			GameObject a = PhotonNetwork.Instantiate ("Prepare", summonPos [i], Quaternion.identity, 0) as GameObject;
+			GameObject a = Instantiate ("Prepare", summonPos [i], Quaternion.identity) as GameObject; 
 			a.transform.SetParent (transform);
 			prepare [i] = a.GetComponent<ParticleSystem> ();
 			prepare [i].emissionRate = 0;
