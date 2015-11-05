@@ -29,6 +29,7 @@ public class Sava_controler : MonoBehaviour
 	GameObject mMapIcon;
 	GameObject headHP;
 	GameObject sideHP;
+
 	bool leader;
 	int myCost;
 	public float searchDest;
@@ -62,6 +63,7 @@ public class Sava_controler : MonoBehaviour
 		toSubmission = GameObject.Find ("Player_info/Sava_report").GetComponent<sava_report> ();
 		canReport = true;		
 		HP = maxHP;
+		MakeHeadHP ();
 	}
 
 	void init ()
@@ -156,16 +158,21 @@ public class Sava_controler : MonoBehaviour
 		}
 	}
 
-	public void init (GameObject Mi, GameObject MMi, GameObject SS, GameObject HHP, int gnum, bool le, int myNum)
+	public void init (GameObject Mi, GameObject MMi, GameObject SS,int gnum, bool le, int myNum)
 	{
 		mapIcon = Mi;
 		mMapIcon = MMi;
 		sideHP = SS;
-		headHP = HHP;
 		myGroupNum = gnum;
 		leader = le;
 		myTeamNum = myNum;
 		gameObject.tag = (myNum).ToString()+"P_Sava";
+	}
+	void MakeHeadHP ()
+	{
+		headHP = PhotonNetwork.Instantiate ("Sava_HP_LV", Vector3.zero, Quaternion.identity, 0) as GameObject;		
+		headHP.GetComponent<sava_head_HPLV> ().init (gameObject);
+		headHP.transform.SetParent (GameObject.Find ("Sava_info").transform);
 	}
 
 	HashSet<GameObject> GetNearAlly (float range)
@@ -213,6 +220,7 @@ public class Sava_controler : MonoBehaviour
 		//animator.SetInteger ("Damage", num);
 	}
 
+
 	public void Repair (int a)
 	{	
 		if (HP + a > maxHP) {
@@ -241,6 +249,8 @@ public class Sava_controler : MonoBehaviour
 	{
 		return dest;	
 	}
+
+
 
 	public void imDead ()
 	{		

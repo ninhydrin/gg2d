@@ -146,7 +146,7 @@ public class MG_func : Photon.MonoBehaviour
 		slip.MMicon.GetComponent<minimap_icon> ().init (theSava);
 		slip.sideHP.GetComponent<sava_side_info> ().SetOb (theSava);
 
-		theSava.GetComponent<Sava_controler> ().init (slip.Micon, slip.MMicon, slip.sideHP, MakeHeadHP (theSava), slip.gNum, slip.leader, myNum);
+		theSava.GetComponent<Sava_controler> ().init (slip.Micon, slip.MMicon, slip.sideHP, slip.gNum, slip.leader, myNum);
 		theSava.GetComponent<Sava_controler> ().SetDestination (slip.dest);
 		theSava.transform.SetParent (mySava);
 
