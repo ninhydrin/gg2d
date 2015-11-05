@@ -213,7 +213,7 @@ public class MG_func : Photon.MonoBehaviour
 		prepare = new ParticleSystem[6];
 		for (int i =0; i<6; i++) {
 			sava_queue [i] = new Queue<order> (){};
-			GameObject a = Instantiate ("Prepare", summonPos [i], Quaternion.identity) as GameObject; 
+			GameObject a = Instantiate (Resources.Load("Prepare"), summonPos [i], Quaternion.identity) as GameObject; 
 			a.transform.SetParent (transform);
 			prepare [i] = a.GetComponent<ParticleSystem> ();
 			prepare [i].emissionRate = 0;
