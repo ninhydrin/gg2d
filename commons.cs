@@ -10,6 +10,7 @@ public class commons :Photon.MonoBehaviour
 	{
 		ok = new bool[4];
 		startF = false;
+		DontDestroyOnLoad (gameObject);		
 	}
 	
 	// Update is called once per frame

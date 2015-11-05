@@ -51,9 +51,9 @@ public class cursor_controller : MonoBehaviour
 	{
 		rt = GetComponent<RectTransform> ();
 		forNext = GameObject.Find ("ForNextScene").GetComponent<For_next> ();
-		
 		player = GameObject.FindWithTag (forNext.myid.ToString()+"P_Master");
 		organC = player.GetComponent<organ_controller> ();
+
 		MBdestT = transform.FindChild ("Message_dest/Text").GetComponent<Text> ();
 		MBdest = transform.FindChild ("Message_dest").GetComponent<Image> ();
 		MBcancel = transform.FindChild ("Message_cancel").GetComponent<Image> ();

@@ -13,6 +13,7 @@ public class organ_MG : MonoBehaviour
 	GameObject cursor;
 	RectTransform cursorRt;
 	cursor_controller cursorC;
+	int myNum;
 	bool imTarget;
 	Image mycolor;
 	organ_controller organC;
@@ -24,7 +25,8 @@ public class organ_MG : MonoBehaviour
 	// Use this for initialization
 	void Start ()
 	{
-		forNext = GameObject.Find ("ForNextScene").GetComponent<For_next> ();		
+		forNext = GameObject.Find ("ForNextScene").GetComponent<For_next> ();	
+		myNum = forNext.myid;
 		rt = GetComponent<RectTransform> ();
 		rt.localScale = new Vector3 (1f, 1f, 0);
 		MG = GameObject.FindWithTag (forNext.myid.ToString () + "P_MG");
@@ -34,9 +36,6 @@ public class organ_MG : MonoBehaviour
 		offset.x = (MG.transform.position.x - 250f) * 0.6f;
 		offset.y = (MG.transform.position.z - 250f) * 0.6f;
 		rt.anchoredPosition = offset;
-		cursor = GameObject.Find ("Organ_Cursor");
-		cursorC = cursor.GetComponent<cursor_controller> ();
-		cursorRt = cursor.GetComponent<RectTransform> ();
 		imTarget = false;
 		mycolor = gameObject.GetComponent<Image> ();
 		myGroupNum = -10;
@@ -70,11 +69,14 @@ public class organ_MG : MonoBehaviour
 	IEnumerator WaitInit(){
 		commons common = GameObject.FindWithTag ("commons").GetComponent<commons> ();
 		forNext = GameObject.Find ("ForNextScene").GetComponent<For_next> ();		
-		while (common.ok[forNext.myid]) {
+		while (!common.ok[forNext.myid]) {
 			yield return 0;
 		}
 		myParent = GameObject.Find ("Organ/Map");
 		transform.SetParent (myParent.transform);
+		cursor = GameObject.Find ("Organ_Cursor");
+		cursorC = cursor.GetComponent<cursor_controller> ();
+		cursorRt = cursor.GetComponent<RectTransform> ();
 		cando = true;
 	}
 

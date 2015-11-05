@@ -22,7 +22,6 @@ public class charactor_select : Photon.MonoBehaviour
 	Button buttons;
 	GameObject forNext;
 	public bool setOk;
-		
 	public bool startOk;
 
 	// Use this for initialization
@@ -92,6 +91,7 @@ public class charactor_select : Photon.MonoBehaviour
 
 				if (Input.GetButtonDown ("Jump")) {
 					forNext.GetComponent<For_next> ().SetPlayer (PhotonNetwork.player.ID, playerOb [seleP], charColor [seleC], teamNum, seleC);
+					charactors [seleP].transform.eulerAngles =Vector3.zero;
 					setOk = true;
 				}
 			} else {
