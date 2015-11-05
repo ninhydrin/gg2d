@@ -161,14 +161,6 @@ public class MG_func : Photon.MonoBehaviour
 		orderToken = orderToken > 4 ? 0 : orderToken + 1;
 	}
 
-	GameObject MakeHeadHP (GameObject me)
-	{
-		GameObject headHP_ob = PhotonNetwork.Instantiate ("Sava_HP_LV", Vector3.zero, Quaternion.identity, 0) as GameObject;		
-		headHP_ob.GetComponent<sava_head_HPLV> ().init (me);
-		headHP_ob.transform.SetParent (GameObject.Find ("Sava_info").transform);
-		return headHP_ob;
-	}
-
 	GameObject createSideHP (GameObject ob, int pre)
 	{
 		GameObject sideHP_ob = Instantiate (sideHP) as GameObject;		

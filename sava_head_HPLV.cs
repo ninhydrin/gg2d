@@ -16,10 +16,7 @@ public class sava_head_HPLV: Photon.MonoBehaviour
 
 	void Start ()
 	{
-		HP_bar = transform.FindChild ("HP").gameObject;
-		LV_bar = transform.FindChild ("LV").gameObject;
-		HPrt = HP_bar.GetComponent<RectTransform> ();
-		LVrt = LV_bar.GetComponent<RectTransform> ();
+
 		canShow = false;
 
 
@@ -51,7 +48,11 @@ public class sava_head_HPLV: Photon.MonoBehaviour
 
 	public void init (GameObject target)
 	{
-		print ("ok");
+
+		HP_bar = transform.FindChild ("HP").gameObject;
+		LV_bar = transform.FindChild ("LV").gameObject;
+		HPrt = HP_bar.GetComponent<RectTransform> ();
+		LVrt = LV_bar.GetComponent<RectTransform> ();
 		myOb = target;
 		HPLenUnit = HP_bar.GetComponent<RectTransform> ().sizeDelta.x / (float)myOb.GetComponent<Sava_controler> ().maxHP;		
 		myObId = target.GetComponent<PhotonView> ().viewID;
