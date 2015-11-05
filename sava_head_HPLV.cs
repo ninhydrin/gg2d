@@ -18,7 +18,8 @@ public class sava_head_HPLV: Photon.MonoBehaviour
 	{
 
 		canShow = false;
-
+		HP_bar = transform.FindChild ("HP").gameObject;
+		LV_bar = transform.FindChild ("LV").gameObject;
 
 	}
 

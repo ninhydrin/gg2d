@@ -39,10 +39,12 @@ public class Game_All_Init : Photon.MonoBehaviour
 		forNext = GameObject.Find ("ForNextScene").GetComponent<For_next> ();
 		myPNum = forNext.myid;
 		common.ok[myPNum] = true;
+
 		playerList = GameObject.Find ("PlayerList");
 		MGList = GameObject.Find ("MGList");
-
 		ghostList = GameObject.Find ("GhostList");
+		StartCoroutine (WaitInit ());
+		/*
 		organMap = GameObject.Find ("Organ/Map");
 		miniMap = GameObject.Find ("Minimap/Field");
 		playerNum = forNext.playerNum;
@@ -52,6 +54,7 @@ public class Game_All_Init : Photon.MonoBehaviour
 		MakeMG ();
 		MakeMapMG ();
 		MakeMiniMG ();
+		*/
 
 	}
 	void MakeMGHP(){
@@ -99,6 +102,28 @@ public class Game_All_Init : Photon.MonoBehaviour
 		}
 	}
 
+	IEnumerator WaitInit(){
+		commons common = GameObject.FindWithTag ("commons").GetComponent<commons> ();
+		forNext = GameObject.Find ("ForNextScene").GetComponent<For_next> ();		
+		int count = 0;
+		while (count != forNext.playerNum) {
+			count=0;
+			for (int i=0;i<forNext.playerNum;i++){
+				if(common.ok[i]) count++;
+			}
+			yield return 0;
+		}
+
+		organMap = GameObject.Find ("Organ/Map");
+		miniMap = GameObject.Find ("Minimap/Field");
+		playerNum = forNext.playerNum;
+		
+		if (PhotonNetwork.isMasterClient)
+			MakeGhost ();
+		MakeMG ();
+		MakeMapMG ();
+		MakeMiniMG ();
+	}
 	// Update is called once per frame
 	/*
 	void Update ()
