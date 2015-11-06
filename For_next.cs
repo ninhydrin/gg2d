@@ -70,7 +70,6 @@ public class For_next : Photon.MonoBehaviour
 					idToid [i] = player [i].ID; 
 				}
 				System.Array.Sort (idToid);
-				int a = 0;
 				for (int i = 0; i < player.Length; i++) {
 					players [i] = players [idToid [i]];
 					if (idToid [i] == PhotonNetwork.player.ID) {
