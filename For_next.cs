@@ -98,7 +98,6 @@ public class For_next : Photon.MonoBehaviour
 
 	IEnumerator LoadScene ()
 	{
-
 		Text loadingText = GameObject.Find ("Text").GetComponent<Text> ();
 		AsyncOperation async = Application.LoadLevelAsync ("Main");
 		

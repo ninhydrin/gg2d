@@ -202,7 +202,6 @@ public class MG_func : Photon.MonoBehaviour
 
 	void CreatePreparePos ()
 	{
-		print ("aa");
 		summonPos = new Vector3[6];
 		summonPos [0] = new Vector3 (35f, 2f, 50f);
 		summonPos [1] = new Vector3 (40f, 2f, 50f);

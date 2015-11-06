@@ -64,6 +64,7 @@ public class Sava_controler : MonoBehaviour
 		canReport = true;		
 		HP = maxHP;
 		MakeHeadHP ();
+
 	}
 
 	void init ()
