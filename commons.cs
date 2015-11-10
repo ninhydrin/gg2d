@@ -3,9 +3,10 @@ using System.Collections;
 
 public class commons :Photon.MonoBehaviour
 {
-	public bool[] ok;
+	public bool ok;
 	public bool startF;
 	public bool myOk;
+	GameObject parent;
 	// Use this for initialization
 	void Start ()
 	{
@@ -13,6 +14,9 @@ public class commons :Photon.MonoBehaviour
 		myOk = false;
 		startF = false;
 		DontDestroyOnLoad (gameObject);		
+		parent = GameObject.Find ("commonsList");
+		transform.SetParent (parent.transform);
+		DontDestroyOnLoad (parent);
 	}
 	
 	// Update is called once per frame
@@ -24,13 +28,12 @@ public class commons :Photon.MonoBehaviour
 	void OnPhotonSerializeView (PhotonStream stream, PhotonMessageInfo info)
 	{
 		if (stream.isWriting) {
-			for (int i = 0; i<4; i++)
-				stream.SendNext (ok [i]);
+			stream.SendNext (ok);
 			stream.SendNext (startF);
 			
 		} else {
-			for (int i = 0; i<4; i++)
-				ok [i] = (bool)stream.ReceiveNext ();
+
+			ok = (bool)stream.ReceiveNext ();
 			startF = (bool)stream.ReceiveNext ();
 		}
 	}

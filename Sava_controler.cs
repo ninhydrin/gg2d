@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class Sava_controler : MonoBehaviour
+public class Sava_controler : Photon.MonoBehaviour
 {
 
 	private Animator anim;							// キャラにアタッチされるアニメーターへの参照
@@ -47,6 +47,8 @@ public class Sava_controler : MonoBehaviour
 	GameObject minimap;
 	sava_report toSubmission;
 	bool canReport;
+	For_next forNext;
+
 	static int idleState = Animator.StringToHash ("Base Layer.Idle");
 	static int walkState = Animator.StringToHash ("Base Layer.Idle");
 	static int fightingState = Animator.StringToHash ("Base Layer.Fighting");
@@ -66,108 +68,105 @@ public class Sava_controler : MonoBehaviour
 		MakeHeadHP ();
 
 	}
-
-	void init ()
-	{
-
-
-
-	}
-
+	
 	// Update is called once per frame
 	void Update ()
 	{
-		if (HP > 0) {
-			currentBaseState = anim.GetCurrentAnimatorStateInfo (0);
+		if (photonView.isMine) {
+			if (HP > 0) {
+				currentBaseState = anim.GetCurrentAnimatorStateInfo (0);
 			
-			//nearEnemy = GetNearAlly (8f);
-			nearEnemy = GetNearEnemy (8f);
-			fighting = nearEnemy.Count != 0 ? true : false;
+				//nearEnemy = GetNearAlly (8f);
+				nearEnemy = GetNearEnemy (8f);
+				fighting = nearEnemy.Count != 0 ? true : false;
 
-			if (nearEnemy.Count != 0 && !fighting && canReport) {
-				if (leader) {
-					toSubmission.SubmitReport (myFace, "敵を発見");
-					canReport = false;
-					StartCoroutine ("WaitReport");
-				}
-			}
-
-
-			if (fighting) {
-				agent.stoppingDistance = attackDest;
-				if (!Target) {
-					foreach (GameObject setIn in nearEnemy) {
-						Target = setIn;
-						tempDest = setIn.transform.position;
-						break;
+				if (nearEnemy.Count != 0 && !fighting && canReport) {
+					if (leader) {
+						toSubmission.SubmitReport (myFace, "敵を発見");
+						canReport = false;
+						StartCoroutine ("WaitReport");
 					}
-				} else {
-					tempDest = Target.transform.position;
 				}
 
-				if (agent.remainingDistance <= agent.stoppingDistance) {
-					anim.SetBool ("Walk", false);				
-					anim.SetBool ("Fighting", true);
+
+				if (fighting) {
+					agent.stoppingDistance = attackDest;
+					if (!Target) {
+						foreach (GameObject setIn in nearEnemy) {
+							Target = setIn;
+							tempDest = setIn.transform.position;
+							break;
+						}
+					} else {
+						tempDest = Target.transform.position;
+					}
+
+					if (agent.remainingDistance <= agent.stoppingDistance) {
+						anim.SetBool ("Walk", false);				
+						anim.SetBool ("Fighting", true);
+						agent.Stop ();
+						//transform.LookAt(Target.transform.position);
+						transform.rotation = Quaternion.Slerp (transform.rotation, Quaternion.LookRotation (Target.transform.position - transform.position), 0.1f);
+					} else if (currentBaseState.nameHash == walkState || currentBaseState.nameHash == fightingState) {
+						anim.SetBool ("Fighting", false);					
+						anim.SetBool ("Walk", true);
+						agent.Resume ();
+					}
+
+				} else {
+					agent.Resume ();
+					anim.SetBool ("Fighting", false);	
+					Target = null;
+					agent.stoppingDistance = stopDest;
+					tempDest = new Vector3 (dest.x, transform.position.y, dest.y);
+			
+					if (agent.remainingDistance <= agent.stoppingDistance) {
+						reached = true;	
+						agent.stoppingDistance = standDest;				
+					} else {
+						agent.stoppingDistance = stopDest;
+						reached = false;
+					}
+
+					if (reached) {
+						anim.SetBool ("Walk", false);	
+					} else {
+						anim.SetBool ("Walk", true);
+						//Vector3 a = (dest - transform.position).normalized;
+						//transform.LookAt (dest);
+						//transform.localPosition += (new Vector3 (a.x, 0, a.z) * speed);
+					}
+				}
+				if (currentBaseState.nameHash == damageState) {
 					agent.Stop ();
-					//transform.LookAt(Target.transform.position);
-					transform.rotation = Quaternion.Slerp (transform.rotation, Quaternion.LookRotation (Target.transform.position - transform.position), 0.1f);
-				} else if (currentBaseState.nameHash == walkState || currentBaseState.nameHash == fightingState) {
-					anim.SetBool ("Fighting", false);					
-					anim.SetBool ("Walk", true);
+				} else {
 					agent.Resume ();
 				}
 
+				if (dest != tempDest)
+					agent.SetDestination (tempDest);
 			} else {
-				agent.Resume ();
-				anim.SetBool ("Fighting", false);	
-				Target = null;
-				agent.stoppingDistance = stopDest;
-				tempDest = new Vector3 (dest.x, transform.position.y, dest.y);
-			
-				if (agent.remainingDistance <= agent.stoppingDistance) {
-					reached = true;	
-					agent.stoppingDistance = standDest;				
-				} else {
-					agent.stoppingDistance = stopDest;
-					reached = false;
-				}
-
-				if (reached) {
-					anim.SetBool ("Walk", false);	
-				} else {
-					anim.SetBool ("Walk", true);
-					//Vector3 a = (dest - transform.position).normalized;
-					//transform.LookAt (dest);
-					//transform.localPosition += (new Vector3 (a.x, 0, a.z) * speed);
-				}
-			}
-			if(currentBaseState.nameHash == damageState){
-				agent.Stop();
-			}else{
-				agent.Resume();
-			}
-
-			if (dest != tempDest)
-				agent.SetDestination (tempDest);
-		} else {
-			Destroy (agent);
-			Destroy (gameObject.GetComponent<Rigidbody> ());
-			imDead ();
-			anim.SetBool ("Die", true);
-			anim.Play (dieState);
+				Destroy (agent);
+				Destroy (gameObject.GetComponent<Rigidbody> ());
+				imDead ();
+				anim.SetBool ("Die", true);
+				anim.Play (dieState);
 		
+			}
 		}
 	}
 
 	public void init (GameObject Mi, GameObject MMi, GameObject SS,int gnum, bool le, int myNum)
 	{
+
 		mapIcon = Mi;
 		mMapIcon = MMi;
 		sideHP = SS;
 		myGroupNum = gnum;
 		leader = le;
 		myTeamNum = myNum;
-		gameObject.tag = (myNum).ToString()+"P_Sava";
+		forNext = GameObject.Find ("ForNextScene").GetComponent<For_next> ();
+		gameObject.tag = forNext.owneerIdToNum[photonView.ownerId].ToString()+"P_Sava";
 	}
 	void MakeHeadHP ()
 	{

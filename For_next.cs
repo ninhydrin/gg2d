@@ -13,7 +13,8 @@ public class For_next : Photon.MonoBehaviour
 	public string[] minimapMaster;
 	public GameObject[] savaIcon;
 	GameObject commons;
-	public int[] ownerIdToGameId;
+	public int[] numToOwnerId;
+	public Dictionary<int, int> owneerIdToNum;
 	public int myid;
 	public Color myCo;
 	int gnum = 0;
@@ -45,7 +46,8 @@ public class For_next : Photon.MonoBehaviour
 		players = new Dictionary<int,playerInfo> ();
 
 		playerNum = 2;
-		ownerIdToGameId = new int[playerNum];
+		numToOwnerId = new int[playerNum];
+		owneerIdToNum = new Dictionary<int,int> ();
 		DontDestroyOnLoad (commons);		
 		DontDestroyOnLoad (gameObject);
 		DontDestroyOnLoad (GameObject.Find("PlayerList"));
@@ -67,12 +69,13 @@ public class For_next : Photon.MonoBehaviour
 			}
 			if (count == playerNum) {
 				for (int i = 0; i < player.Length; i++) {
-					ownerIdToGameId [i] = player [i].ID; 
+					numToOwnerId [i] = player [i].ID; 
 				}
-				System.Array.Sort (ownerIdToGameId);
+				System.Array.Sort (numToOwnerId);
 				for (int i = 0; i < player.Length; i++) {
-					players [i] = players [ownerIdToGameId [i]];
-					if (ownerIdToGameId [i] == PhotonNetwork.player.ID) {
+					players [i] = players [numToOwnerId [i]];
+					owneerIdToNum[numToOwnerId[i]] = i;
+					if (numToOwnerId [i] == PhotonNetwork.player.ID) {
 						myid = i;
 						myCo = players [i].playerColor;
 					}

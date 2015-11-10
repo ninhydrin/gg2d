@@ -105,13 +105,13 @@ public class Game_All_Init : Photon.MonoBehaviour
 	}
 
 	IEnumerator WaitInit(){
-		commons common = GameObject.FindWithTag ("commons").GetComponent<commons> ();
+		commons commonsList = GameObject.Find ("commonsList").GetComponent<commons> ();
 		forNext = GameObject.Find ("ForNextScene").GetComponent<For_next> ();		
 		int count = 0;
 		while (count != forNext.playerNum) {
 			count=0;
-			for (int i=0;i<forNext.playerNum;i++){
-				if(common.ok[i]) count++;
+			foreach (GameObject child in commonsList){
+				if(child.GetComponent<commons>().ok) count++;
 			}
 			yield return 0;
 		}
@@ -124,7 +124,10 @@ public class Game_All_Init : Photon.MonoBehaviour
 		MakeMG ();
 		MakeMapMG ();
 		MakeMiniMG ();
-		common.myOk = true;
+		foreach (GameObject child in commonsList){
+			if(common.GetComponent<commons>().photonView.isMine) child.GetComponent<commons>().myOk=true;
+		}
+		
 	}
 	// Update is called once per frame
 	/*
