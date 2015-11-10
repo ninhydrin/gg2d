@@ -30,15 +30,18 @@ public class Game_All_Init : Photon.MonoBehaviour
 	Color[] playerColor;
 	ghost_base[] ghosts;
 	int[] ghostNum;
-	
+	GameObject commonsList;
 
 	// Use this for initialization
 	void Awake ()
 	{
-		common = GameObject.FindWithTag("commons").GetComponent<commons> ();
+		commonsList = GameObject.Find ("commonsList");		
+		foreach (Transform child in commonsList.transform){
+			if(child.GetComponent<commons>().photonView.isMine) common = child.GetComponent<commons>();
+		}
 		forNext = GameObject.Find ("ForNextScene").GetComponent<For_next> ();
 		myPNum = forNext.myid;
-		common.ok[myPNum] = true;
+		
 
 		playerList = GameObject.Find ("PlayerList");
 		MGList = GameObject.Find ("MGList");
@@ -105,12 +108,11 @@ public class Game_All_Init : Photon.MonoBehaviour
 	}
 
 	IEnumerator WaitInit(){
-		commons commonsList = GameObject.Find ("commonsList").GetComponent<commons> ();
 		forNext = GameObject.Find ("ForNextScene").GetComponent<For_next> ();		
 		int count = 0;
 		while (count != forNext.playerNum) {
 			count=0;
-			foreach (GameObject child in commonsList){
+			foreach (Transform child in commonsList.transform){
 				if(child.GetComponent<commons>().ok) count++;
 			}
 			yield return 0;
@@ -124,9 +126,7 @@ public class Game_All_Init : Photon.MonoBehaviour
 		MakeMG ();
 		MakeMapMG ();
 		MakeMiniMG ();
-		foreach (GameObject child in commonsList){
-			if(common.GetComponent<commons>().photonView.isMine) child.GetComponent<commons>().myOk=true;
-		}
+		common.myOk = true;
 		
 	}
 	// Update is called once per frame

@@ -10,7 +10,6 @@ public class commons :Photon.MonoBehaviour
 	// Use this for initialization
 	void Start ()
 	{
-		ok = new bool[4];
 		myOk = false;
 		startF = false;
 		DontDestroyOnLoad (gameObject);		
