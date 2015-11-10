@@ -170,7 +170,7 @@ public class Sava_controler : Photon.MonoBehaviour
 	}
 	void MakeHeadHP ()
 	{
-		headHP = PhotonNetwork.Instantiate ("Sava_HP_LV", Vector3.zero, Quaternion.identity, 0) as GameObject;		
+		headHP = Instantiate (Resources.Load("Sava_HP_LV"), Vector3.zero, Quaternion.identity) as GameObject;		
 		headHP.GetComponent<sava_head_HPLV> ().init (gameObject);
 		headHP.transform.SetParent (GameObject.Find ("Sava_info").transform);
 	}

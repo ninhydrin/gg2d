@@ -31,6 +31,8 @@ public class PlayerController : Photon.MonoBehaviour
 	GameObject myParent;
 
 	void Awake(){
+		myParent = GameObject.Find("PlayerList");
+		transform.SetParent (myParent.transform);
 		forNext = GameObject.Find ("ForNextScene").GetComponent<For_next> ();
 		myNum = forNext.myid;
 		myColor = forNext.myCo;

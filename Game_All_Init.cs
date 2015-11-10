@@ -43,8 +43,8 @@ public class Game_All_Init : Photon.MonoBehaviour
 		myPNum = forNext.myid;
 		
 
-		playerList = GameObject.Find ("PlayerList");
-		MGList = GameObject.Find ("MGList");
+
+
 		ghostList = GameObject.Find ("GhostList");
 		StartCoroutine (WaitInit ());
 		/*
@@ -69,8 +69,7 @@ public class Game_All_Init : Photon.MonoBehaviour
 		MG = PhotonNetwork.Instantiate ("MG", new Vector3 (40, 0, 40), Quaternion.identity, 0) as GameObject;
 		MG.transform.Rotate (new Vector3(-90f,45f,0));
 		Player = PhotonNetwork.Instantiate ("UP", new Vector3 (50, 0, 50), Quaternion.identity, 0) as GameObject;
-		Player.transform.SetParent (playerList.transform);
-		MG.transform.SetParent (MGList.transform);
+
 	}
 
 	void MakeMiniMG ()

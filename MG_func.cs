@@ -68,7 +68,8 @@ public class MG_func : Photon.MonoBehaviour
 	void Awake ()
 	{
 		forNext = GameObject.Find ("ForNextScene").GetComponent<For_next> ();
-
+		myParent = GameObject.Find("MGList");
+		transform.SetParent (myParent.transform);
 		myNum = forNext.myid;
 		myColor = forNext.myCo;
 		tag = myNum.ToString () + "P_MG";
