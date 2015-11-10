@@ -42,7 +42,7 @@ public class Game_All_Init : Photon.MonoBehaviour
 		}
 		forNext = GameObject.Find ("ForNextScene").GetComponent<For_next> ();
 		myPNum = forNext.myid;
-		gameTimer = GameObject.Find ("Player_Info/Time").GetComponent<Timelimit> ();
+		gameTimer = GameObject.Find ("Player_info/Time").GetComponent<Timelimit> ();
 
 		ghostList = GameObject.Find ("GhostList");
 		StartCoroutine (WaitInit ());
