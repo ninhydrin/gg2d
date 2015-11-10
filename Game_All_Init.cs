@@ -110,6 +110,7 @@ public class Game_All_Init : Photon.MonoBehaviour
 	IEnumerator WaitInit(){
 		forNext = GameObject.Find ("ForNextScene").GetComponent<For_next> ();		
 		int count = 0;
+		common.ok = true;
 		while (count != forNext.playerNum) {
 			count=0;
 			foreach (Transform child in commonsList.transform){
