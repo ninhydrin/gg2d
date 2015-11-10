@@ -18,7 +18,8 @@ public class Game_All_Init : Photon.MonoBehaviour
 	GameObject MG;
 	GameObject mapMG;
 	GameObject minimapMG;
-	commons common;
+	Timelimit gameTimer;
+	public commons common;
 
 	int myPNum;
 	For_next forNext;
@@ -41,9 +42,7 @@ public class Game_All_Init : Photon.MonoBehaviour
 		}
 		forNext = GameObject.Find ("ForNextScene").GetComponent<For_next> ();
 		myPNum = forNext.myid;
-		
-
-
+		gameTimer = GameObject.Find ("Player_Info/Time").GetComponent<Timelimit> ();
 
 		ghostList = GameObject.Find ("GhostList");
 		StartCoroutine (WaitInit ());
@@ -127,6 +126,7 @@ public class Game_All_Init : Photon.MonoBehaviour
 		MakeMapMG ();
 		MakeMiniMG ();
 		common.myOk = true;
+		gameTimer.IsEnable = true;
 		
 	}
 	// Update is called once per frame

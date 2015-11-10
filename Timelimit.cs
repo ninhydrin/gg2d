@@ -3,7 +3,6 @@ using System.Collections;
 
 public class Timelimit: MonoBehaviour
 {
-
 	public static class Delegate
 	{
 		
@@ -81,7 +80,7 @@ public class Timelimit: MonoBehaviour
 
 	}
 
-	bool isEnable = true;
+	bool isEnable = false;
 
 	public bool IsEnable {
 		get {
