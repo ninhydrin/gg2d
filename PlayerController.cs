@@ -34,7 +34,8 @@ public class PlayerController : Photon.MonoBehaviour
 		myParent = GameObject.Find("PlayerList");
 		transform.SetParent (myParent.transform);
 		forNext = GameObject.Find ("ForNextScene").GetComponent<For_next> ();
-		myNum = forNext.myid;
+		myNum = forNext.owneerIdToNum [photonView.ownerId];
+		//myNum = forNext.myid;
 		myColor = forNext.myCo;
 		tag = forNext.owneerIdToNum[photonView.ownerId].ToString()+"P_Master";
 	}

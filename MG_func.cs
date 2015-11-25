@@ -62,6 +62,7 @@ public class MG_func : Photon.MonoBehaviour
 	int orderToken;
 	Game_All_Init GameMaster;
 	GameObject myParent;
+
 	For_next forNext;
 	// Use this for initialization
 
@@ -70,7 +71,8 @@ public class MG_func : Photon.MonoBehaviour
 		forNext = GameObject.Find ("ForNextScene").GetComponent<For_next> ();
 		myParent = GameObject.Find("MGList");
 		transform.SetParent (myParent.transform);
-		myNum = forNext.myid;
+		myNum = forNext.owneerIdToNum [photonView.ownerId];
+		//myNum = forNext.myid;
 		myColor = forNext.myCo;
 		tag = myNum.ToString () + "P_MG";
 
@@ -97,9 +99,15 @@ public class MG_func : Photon.MonoBehaviour
 	}
 
 	void MakeMGHP(){
-		MGHP = PhotonNetwork.Instantiate ("MG_HP", new Vector3 (-175f, -22.5f, 0), Quaternion.identity, 0);
+		MGHP = Instantiate (Resources.Load("MG_HP")) as GameObject;
+		MGHP.transform.FindChild ("MG_HP_bar").GetComponent<Image> ().color = myColor;		
 		HPBar = MGHP.transform.FindChild ("MG_HP_bar").GetComponent<RectTransform> ();
+		MGHP.transform.SetParent(GameObject.Find("Player_info").transform);
+		print (myNum);
+		MGHP.GetComponent<RectTransform> ().anchoredPosition = new Vector2 (-175f + 328f * myNum, -22.5f);
+
 		MGHP.tag = myNum.ToString()+"P_HP";
+		
 		HPUnit = HPBar.sizeDelta.x / HP;
 		barrierOb = MGHP.transform.FindChild("Barrier").GetComponent<Text> ();
 	}

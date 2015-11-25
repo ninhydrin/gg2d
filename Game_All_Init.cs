@@ -21,7 +21,7 @@ public class Game_All_Init : Photon.MonoBehaviour
 	Timelimit gameTimer;
 	public commons common;
 
-	int myPNum;
+	int myNum;
 	For_next forNext;
 	int ghostIncome;
 	int masterGhostIncome;
@@ -41,7 +41,8 @@ public class Game_All_Init : Photon.MonoBehaviour
 			if(child.GetComponent<commons>().photonView.isMine) common = child.GetComponent<commons>();
 		}
 		forNext = GameObject.Find ("ForNextScene").GetComponent<For_next> ();
-		myPNum = forNext.myid;
+		myNum = forNext.owneerIdToNum [photonView.ownerId];
+		//myNum = forNext.myid;
 		gameTimer = GameObject.Find ("Player_info/Time").GetComponent<Timelimit> ();
 
 		ghostList = GameObject.Find ("GhostList");
@@ -61,12 +62,12 @@ public class Game_All_Init : Photon.MonoBehaviour
 	}
 	void MakeMGHP(){
 		MGHP = PhotonNetwork.Instantiate ("MG_HP", new Vector3 (-225f, -65f, 0), Quaternion.identity, 0) as GameObject;
-		MGHP.tag = myPNum.ToString()+"P_HP";
+		MGHP.tag = myNum.ToString()+"P_HP";
 	}
 	void MakeMG ()
 	{
-		MG = PhotonNetwork.Instantiate ("MG", new Vector3 (40, 0, 40), Quaternion.identity, 0) as GameObject;
-		MG.transform.Rotate (new Vector3(-90f,45f,0));
+		MG = PhotonNetwork.Instantiate ("MG", new Vector3 (40+170*myNum, 0, 40+170*myNum), Quaternion.identity, 0) as GameObject;
+		MG.transform.Rotate (new Vector3(-90f,45f+myNum*180f,0));
 		Player = PhotonNetwork.Instantiate ("UP", new Vector3 (50, 0, 50), Quaternion.identity, 0) as GameObject;
 
 	}

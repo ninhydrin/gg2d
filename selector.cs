@@ -35,6 +35,7 @@ public class selector : MonoBehaviour
 		entrys = transform.FindChild ("Entry_list");
 		entry_num = entrys.childCount;
 		rt = transform.FindChild ("Menu_selector").GetComponent<RectTransform> ();
+
 		myselector = transform.FindChild ("Menu_selector").GetComponent<Image> ();
 		Mana = GameObject.Find ("Mana").GetComponent<Mana_manager> ();
 		init_pos = new Vector2 (0f, -20f);
@@ -85,6 +86,7 @@ public class selector : MonoBehaviour
 		}
 		MG = GameObject.FindGameObjectWithTag (forNext.myid.ToString()+"P_MG").GetComponent<MG_func> ();		
 		organ = GameObject.FindWithTag (forNext.myid.ToString()+ "P_Master").GetComponent<organ_controller> ();	
+		rt.anchoredPosition = init_pos;
 		cando = true;
 	}
 
