@@ -42,8 +42,8 @@ public class Game_All_Init : Photon.MonoBehaviour
 			if(child.GetComponent<commons>().photonView.isMine) common = child.GetComponent<commons>();
 		}
 		forNext = GameObject.Find ("ForNextScene").GetComponent<For_next> ();
-		myNum = forNext.owneerIdToNum [photonView.ownerId];
-		//myNum = forNext.myid;
+		//myNum = forNext.owneerIdToNum [photonView.ownerId];
+		myNum = forNext.myid;
 		gameTimer = GameObject.Find ("Player_info/Time").GetComponent<Timelimit> ();
 
 		ghostList = GameObject.Find ("GhostList");
