@@ -103,7 +103,6 @@ public class MG_func : Photon.MonoBehaviour
 		MGHP.transform.FindChild ("MG_HP_bar").GetComponent<Image> ().color = myColor;		
 		HPBar = MGHP.transform.FindChild ("MG_HP_bar").GetComponent<RectTransform> ();
 		MGHP.transform.SetParent(GameObject.Find("Player_info").transform);
-		print (myNum);
 		MGHP.GetComponent<RectTransform> ().anchoredPosition = new Vector2 (-175f + 328f * myNum, -22.5f);
 
 		MGHP.tag = myNum.ToString()+"P_HP";

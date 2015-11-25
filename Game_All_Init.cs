@@ -67,7 +67,7 @@ public class Game_All_Init : Photon.MonoBehaviour
 	}
 	void MakeMG ()
 	{
-		MG = PhotonNetwork.Instantiate ("MG", new Vector3 (40+170*myNum, 0, 40+170*myNum), Quaternion.identity, 0) as GameObject;
+		MG = PhotonNetwork.Instantiate ("MG", new Vector3 (40+420*myNum, 0, 40+420*myNum), Quaternion.identity, 0) as GameObject;
 		MG.transform.Rotate (new Vector3(-90f,45f+myNum*180f,0));
 		Player = PhotonNetwork.Instantiate ("UP", new Vector3 (50, 0, 50), Quaternion.identity, 0) as GameObject;
 
@@ -75,11 +75,14 @@ public class Game_All_Init : Photon.MonoBehaviour
 
 	void MakeMiniMG ()
 	{
-		minimapMG = PhotonNetwork.Instantiate ("miniMG", new Vector3 (50, 0, 50), Quaternion.identity, 0) as GameObject;		
+		minimapMG = PhotonNetwork.Instantiate ("miniMG", new Vector3 (50, 0, 50), Quaternion.identity, 0) as GameObject;	
+		/*
 		float x = (MG.transform.position.x - 250f) / 5f;
 		float y = (MG.transform.position.z - 250f) / 5f;
+		minimapMG.transform.SetParent (GameObject.Find ("Minimap").transform);
 		minimapMG.GetComponent<RectTransform> ().anchoredPosition = new Vector2 (x, y);
 		minimapMG.GetComponent<RectTransform> ().localScale = new Vector3 (1f, 1f, 0);		
+		*/
 	}
 	void MakeMana(){
 		Instantiate (Mana);
