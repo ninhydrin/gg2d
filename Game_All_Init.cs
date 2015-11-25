@@ -36,6 +36,7 @@ public class Game_All_Init : Photon.MonoBehaviour
 	// Use this for initialization
 	void Awake ()
 	{
+		forNext = GameObject.Find ("ForNextScene").GetComponent<For_next> ();				
 		commonsList = GameObject.Find ("commonsList");		
 		foreach (Transform child in commonsList.transform){
 			if(child.GetComponent<commons>().photonView.isMine) common = child.GetComponent<commons>();
@@ -107,7 +108,6 @@ public class Game_All_Init : Photon.MonoBehaviour
 	}
 
 	IEnumerator WaitInit(){
-		forNext = GameObject.Find ("ForNextScene").GetComponent<For_next> ();		
 		int count = 0;
 		common.ok = true;
 		while (count != forNext.playerNum) {
