@@ -16,9 +16,8 @@ public class ghost_control : MonoBehaviour
 	public Color domiColor;
 	private float LenUnit;
 	private float barLength;
-
 	int playerNum;
-	bool cando,domiF;
+	bool cando, domiF;
 
 	void Start ()
 	{
@@ -50,13 +49,13 @@ public class ghost_control : MonoBehaviour
 
 			for (int i=0; i<playerNum; i++) {
 				if (Power [i] >= 100) {
-					domiColor = forNext.players[i].playerColor;
+					domiColor = forNext.players [i].playerColor;
 					dominator = i;
-					domiF=true;
+					domiF = true;
 				}
 			}
-			if(!domiF){
-				dominator=-1;
+			if (!domiF) {
+				dominator = -1;
 			}
 		}
 	}
@@ -71,15 +70,15 @@ public class ghost_control : MonoBehaviour
 		Power [playerNum] = 100;
 		for (int i=0; i<playerNum+1; i++) {			
 			control_bar [i] = Instantiate (control_barOb);			
-				RectTransform rt = control_bar [i].GetComponent<RectTransform> ();
-			if(i==0){
-				rt.pivot = new Vector2(1f,0.5f);
-				rt.anchoredPosition= Vector2.right*rt.sizeDelta.x/2;
-			}else{
-				rt.anchoredPosition= Vector2.left*rt.sizeDelta.x/2;				
+			RectTransform rt = control_bar [i].GetComponent<RectTransform> ();
+			if (i == 0) {
+				rt.pivot = new Vector2 (1f, 0.5f);
+				rt.anchoredPosition = Vector2.right * rt.sizeDelta.x / 2;
+			} else {
+				control_bar [i].GetComponent<Image> ().color = forNext.players [i-1].playerColor;			
+				rt.anchoredPosition = Vector2.left * rt.sizeDelta.x / 2;				
 			}
 			control_bar [i].transform.SetParent (transform);
-			control_bar [i].GetComponent<Image> ().color = forNext.players [i].playerColor;			
 		}
 		canShow = false;
 		barLength = control_bar [playerNum].GetComponent<RectTransform> ().sizeDelta.x;
@@ -128,13 +127,13 @@ public class ghost_control : MonoBehaviour
 		if (Power [team] > 100)
 			Power [team] = 100;
 		if (Power [playerNum] < a) {
-			Power [playerNum]=0;
+			Power [playerNum] = 0;
 		} else {
 			Power [playerNum] -= a;
 		}
 		for (int i=0; i<playerNum; i++) {
-			if(i!=team){				
-				Power[i] = Power[i] < a ? 0:Power[i]-a/(playerNum-1);
+			if (i != team) {				
+				Power [i] = Power [i] < a ? 0 : Power [i] - a / (playerNum - 1);
 			}
 		}
 	}

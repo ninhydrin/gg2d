@@ -101,7 +101,7 @@ public class MG_func : Photon.MonoBehaviour
 
 	void MakeMGHP(){
 		MGHP = Instantiate (Resources.Load("MG_HP")) as GameObject;
-		MGHP.transform.FindChild ("MG_HP_bar").GetComponent<Image> ().color = myColor;		
+		MGHP.transform.FindChild ("MG_HP_bar").GetComponent<Image> ().color = forNext.players[myNum].playerColor;		
 		HPBar = MGHP.transform.FindChild ("MG_HP_bar").GetComponent<RectTransform> ();
 		MGHP.transform.SetParent(GameObject.Find("Player_info").transform);
 		MGHP.GetComponent<RectTransform> ().anchoredPosition = new Vector2 (-175f + 328f * myNum, -22.5f);

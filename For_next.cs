@@ -14,20 +14,22 @@ public class For_next : Photon.MonoBehaviour
 	public GameObject[] savaIcon;
 	GameObject commons;
 	public int[] numToOwnerId;
+	public Color[] numToColor;
 	public Dictionary<int, int> owneerIdToNum;
 	public int myid;
 	public Color myCo;
 	int gnum = 0;
 	bool flag;
 
-	public struct playerInfo
+	public struct pInfoStruct
+
 	{
 		public GameObject playerOb;
 		public Color playerColor;
 		public int teamNum;
 		public int colorNum;
 
-		public playerInfo (GameObject pOb, Color pCo, int tNum, int cNum)
+		public pInfoStruct (GameObject pOb, Color pCo, int tNum, int cNum)
 		{
 			playerOb = pOb;
 			playerColor = pCo;
@@ -37,22 +39,26 @@ public class For_next : Photon.MonoBehaviour
 
 	}
 	Transform playerList;
-	public Dictionary<int, playerInfo> players;
+	public Dictionary<int, pInfoStruct> playerskari;
+	public pInfoStruct[] players;
 	
 	// Use this for initialization
 	void Start ()
 	{
 		playerList = GameObject.Find ("Players").transform;
-		players = new Dictionary<int,playerInfo> ();
+		playerskari = new Dictionary<int,pInfoStruct> ();
 
 		playerNum = 2;
+		players = new pInfoStruct[playerNum];
+		
 		numToOwnerId = new int[playerNum];
+		numToColor = new Color[playerNum];
 		owneerIdToNum = new Dictionary<int,int> ();
 		DontDestroyOnLoad (commons);		
 		DontDestroyOnLoad (gameObject);
-		DontDestroyOnLoad (GameObject.Find("PlayerList"));
-		DontDestroyOnLoad (GameObject.Find("MGList"));
-		DontDestroyOnLoad (GameObject.Find("GhostList"));
+		DontDestroyOnLoad (GameObject.Find ("PlayerList"));
+		DontDestroyOnLoad (GameObject.Find ("MGList"));
+		DontDestroyOnLoad (GameObject.Find ("GhostList"));
 				
 	}
 
@@ -73,8 +79,8 @@ public class For_next : Photon.MonoBehaviour
 				}
 				System.Array.Sort (numToOwnerId);
 				for (int i = 0; i < player.Length; i++) {
-					players [i] = players [numToOwnerId [i]];
-					owneerIdToNum[numToOwnerId[i]] = i;
+					players [i] = playerskari [numToOwnerId[i]];
+					owneerIdToNum [numToOwnerId [i]] = i;
 					if (numToOwnerId [i] == PhotonNetwork.player.ID) {
 						myid = i;
 						myCo = players [i].playerColor;
@@ -89,7 +95,7 @@ public class For_next : Photon.MonoBehaviour
 	public void SetPlayer (int pNum, GameObject pOb, Color pCo, int tNum, int cNum)
 	{
 
-		players [pNum] = new playerInfo (pOb, pCo, tNum, cNum);
+		playerskari [pNum] = new pInfoStruct (pOb, pCo, tNum, cNum);
 	}
 
 	public int getGNum ()

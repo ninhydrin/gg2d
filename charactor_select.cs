@@ -57,7 +57,7 @@ public class charactor_select : Photon.MonoBehaviour
 		myColor.color = charColor [seleC];
 		if (photonView.isMine) {
 			if (!setOk) {
-				if (selector == 0) {
+				if (selector == 0) { //
 					if (Input.GetKeyDown (buttons.LStick_Left)) {
 						seleP = seleP < 1 ? charNum - 1 : seleP - 1;
 						charactors [seleP].transform.eulerAngles = Vector3.zero;
@@ -90,7 +90,7 @@ public class charactor_select : Photon.MonoBehaviour
 				}
 
 				if (Input.GetButtonDown ("Jump")) {
-					forNext.GetComponent<For_next> ().SetPlayer (PhotonNetwork.player.ID, playerOb [seleP], charColor [seleC], teamNum, seleC);
+					forNext.GetComponent<For_next> ().SetPlayer (photonView.ownerId, playerOb [seleP], charColor [seleC], teamNum, seleC);
 					charactors [seleP].transform.eulerAngles =Vector3.zero;
 					setOk = true;
 				}
