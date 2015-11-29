@@ -95,7 +95,8 @@ public class MG_func : Photon.MonoBehaviour
 
 		creating = false;
 		CreatePreparePos ();
-
+		//minimapMG = PhotonNetwork.Instantiate ("miniMG", new Vector3 (50, 0, 50), Quaternion.identity, 0) as GameObject;			
+		//minimapMG = Instantiate (Resources.Load("miniMG"), new Vector3 (transform.position.x, transform.position.y, 0), Quaternion.identity) as GameObject;			
 	}
 
 	void MakeMGHP(){

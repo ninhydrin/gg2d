@@ -66,6 +66,8 @@ public class Sava_controler : Photon.MonoBehaviour
 		canReport = true;		
 		HP = maxHP;
 		MakeHeadHP ();
+		forNext = GameObject.Find ("ForNextScene").GetComponent<For_next> ();
+		tag = forNext.owneerIdToNum[photonView.ownerId].ToString()+"P_Sava";		
 
 	}
 	
