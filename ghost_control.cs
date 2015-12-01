@@ -57,7 +57,7 @@ public class ghost_control : Photon.MonoBehaviour
 			if (!domiF) {
 				dominator = -1;
 			}
-			photonView.RPC("SyncPower",PhotonTargets.All,Power as Object);
+			photonView.RPC("SyncPower",PhotonTargets.All,Power);
 		}
 	}
 
@@ -139,7 +139,7 @@ public class ghost_control : Photon.MonoBehaviour
 		}
 	}
 	[PunRPC]
-	void SyncPower(object[] ob){
+	void SyncPower(int[] ob){
 		Power [0] = ob[0];
 		Power [1] = ob[1];
 	}
