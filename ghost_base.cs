@@ -24,7 +24,6 @@ public class ghost_base : Photon.MonoBehaviour
 		myParent = GameObject.Find("GhostList");
 		transform.SetParent (myParent.transform);
 		forNext = GameObject.Find ("ForNextScene").GetComponent<For_next> ();	
-PhotonTargets.MasterClient=
 		ghostHP = Instantiate (ghostHP_ob);
 		ghostHP.GetComponent<ghost_control> ().init (gameObject,forNext.playerNum);
 		ghostHP.transform.SetParent (GameObject.Find ("Minimap").transform);
