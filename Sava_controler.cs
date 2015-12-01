@@ -25,11 +25,12 @@ public class Sava_controler : Photon.MonoBehaviour
 
 	int myTeamNum;
 	int myGroupNum;
+	Color myColor;
+	int myNum;
 	GameObject mapIcon;
 	GameObject mMapIcon;
 	GameObject headHP;
 	GameObject sideHP;
-
 	bool leader;
 	int myCost;
 	public float searchDest;
@@ -48,7 +49,7 @@ public class Sava_controler : Photon.MonoBehaviour
 	sava_report toSubmission;
 	bool canReport;
 	For_next forNext;
-
+	bool repoRearch, repoFight, repoSituation;
 	static int idleState = Animator.StringToHash ("Base Layer.Idle");
 	static int walkState = Animator.StringToHash ("Base Layer.Idle");
 	static int fightingState = Animator.StringToHash ("Base Layer.Fighting");
@@ -65,10 +66,12 @@ public class Sava_controler : Photon.MonoBehaviour
 		toSubmission = GameObject.Find ("Player_info/Sava_report").GetComponent<sava_report> ();
 		canReport = true;		
 		HP = maxHP;
-		MakeHeadHP ();
 		forNext = GameObject.Find ("ForNextScene").GetComponent<For_next> ();
-		tag = forNext.owneerIdToNum[photonView.ownerId].ToString()+"P_Sava";		
-
+		myNum = forNext.owneerIdToNum [photonView.ownerId];
+		tag = myNum.ToString () + "P_Sava";
+		myColor = forNext.players [myNum].playerColor;
+		MakeHeadHP ();		
+		repoFight = repoRearch = repoSituation = true;
 	}
 	
 	// Update is called once per frame
@@ -83,8 +86,9 @@ public class Sava_controler : Photon.MonoBehaviour
 				fighting = nearEnemy.Count != 0 ? true : false;
 
 				if (nearEnemy.Count != 0 && !fighting && canReport) {
-					if (leader) {
+					if (leader&&repoFight) {
 						toSubmission.SubmitReport (myFace, "敵を発見");
+						repoFight=false;
 						canReport = false;
 						StartCoroutine ("WaitReport");
 					}
@@ -124,6 +128,10 @@ public class Sava_controler : Photon.MonoBehaviour
 			
 					if (agent.remainingDistance <= agent.stoppingDistance) {
 						reached = true;	
+						if (leader && repoRearch && reached) {
+							toSubmission.SubmitReport (myFace, "目的地に到着");
+							repoRearch = false;
+						}
 						agent.stoppingDistance = standDest;				
 					} else {
 						agent.stoppingDistance = stopDest;
@@ -158,7 +166,7 @@ public class Sava_controler : Photon.MonoBehaviour
 		}
 	}
 
-	public void init (GameObject Mi, GameObject MMi, GameObject SS,int gnum, bool le, int myNum)
+	public void init (GameObject Mi, GameObject MMi, GameObject SS, int gnum, bool le, int myNumm)
 	{
 
 		mapIcon = Mi;
@@ -166,14 +174,15 @@ public class Sava_controler : Photon.MonoBehaviour
 		sideHP = SS;
 		myGroupNum = gnum;
 		leader = le;
-		myTeamNum = myNum;
+		myTeamNum = myNumm;
 		forNext = GameObject.Find ("ForNextScene").GetComponent<For_next> ();
-		gameObject.tag = forNext.owneerIdToNum[photonView.ownerId].ToString()+"P_Sava";
+		gameObject.tag = forNext.owneerIdToNum [photonView.ownerId].ToString () + "P_Sava";
 	}
+
 	void MakeHeadHP ()
 	{
-		headHP = Instantiate (Resources.Load("Sava_HP_LV"), Vector3.zero, Quaternion.identity) as GameObject;		
-		headHP.GetComponent<sava_head_HPLV> ().init (gameObject);
+		headHP = Instantiate (Resources.Load ("Sava_HP_LV"), Vector3.zero, Quaternion.identity) as GameObject;		
+		headHP.GetComponent<sava_head_HPLV> ().init (gameObject, myColor);
 		headHP.transform.SetParent (GameObject.Find ("Sava_info").transform);
 	}
 
@@ -182,7 +191,7 @@ public class Sava_controler : Photon.MonoBehaviour
 		HashSet<GameObject> c = new HashSet<GameObject> ();
 		Collider[] a = Physics.OverlapSphere (transform.position, range);
 		foreach (Collider b in a) {
-			if (b.gameObject.tag ==  myTeamNum.ToString()+"P_Sava" || b.gameObject.tag == myTeamNum.ToString()+ "P_Master" ||b.gameObject.tag == myTeamNum.ToString()+"P_MG")
+			if (b.gameObject.tag == myTeamNum.ToString () + "P_Sava" || b.gameObject.tag == myTeamNum.ToString () + "P_Master" || b.gameObject.tag == myTeamNum.ToString () + "P_MG")
 				c.Add (b.gameObject);
 		}
 		return c;
@@ -194,7 +203,7 @@ public class Sava_controler : Photon.MonoBehaviour
 		Collider[] a = Physics.OverlapSphere (transform.position, range);
 		foreach (Collider b in a) {
 			if (b.gameObject.tag == "Ghost" && b.gameObject.GetComponent<ghost_base> ().dominator != myTeamNum)
-				c.Add(b.gameObject);
+				c.Add (b.gameObject);
 			if (b.gameObject.tag == "Enemy_sava" || b.gameObject.tag == "Enemy_master")
 				c.Add (b.gameObject);
 		}
@@ -222,7 +231,6 @@ public class Sava_controler : Photon.MonoBehaviour
 		//animator.SetInteger ("Damage", num);
 	}
 
-
 	public void Repair (int a)
 	{	
 		if (HP + a > maxHP) {
@@ -235,6 +243,7 @@ public class Sava_controler : Photon.MonoBehaviour
 	public void SetDestination (Vector2 destination)
 	{
 		dest = destination;
+		repoRearch = true;
 	}
 
 	public bool isLeader ()
@@ -251,8 +260,6 @@ public class Sava_controler : Photon.MonoBehaviour
 	{
 		return dest;	
 	}
-
-
 
 	public void imDead ()
 	{		

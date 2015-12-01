@@ -41,15 +41,17 @@ public class CameraController : MonoBehaviour
 
 		
 	}
-	IEnumerator WaitInit(){
+
+	IEnumerator WaitInit ()
+	{
 		common = GameObject.FindWithTag ("commons").GetComponent<commons> ();
 		forNext = GameObject.Find ("ForNextScene").GetComponent<For_next> ();		
 		while (!common.myOk) {
 			yield return 0;
 		}	
-		player = GameObject.FindWithTag (myNum.ToString()+"P_Master");
+		player = GameObject.FindWithTag (myNum.ToString () + "P_Master");
 		playerC = player.GetComponent<PlayerController> ();
-		CP = player.transform.FindChild("Camera_Pos");
+		CP = player.transform.FindChild ("Camera_Pos");
 		LOP = player.transform.FindChild ("LockOnPos");
 		DefaultPos = player.transform.FindChild ("DefaultPos");
 		BDPos = player.transform.FindChild ("BD_Pos");
@@ -58,7 +60,6 @@ public class CameraController : MonoBehaviour
 		transform.position = a + offset;
 		cando = true;
 	}
-
 
 	Vector3 a, b;
 	int targetNum, maxTnum;
@@ -123,7 +124,8 @@ public class CameraController : MonoBehaviour
 					transform.position = a + offset;
 				} else {
 					turnTime = 4f;
-					transform.position = Vector3.Lerp (transform.position, a + offset, turnTime * Time.deltaTime);
+					transform.position = a + offset;
+//					transform.position = Vector3.Lerp (transform.position, a + offset, turnTime * Time.deltaTime);
 				
 				}
 //			transform.position = Vector3.Lerp (transform.position, a + offset, turnTime * Time.deltaTime);

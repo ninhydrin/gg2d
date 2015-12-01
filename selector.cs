@@ -54,7 +54,8 @@ public class selector : MonoBehaviour
 		
 		}
 		init_pos = new Vector2 (0f, -20f);
-		rt.anchoredPosition = init_pos;
+		init_pos = new Vector2 (0f, -100f);		
+		rt.position = init_pos;
 		savaGroupNum = 1;
 		coflag = false;
 		cantReleasing = false;
@@ -128,7 +129,7 @@ public class selector : MonoBehaviour
 			leader=false;
 		}
 		for (int i =0; i<theEntry.HowMany; i++) {
-			MG.Order (theEntry.sava,theEntry.sumonTime,leader,theEntry.map_icon,theEntry.minimap_icon,gnum,dest);
+			MG.Order (theEntry.sava,theEntry.sumonTime,leader,theEntry.map_icon,gnum,dest,theEntry.face,theEntry.maxHp);
 			leader = false;			
 		}
 	}
@@ -137,7 +138,7 @@ public class selector : MonoBehaviour
 	{
 		organ_menu_entry theEntry = entry_list [point].GetComponent<organ_menu_entry> ();
 		Mana.RemoveMana (theEntry.cost);
-		return Instantiate (theEntry.sava) as GameObject;
+		return Instantiate (Resources.Load("item/"+theEntry.sava)) as GameObject;
 	}
 
 	public bool CanRelease ()

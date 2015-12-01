@@ -5,9 +5,8 @@ using UnityEngine.UI;
 public class organ_menu_entry : MonoBehaviour
 {
 
-	public GameObject sava;
-	public GameObject minimap_icon;
-	public GameObject map_icon;
+	public string sava;
+	public string map_icon;
 	public int cost;
 	public string savaName;
 	public Sprite face;

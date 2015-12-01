@@ -29,15 +29,29 @@ public class PlayerController : Photon.MonoBehaviour
 
 	For_next forNext;
 	GameObject myParent;
-
+	GameObject myHead;
+	GameObject miniMe;
+	GameObject organMe;
 	void Awake(){
 		myParent = GameObject.Find("PlayerList");
 		transform.SetParent (myParent.transform);
 		forNext = GameObject.Find ("ForNextScene").GetComponent<For_next> ();
 		myNum = forNext.owneerIdToNum [photonView.ownerId];
 		//myNum = forNext.myid;
-		myColor = forNext.myCo;
+		myColor = forNext.players[myNum].playerColor;
+		nowHP = maxHP;
+		nowTP = maxTP / 2;
 		tag = forNext.owneerIdToNum[photonView.ownerId].ToString()+"P_Master";
+		if (!photonView.isMine) {
+			myHead = Instantiate(Resources.Load("Master_HP_TP")) as GameObject;
+			myHead.GetComponent<master_head_HPTP>().init(gameObject,myColor);
+			myHead.transform.SetParent(GameObject.Find("Minimap").transform);
+		}
+		miniMe = Instantiate(Resources.Load("minimap/Mini_master")) as GameObject;
+		miniMe.GetComponent<mini_master> ().init (gameObject, myColor);
+		organMe = Instantiate (Resources.Load ("Organ_master")) as GameObject;
+		organMe.GetComponent<organ_master> ().init (gameObject, myColor);
+		
 	}
 
 	void Start ()
@@ -46,8 +60,7 @@ public class PlayerController : Photon.MonoBehaviour
 		if (photonView.isMine) {
 			GameObject.Find ("Organ").GetComponent<UnityEngine.Canvas> ().enabled = false;
 			buttons = GameObject.Find ("ForNextScene").GetComponent<Button> ();
-			nowHP = maxHP;
-			nowTP = maxTP / 2;
+
 			itemSelector = GameObject.Find ("Player_info/Item_slot/Item_selector").GetComponent<RectTransform> ();
 			itemSlot = new Image[6];
 			for (int i =0; i<6; i++)
@@ -112,9 +125,6 @@ public class PlayerController : Photon.MonoBehaviour
 					//nearEnemy.Clear();
 				} 
 
-
-
-
 			} else {
 				canitem = false;
 				canitem2 = false;
@@ -149,7 +159,7 @@ public class PlayerController : Photon.MonoBehaviour
 					print (child.transform.parent);
 					storeSava = child.transform.parent;
 				}
-				itemBox [a].GetComponent<item> ().icon = storeSava.GetComponent<sava_base> ().face;
+				//itemBox [a].GetComponent<item> ().icon = storeSava.GetComponent<sava_base> ().face;
 			}
 		}
 	}

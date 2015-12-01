@@ -38,15 +38,15 @@ public class sava_side_info : MonoBehaviour
 		}
 	}
 
-	public void init (GameObject ob,GameObject pre)
+	public void init (Sprite face,GameObject pre,int mHP)
 	{
 		myOb = pre;
 		canDelete = true;
-		GetComponent<UnityEngine.UI.Image> ().sprite = ob.GetComponent<Sava_controler> ().myFace;
+		GetComponent<UnityEngine.UI.Image> ().sprite = face;
 		rt = GetComponent<RectTransform> ();
 		HPrt = transform.FindChild ("Sava_side_HP").GetComponent<RectTransform> ();
 		LVrt = transform.FindChild ("Sava_side_LV").GetComponent<RectTransform> ();
-		HPLenUnit = HPrt.sizeDelta.x / (float)ob.GetComponent<Sava_controler> ().maxHP;
+		HPLenUnit = HPrt.sizeDelta.x / (float)mHP;
 		LVLenUnit = LVrt.sizeDelta.x / 99f;
 		LVrt.sizeDelta = new Vector2 (0, 0);
 	}

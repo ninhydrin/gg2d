@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class ghost_base : MonoBehaviour
+public class ghost_base : Photon.MonoBehaviour
 {
 	public GameObject mapicon_ob;
 	public GameObject ghostHP_ob;
@@ -24,7 +24,7 @@ public class ghost_base : MonoBehaviour
 		myParent = GameObject.Find("GhostList");
 		transform.SetParent (myParent.transform);
 		forNext = GameObject.Find ("ForNextScene").GetComponent<For_next> ();	
-
+PhotonTargets.MasterClient=
 		ghostHP = Instantiate (ghostHP_ob);
 		ghostHP.GetComponent<ghost_control> ().init (gameObject,forNext.playerNum);
 		ghostHP.transform.SetParent (GameObject.Find ("Minimap").transform);
@@ -60,6 +60,7 @@ public class ghost_base : MonoBehaviour
 
 	public void Damage (int da, int t)
 	{
+		photonView.RPC ("DamageRPC", PhotonTargets.All, new object[]{da,t});
 		ghostHP.GetComponent<ghost_control> ().Damage (da, t);
 	}
 
@@ -80,6 +81,10 @@ public class ghost_base : MonoBehaviour
 		dominator = c;
 		domiColor = b;
 
+	}
+	[PunRPC]
+	void DamageRPC(int da,int t){
+		ghostHP.GetComponent<ghost_control> ().Damage (da, t);	
 	}
 
 	public IEnumerator CanDominate (int a)

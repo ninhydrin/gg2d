@@ -141,12 +141,9 @@ public class ghost_control : MonoBehaviour
 	void OnTriggerEnter (Collider collider)
 	{
 
-		print (collider);
 		if (collider.gameObject.tag == "Ghost") {
 				
 		}
-		if (collider.gameObject.tag == "Enemy_sava")
-			collider.transform.parent.GetComponent<sava_base> ().Damage (120);
 
 	}
 }

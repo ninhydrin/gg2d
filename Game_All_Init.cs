@@ -69,8 +69,9 @@ public class Game_All_Init : Photon.MonoBehaviour
 	{
 		MG = PhotonNetwork.Instantiate ("MG", new Vector3 (40+420*myNum, 0, 40+420*myNum), Quaternion.identity, 0) as GameObject;
 		MG.transform.Rotate (new Vector3(-90f,45f+myNum*180f,0));
-		Player = PhotonNetwork.Instantiate ("UP", new Vector3 (50, 0, 50), Quaternion.identity, 0) as GameObject;
-		MakeMiniMG ();		
+		Player = PhotonNetwork.Instantiate ("UP", new Vector3 (50, 20, 50), Quaternion.identity, 0) as GameObject;
+		MakeMiniMG ();	
+		MakeMapMG ();
 	}
 
 	void MakeMiniMG ()
@@ -93,7 +94,6 @@ public class Game_All_Init : Photon.MonoBehaviour
 	void MakeMapMG ()
 	{
 		mapMG = PhotonNetwork.Instantiate (forNext.mapMG [forNext.players [0].colorNum], Vector3.zero, Quaternion.identity, 0);
-
 		mapMG.GetComponent<RectTransform> ().localScale = new Vector3 (1f, 1f, 0);
 
 	}
@@ -129,7 +129,7 @@ public class Game_All_Init : Photon.MonoBehaviour
 		if (PhotonNetwork.isMasterClient)
 			MakeGhost ();
 		MakeMG ();
-		MakeMapMG ();
+
 		//MakeMiniMG ();
 		common.myOk = true;
 		gameTimer.IsEnable = true;

@@ -8,7 +8,6 @@ public class MG_func : Photon.MonoBehaviour
 	int HP = 1000;
 	int maxBarrier = 100;
 	int barrier = 100;
-
 	RectTransform HPBar;
 	Text barrierOb;
 	float HPUnit;
@@ -21,14 +20,14 @@ public class MG_func : Photon.MonoBehaviour
 	{
 		public int summonTime;
 		public Vector2 dest;
-		public GameObject sava;
+		public string sava;
 		public bool leader;
 		public int gNum;
 		public GameObject MMicon;
 		public GameObject Micon;
 		public GameObject sideHP;
 
-		public order (int p1, GameObject p2, int gnum, bool p3, GameObject Mi, GameObject MMi, GameObject side, Vector2 de)
+		public order (int p1, string p2, int gnum, bool p3, GameObject Mi, GameObject MMi, GameObject side, Vector2 de)
 		{
 			summonTime = p1;
 			sava = p2;
@@ -45,7 +44,6 @@ public class MG_func : Photon.MonoBehaviour
 	GameObject mapMG;
 	GameObject MGHP;
 	GameObject Mana;
-
 	public GameObject headHP;
 	public GameObject sideHP;
 	public GameObject ManaOb;
@@ -62,14 +60,13 @@ public class MG_func : Photon.MonoBehaviour
 	int orderToken;
 	Game_All_Init GameMaster;
 	GameObject myParent;
-
 	For_next forNext;
 	// Use this for initialization
 
 	void Awake ()
 	{
 		forNext = GameObject.Find ("ForNextScene").GetComponent<For_next> ();
-		myParent = GameObject.Find("MGList");
+		myParent = GameObject.Find ("MGList");
 		transform.SetParent (myParent.transform);
 		myNum = forNext.owneerIdToNum [photonView.ownerId];
 		//myNum = forNext.myid;
@@ -86,7 +83,7 @@ public class MG_func : Photon.MonoBehaviour
 */
 		if (photonView.isMine) {
 			savaSide = GameObject.Find ("Player_info/Sava_side").transform;
-		    mySava = GameObject.FindWithTag ("My_sava").transform;
+			mySava = GameObject.FindWithTag ("My_sava").transform;
 		
 		}
 		player = GameObject.Find (myNum.ToString () + "P_Master");
@@ -99,17 +96,18 @@ public class MG_func : Photon.MonoBehaviour
 		//minimapMG = Instantiate (Resources.Load("miniMG"), new Vector3 (transform.position.x, transform.position.y, 0), Quaternion.identity) as GameObject;			
 	}
 
-	void MakeMGHP(){
-		MGHP = Instantiate (Resources.Load("MG_HP")) as GameObject;
-		MGHP.transform.FindChild ("MG_HP_bar").GetComponent<Image> ().color = forNext.players[myNum].playerColor;		
+	void MakeMGHP ()
+	{
+		MGHP = Instantiate (Resources.Load ("MG_HP")) as GameObject;
+		MGHP.transform.FindChild ("MG_HP_bar").GetComponent<Image> ().color = forNext.players [myNum].playerColor;		
 		HPBar = MGHP.transform.FindChild ("MG_HP_bar").GetComponent<RectTransform> ();
-		MGHP.transform.SetParent(GameObject.Find("Player_info").transform);
+		MGHP.transform.SetParent (GameObject.Find ("Player_info").transform);
 		MGHP.GetComponent<RectTransform> ().anchoredPosition = new Vector2 (-175f + 328f * myNum, -22.5f);
 
-		MGHP.tag = myNum.ToString()+"P_HP";
+		MGHP.tag = myNum.ToString () + "P_HP";
 		
 		HPUnit = HPBar.sizeDelta.x / HP;
-		barrierOb = MGHP.transform.FindChild("Barrier").GetComponent<Text> ();
+		barrierOb = MGHP.transform.FindChild ("Barrier").GetComponent<Text> ();
 	}
 
 	// Update is called once per frame
@@ -147,7 +145,7 @@ public class MG_func : Photon.MonoBehaviour
 	{		
 		int a = summonToken < 1 ? 5 : summonToken - 1;		
 		//slip.sava.GetComponent<sava_base> ().create (summonPos [a], slip.leader);
-		GameObject theSava = PhotonNetwork.Instantiate ("Troll", summonPos [a], Quaternion.identity,0) as GameObject;
+		GameObject theSava = PhotonNetwork.Instantiate ("sava/"+slip.sava, summonPos [a], Quaternion.identity, 0) as GameObject;
 		if (sava_queue [a].Count == 0)
 			prepare [a].emissionRate = 0;
 
@@ -162,33 +160,33 @@ public class MG_func : Photon.MonoBehaviour
 		creating = false;
 	}
 
-	public void Order (GameObject ob, int sTime, bool lea, GameObject Mi, GameObject MMi, int gNum, Vector2 dest)
+	public void Order (string ob, int sTime, bool lea, string mIcon,int gNum, Vector2 dest,Sprite face,int mHP)
 	{
 		prepare [orderToken].emissionRate = 100;
 		
-		sava_queue [orderToken].Enqueue (new order (sTime, ob, gNum, lea, createMapIcon (Mi, orderToken, gNum), createMinimapIcon (MMi, orderToken), createSideHP (ob, orderToken), dest));
+		sava_queue [orderToken].Enqueue (new order (sTime, ob, gNum, lea, createMapIcon (mIcon, orderToken, gNum), createMinimapIcon (mIcon, orderToken), createSideHP (face, orderToken,mHP), dest));
 		orderToken = orderToken > 4 ? 0 : orderToken + 1;
 	}
 
-	GameObject createSideHP (GameObject ob, int pre)
+	GameObject createSideHP (Sprite ob, int pre,int mHP)
 	{
 		GameObject sideHP_ob = Instantiate (sideHP) as GameObject;		
 		sideHP_ob.transform.SetParent (savaSide);
-		sideHP_ob.GetComponent<sava_side_info> ().init (ob, prepare [pre].gameObject);
+		sideHP_ob.GetComponent<sava_side_info> ().init (ob, prepare [pre].gameObject,mHP);
 		return sideHP_ob;
 	}
 
-	public GameObject createMapIcon (GameObject map_icon, int targetPreNum, int gNum)
+	public GameObject createMapIcon (string map_icon, int targetPreNum, int gNum)
 	{
-		GameObject map_icon_ob = PhotonNetwork.Instantiate ("kinsetsu", Vector3.zero, Quaternion.identity, 0) as GameObject;		
+		GameObject map_icon_ob = PhotonNetwork.Instantiate ("map/"+map_icon, Vector3.zero, Quaternion.identity, 0) as GameObject;		
 		map_icon_ob.transform.SetParent (GameObject.Find ("Organ/Map/Organ_sava").transform);
 		map_icon_ob.GetComponent<mapicon> ().init (prepare [targetPreNum].gameObject, gNum);
 		return map_icon_ob;
 	}
 	
-	public GameObject createMinimapIcon (GameObject minimap_icon, int targetPreNum)
+	public GameObject createMinimapIcon (string minimap_icon, int targetPreNum)
 	{
-		GameObject minimap_icon_ob = PhotonNetwork.Instantiate ("minimap_A", Vector3.zero, Quaternion.identity, 0) as GameObject;		
+		GameObject minimap_icon_ob = PhotonNetwork.Instantiate ("minimap/"+minimap_icon, Vector3.zero, Quaternion.identity, 0) as GameObject;		
 		minimap_icon_ob.transform.SetParent (GameObject.Find ("Minimap/Field").transform);
 		minimap_icon_ob.GetComponent<minimap_icon> ().init (prepare [targetPreNum].gameObject);
 		return minimap_icon_ob;
@@ -221,7 +219,7 @@ public class MG_func : Photon.MonoBehaviour
 		prepare = new ParticleSystem[6];
 		for (int i =0; i<6; i++) {
 			sava_queue [i] = new Queue<order> (){};
-			GameObject a = Instantiate (Resources.Load("Prepare"), summonPos [i], Quaternion.identity) as GameObject; 
+			GameObject a = Instantiate (Resources.Load ("Prepare"), summonPos [i], Quaternion.identity) as GameObject; 
 			a.transform.SetParent (transform);
 			prepare [i] = a.GetComponent<ParticleSystem> ();
 			prepare [i].emissionRate = 0;

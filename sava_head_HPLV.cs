@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
-
+using UnityEngine.UI;
 public class sava_head_HPLV: Photon.MonoBehaviour
 {
 	private Vector3 screenPoint;
@@ -13,14 +13,13 @@ public class sava_head_HPLV: Photon.MonoBehaviour
 	private bool cando;
 	float HPLenUnit;
 	int myObId;
-
 	void Start ()
 	{
-
 		canShow = false;
 		HP_bar = transform.FindChild ("HP").gameObject;
 		LV_bar = transform.FindChild ("LV").gameObject;
-
+		HPrt = HP_bar.GetComponent<RectTransform> ();
+		LVrt = LV_bar.GetComponent<RectTransform> ();
 	}
 
 	void LateUpdate ()
@@ -30,7 +29,7 @@ public class sava_head_HPLV: Photon.MonoBehaviour
 			Vector3 aa = myOb.transform.position;
 			aa.y += 4f;
 			screenPoint = Camera.main.WorldToScreenPoint (aa);
-			HP_bar.GetComponent<RectTransform> ().sizeDelta = new Vector2 (HPLenUnit * myOb.GetComponent<Sava_controler> ().HP, HP_bar.GetComponent<RectTransform> ().sizeDelta.y);
+			HPrt.sizeDelta = new Vector2 (HPLenUnit * myOb.GetComponent<Sava_controler> ().HP, HPrt.sizeDelta.y);
 			if (screenPoint.z > 30 || screenPoint.z < 0)
 				canShow = false;
 			else
@@ -47,7 +46,7 @@ public class sava_head_HPLV: Photon.MonoBehaviour
 
 	}
 
-	public void init (GameObject target)
+	public void init (GameObject target,Color myC)
 	{
 
 		HP_bar = transform.FindChild ("HP").gameObject;
@@ -57,7 +56,7 @@ public class sava_head_HPLV: Photon.MonoBehaviour
 		myOb = target;
 		HPLenUnit = HP_bar.GetComponent<RectTransform> ().sizeDelta.x / (float)myOb.GetComponent<Sava_controler> ().maxHP;		
 		myObId = target.GetComponent<PhotonView> ().viewID;
-
+		HP_bar.GetComponent<Image> ().color = myC;
 	}
 
 	void HideBar ()

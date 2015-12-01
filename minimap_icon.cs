@@ -8,6 +8,7 @@ public class minimap_icon : MonoBehaviour {
 	GameObject myOb;
 	private Vector2 offset;
 	float inter;
+	bool cando =false;
 	// Use this for initialization
 	void Start ()
 	{
@@ -18,16 +19,16 @@ public class minimap_icon : MonoBehaviour {
 	// Update is called once per frame
 	void Update ()
 	{
-
-		if (myOb == null) {
-			Destroy (this.gameObject);
-		} else {
+		if (cando) {
+			if (myOb == null) {
+				Destroy (this.gameObject);
+			} else {
 		
-			offset.x = (myOb.transform.position.x - 250f) / 5f;
-			offset.y = (myOb.transform.position.z - 250f) / 5f;
-			rt.anchoredPosition = offset;
+				offset.x = (myOb.transform.position.x - 250f) / 5f;
+				offset.y = (myOb.transform.position.z - 250f) / 5f;
+				rt.anchoredPosition = offset;
+			}
 		}
-
 
 	}
 	
@@ -38,6 +39,7 @@ public class minimap_icon : MonoBehaviour {
 		offset.x = (myOb.transform.position.x - 250f) / 5f;
 		offset.y = (myOb.transform.position.z - 250f) / 5f;
 		rt.anchoredPosition = offset;
+		cando = true;
 	}
 
 }

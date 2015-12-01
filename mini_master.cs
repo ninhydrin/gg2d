@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.UI;
 
 public class mini_master : MonoBehaviour
 {
@@ -10,19 +11,21 @@ public class mini_master : MonoBehaviour
 	int myNum;
 	For_next forNext;
 	private bool cando;
+
+	Color myColor;
 	// Use this for initialization
 	void Start ()
 	{
 		forNext = GameObject.Find ("ForNextScene").GetComponent<For_next> ();
 		myNum = forNext.myid;
-		rt = GetComponent<RectTransform> ();
 		offset = rt.anchoredPosition;
-		StartCoroutine (WaitInit ());
+		
 	}
 	
 	// Update is called once per frame
 	void Update ()
-	{if (cando) {
+	{
+		if (cando) {
 			offset.x = (player.transform.position.x - 250f) / 5f;
 			offset.y = (player.transform.position.z - 250f) / 5f;
 			rt.eulerAngles = new Vector3 (rt.eulerAngles.x, rt.eulerAngles.y, -player.transform.eulerAngles.y);
@@ -33,22 +36,22 @@ public class mini_master : MonoBehaviour
 			} else {
 				enabled = true;
 			}					
-			rt.anchoredPosition = offset;	
+			rt.anchoredPosition = offset;
+			if(!player)Destroy(gameObject);
 		}
 	}
 
-	IEnumerator WaitInit(){
-		commons common = GameObject.FindWithTag ("commons").GetComponent<commons> ();
-		forNext = GameObject.Find ("ForNextScene").GetComponent<For_next> ();		
-		while (!common.myOk) {
-			yield return 0;
-		}
-		player = GameObject.FindWithTag (myNum.ToString()+"P_Master");
-		StartCoroutine (ImSelected ());		
+	public void init (GameObject me,Color myC)
+	{
+		player = me;
+		GetComponent<Image> ().color = myC;
+		rt = GetComponent<RectTransform> ();
+		transform.SetParent (GameObject.Find ("Minimap/Field").transform);
+		StartCoroutine (ImMove());
 		cando = true;
 	}
 
-	private IEnumerator ImSelected ()
+	private IEnumerator ImMove ()
 	{
 		Vector2 or = rt.sizeDelta;
 
