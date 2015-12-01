@@ -18,7 +18,6 @@ public class ghost_control : Photon.MonoBehaviour
 	private float barLength;
 	int playerNum;
 	bool cando, domiF;
-	object[] args;
 	PhotonView myPV;
 	void Start ()
 
@@ -59,7 +58,9 @@ public class ghost_control : Photon.MonoBehaviour
 			if (!domiF) {
 				dominator = -1;
 			}
-			myPV.RPC("SyncPower",PhotonTargets.All,Power);
+			//myPV.RPC("SyncPower",PhotonTargets.All,Power);
+			photonView.RPC("SyncPower",PhotonTargets.All,Power);
+			
 		}
 	}
 	[PunRPC]
@@ -92,9 +93,6 @@ public class ghost_control : Photon.MonoBehaviour
 		LenUnit = barLength / 100;
 		cando = true;
 		myPV = PhotonView.Get (this);
-		args = new object[]{
-			Power
-		};
 	}
 
 	void HideBar ()
