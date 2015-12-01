@@ -59,7 +59,6 @@ public class ghost_base : Photon.MonoBehaviour
 
 	public void Damage (int da, int t)
 	{
-		photonView.RPC ("DamageRPC", PhotonTargets.All, new object[]{da,t});
 		ghostHP.GetComponent<ghost_control> ().Damage (da, t);
 	}
 
@@ -80,10 +79,6 @@ public class ghost_base : Photon.MonoBehaviour
 		dominator = c;
 		domiColor = b;
 
-	}
-	[PunRPC]
-	void DamageRPC(int da,int t){
-		ghostHP.GetComponent<ghost_control> ().Damage (da, t);	
 	}
 
 	public IEnumerator CanDominate (int a)

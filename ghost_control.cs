@@ -2,7 +2,7 @@
 using System.Collections;
 using UnityEngine.UI;
 
-public class ghost_control : MonoBehaviour
+public class ghost_control : Photon.MonoBehaviour
 {
 
 	private Vector3 screenPoint;
@@ -57,6 +57,7 @@ public class ghost_control : MonoBehaviour
 			if (!domiF) {
 				dominator = -1;
 			}
+			photonView.RPC("SyncPower",PhotonTargets.All,Power as Object);
 		}
 	}
 
@@ -137,7 +138,11 @@ public class ghost_control : MonoBehaviour
 			}
 		}
 	}
-
+	[PunRPC]
+	void SyncPower(object[] ob){
+		Power [0] = ob[0];
+		Power [1] = ob[1];
+	}
 	void OnTriggerEnter (Collider collider)
 	{
 
