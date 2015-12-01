@@ -18,7 +18,7 @@ public class ghost_control : Photon.MonoBehaviour
 	private float barLength;
 	int playerNum;
 	bool cando, domiF;
-
+	object[] args;
 	void Start ()
 	{
 		GetComponent<RectTransform> ().localScale = new Vector3 (1, 1, 0);		
@@ -57,7 +57,7 @@ public class ghost_control : Photon.MonoBehaviour
 			if (!domiF) {
 				dominator = -1;
 			}
-			photonView.RPC("SyncPower",PhotonTargets.All,Power);
+			PhotonView.RPC("SyncPower",PhotonTargets.All,Power);
 		}
 	}
 
@@ -85,7 +85,9 @@ public class ghost_control : Photon.MonoBehaviour
 		barLength = control_bar [playerNum].GetComponent<RectTransform> ().sizeDelta.x;
 		LenUnit = barLength / 100;
 		cando = true;
-
+		args = new object[]{
+			Power
+		};
 	}
 
 	void HideBar ()
