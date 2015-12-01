@@ -11,7 +11,7 @@ public class ghost_control : Photon.MonoBehaviour
 	For_next forNext;
 	public GameObject control_barOb;
 	GameObject[] control_bar;
-	private int[] Power;
+	private static int[] Power;
 	public int dominator;
 	public Color domiColor;
 	private float LenUnit;
@@ -19,7 +19,9 @@ public class ghost_control : Photon.MonoBehaviour
 	int playerNum;
 	bool cando, domiF;
 	object[] args;
+	PhotonView myPV;
 	void Start ()
+
 	{
 		GetComponent<RectTransform> ().localScale = new Vector3 (1, 1, 0);		
 	}
@@ -57,10 +59,14 @@ public class ghost_control : Photon.MonoBehaviour
 			if (!domiF) {
 				dominator = -1;
 			}
-			PhotonView.RPC("SyncPower",PhotonTargets.All,Power);
+			myPV.RPC("SyncPower",PhotonTargets.All,Power);
 		}
 	}
-
+	[PunRPC]
+	public void SyncPower(int[] ob,PhotonMessageInfo info){
+		Power [0] = ob[0];
+		Power [1] = ob[1];
+	}
 	public void init (GameObject target, int pNum)
 	{
 		forNext = GameObject.Find ("ForNextScene").GetComponent<For_next> ();
@@ -85,6 +91,7 @@ public class ghost_control : Photon.MonoBehaviour
 		barLength = control_bar [playerNum].GetComponent<RectTransform> ().sizeDelta.x;
 		LenUnit = barLength / 100;
 		cando = true;
+		myPV = PhotonView.Get (this);
 		args = new object[]{
 			Power
 		};
@@ -140,11 +147,7 @@ public class ghost_control : Photon.MonoBehaviour
 			}
 		}
 	}
-	[PunRPC]
-	void SyncPower(int[] ob){
-		Power [0] = ob[0];
-		Power [1] = ob[1];
-	}
+
 	void OnTriggerEnter (Collider collider)
 	{
 
