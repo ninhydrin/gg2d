@@ -28,7 +28,7 @@ public class ghost_base : Photon.MonoBehaviour
 		forNext = GameObject.Find ("ForNextScene").GetComponent<For_next> ();
 		playerNum = forNext.playerNum;
 		ghostHP = Instantiate (ghostHP_ob);
-		ghostHP.GetComponent<ghost_control> ().init (gameObject, forNext.playerNum);
+		ghostHP.GetComponent<ghost_control> ().init (gameObject,forNext.owneerIdToNum[photonView.ownerId]);
 		ghostHP.transform.SetParent (GameObject.Find ("Minimap").transform);
 
 		myPV = photonView;

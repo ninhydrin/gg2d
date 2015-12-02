@@ -49,7 +49,7 @@ public class ghost_control : Photon.MonoBehaviour
 		}
 	}
 
-	public void init (GameObject target, int pNum)
+	public void init (GameObject target,int pNum)
 	{
 		forNext = GameObject.Find ("ForNextScene").GetComponent<For_next> ();
 		myOb = target;
@@ -68,6 +68,8 @@ public class ghost_control : Photon.MonoBehaviour
 				rt.anchoredPosition = Vector2.left * rt.sizeDelta.x / 2;				
 			}
 			control_bar [i].transform.SetParent (transform);
+			if(i != pNum)
+				transform.SetAsFirstSibling();
 		}
 
 		canShow = false;
