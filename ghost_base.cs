@@ -67,7 +67,7 @@ public class ghost_base : Photon.MonoBehaviour
 
 	}
 
-	[RPC]
+	[PunRPC]
 	public void SyncPower (int[] ob, PhotonMessageInfo info)
 	{
 		bool domiCheck = true;
