@@ -32,8 +32,7 @@ public class ghost_icon : MonoBehaviour
 	void Update ()
 	{
 		if (cando) {
-			myColor.color = ghostB.dominator >= 0 ? ghostB.domiColor : defaultColor;
-
+			myColor.color = ghostB.dominator >= 0 ? ghostB.domiColor[ghostB.dominator] : defaultColor;
 			if (organC.savaDictSetting || organC.summoning) {
 				float inter = Vector2.Distance (cursorRt.anchoredPosition, rt.anchoredPosition);
 

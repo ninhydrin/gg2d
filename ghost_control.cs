@@ -11,16 +11,14 @@ public class ghost_control : Photon.MonoBehaviour
 	For_next forNext;
 	public GameObject control_barOb;
 	GameObject[] control_bar;
-	private static int[] Power;
-	public int dominator;
-	public Color domiColor;
 	private float LenUnit;
 	private float barLength;
-	int playerNum;
-	bool cando, domiF;
-	PhotonView myPV;
-	void Start ()
 
+	ghost_base ghostB;
+	int playerNum;
+	bool cando;
+
+	void Start ()
 	{
 		GetComponent<RectTransform> ().localScale = new Vector3 (1, 1, 0);		
 	}
@@ -48,34 +46,17 @@ public class ghost_control : Photon.MonoBehaviour
 				HideBar ();
 			}
 
-			for (int i=0; i<playerNum; i++) {
-				if (Power [i] >= 100) {
-					domiColor = forNext.players [i].playerColor;
-					dominator = i;
-					domiF = true;
-				}
-			}
-			if (!domiF) {
-				dominator = -1;
-			}
-			//myPV.RPC("SyncPower",PhotonTargets.All,Power);
-			photonView.RPC("SyncPower",PhotonTargets.All,Power);
-			
 		}
 	}
-	[PunRPC]
-	public void SyncPower(int[] ob,PhotonMessageInfo info){
-		Power [0] = ob[0];
-		Power [1] = ob[1];
-	}
+
 	public void init (GameObject target, int pNum)
 	{
 		forNext = GameObject.Find ("ForNextScene").GetComponent<For_next> ();
 		myOb = target;
-		playerNum = pNum;
+		playerNum = forNext.playerNum;
 		control_bar = new GameObject[playerNum + 1];
-		Power = new int[playerNum + 1];
-		Power [playerNum] = 100;
+		ghostB = target.GetComponent<ghost_base> ();
+
 		for (int i=0; i<playerNum+1; i++) {			
 			control_bar [i] = Instantiate (control_barOb);			
 			RectTransform rt = control_bar [i].GetComponent<RectTransform> ();
@@ -88,11 +69,11 @@ public class ghost_control : Photon.MonoBehaviour
 			}
 			control_bar [i].transform.SetParent (transform);
 		}
+
 		canShow = false;
 		barLength = control_bar [playerNum].GetComponent<RectTransform> ().sizeDelta.x;
 		LenUnit = barLength / 100;
 		cando = true;
-		myPV = PhotonView.Get (this);
 	}
 
 	void HideBar ()
@@ -111,12 +92,12 @@ public class ghost_control : Photon.MonoBehaviour
 
 	void AdjustmentBar ()
 	{
-		int sum = Power [playerNum];
+		int sum = ghostB.power [playerNum]; //中立のバー
 		float yy = control_bar [playerNum].GetComponent<RectTransform> ().sizeDelta.y;
 		
 		for (int i =0; i<playerNum; i++) {
 			control_bar [i].GetComponent<RectTransform> ().sizeDelta = new Vector2 (AdLen (sum, LenUnit), yy);
-			sum += Power [i];
+			sum += ghostB.power [i];
 		}
 	}
 
@@ -128,7 +109,7 @@ public class ghost_control : Photon.MonoBehaviour
 			return s * l;
 		}
 	}
-
+/*
 	public void Damage (int a, int team)
 	{
 		Power [team] += a;
@@ -145,13 +126,5 @@ public class ghost_control : Photon.MonoBehaviour
 			}
 		}
 	}
-
-	void OnTriggerEnter (Collider collider)
-	{
-
-		if (collider.gameObject.tag == "Ghost") {
-				
-		}
-
-	}
+*/
 }
