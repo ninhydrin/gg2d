@@ -38,14 +38,14 @@ public class charactor_select : Photon.MonoBehaviour
 		rt = GetComponent<RectTransform> ();
 		rt.anchoredPosition = new Vector2 (-180 + (photonView.ownerId - 1) * 360, 65);
 		cam1.GetComponent<Camera> ().rect = new Rect (0.07f + (photonView.ownerId - 1) * 0.5f, 0, 0.3f, 0.5f);
-		for (int i=0; i<charNum; i++) {
+		for (int i = 0; i < charNum; i++) {
 			charactors [i] = Instantiate (charactors [i], new Vector3 (i * 30, 50 * photonView.ownerId, 0), Quaternion.identity) as GameObject;
 		}
 
-		forNext = GameObject.Find ("ForNextScene").GetComponent<For_next>();
+		forNext = GameObject.Find ("ForNextScene").GetComponent<For_next> ();
 		DontDestroyOnLoad (forNext);
  
-		myColor.color = charColor [seleC];
+		myColor.color = forNext.Colors [seleC];
 		SetCamPos ();
 		
 	}
@@ -54,7 +54,7 @@ public class charactor_select : Photon.MonoBehaviour
 	void Update ()
 	{
 		SetCamPos ();
-		myColor.color = charColor [seleC];
+		//myColor.color = charColor [seleC];
 		if (Input.GetKeyDown (KeyCode.G))
 			Debug.Log (photonView.ownerId);
 		if (photonView.isMine) {
@@ -63,8 +63,8 @@ public class charactor_select : Photon.MonoBehaviour
 				MoveCharactor ();
 
 				if (Input.GetButtonDown ("Jump") && forNext.ready) {
-					forNext.SetPlayer (PhotonNetwork.player.ID, playerOb [seleP], charColor [seleC], teamNum, seleC);
-					charactors [seleP].transform.eulerAngles =Vector3.zero;
+					forNext.SetPlayer (PhotonNetwork.player.ID, playerOb [seleP], teamNum, seleC);
+					charactors [seleP].transform.eulerAngles = Vector3.zero;
 					setOk = true;
 				}
 			} else {
@@ -83,13 +83,16 @@ public class charactor_select : Photon.MonoBehaviour
 		cam1.transform.position = new Vector3 (30 * seleP, 2 + 50 * photonView.ownerId, 4);
 	}
 
-	void MoveCharactor(){
-		for (int i =0; i<charNum; i++) {
+	void MoveCharactor ()
+	{
+		for (int i = 0; i < charNum; i++) {
 			charactors [i].transform.Rotate (Vector3.up * Time.deltaTime * 10);
 		}
 	}
-	void OnKeyDown(){
-		if (selector == 0) { //
+
+	void OnKeyDown ()
+	{
+		if (selector == 0) { //キャラクター
 			if (Input.GetKeyDown (buttons.LStick_Left)) {
 				seleP = seleP < 1 ? charNum - 1 : seleP - 1;
 				charactors [seleP].transform.eulerAngles = Vector3.zero;
@@ -97,13 +100,14 @@ public class charactor_select : Photon.MonoBehaviour
 				seleP = seleP > charNum - 2 ? 0 : seleP + 1;
 				charactors [seleP].transform.eulerAngles = Vector3.zero;
 			}
-		} else if (selector == 1) {
+		} else if (selector == 1) {//カラー
 			if (Input.GetKeyDown (buttons.LStick_Left)) {
 				seleC = seleC < 1 ? colorNum - 1 : seleC - 1;
 			} else if (Input.GetKeyDown (buttons.LStick_Right)) {
 				seleC = seleC > colorNum - 2 ? 0 : seleC + 1;
 			}
-		} else if (selector == 2) {
+			myColor.color = forNext.Colors [seleC];
+		} else if (selector == 2) {//チーム
 			if (Input.GetKeyDown (buttons.LStick_Left)) {
 				seleT = seleT < 1 ? teamNum - 1 : seleT - 1;					
 			} else if (Input.GetKeyDown (buttons.LStick_Right)) {
@@ -118,6 +122,7 @@ public class charactor_select : Photon.MonoBehaviour
 		}
 
 	}
+
 	void OnPhotonSerializeView (PhotonStream stream, PhotonMessageInfo info)
 	{
 		if (stream.isWriting) {
