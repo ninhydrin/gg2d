@@ -64,6 +64,7 @@ public class For_next : Photon.MonoBehaviour
 	{
 		
 		if (PhotonNetwork.room != null) {
+
 			if (PhotonNetwork.room.playerCount == playerNum && !ready) {
 				roomPlayerDic = new Dictionary<int,pInfoStruct> ();
 				PhotonPlayer[] player = PhotonNetwork.playerList;
@@ -79,9 +80,15 @@ public class For_next : Photon.MonoBehaviour
 				ready = false;
 			}
 		}
+
 		if (ready && !flag) {
-			int count = 0;
 			PhotonPlayer[] player = PhotonNetwork.playerList;
+			for (int i = 0; i < player.Length; i++) {
+				print (i);
+				print (setOK [player [i].ID]);
+			}
+			int count = 0;
+
 			for (int i = 0; i < player.Length; i++) {
 				if (setOK [player [i].ID])
 					count++;
@@ -105,8 +112,6 @@ public class For_next : Photon.MonoBehaviour
 		}
 	}
 
-	public int aa = 110;
-
 	public void SetPlayer (int pNum, GameObject pOb, int tNum, int cNum)
 	{
 		roomPlayerDic [pNum] = new pInfoStruct (pOb, Colors [cNum], tNum, cNum);
@@ -124,7 +129,8 @@ public class For_next : Photon.MonoBehaviour
 
 	[PunRPC]
 	public void SendOK (int pNum,int cNum,int tNum,bool un,PhotonMessageInfo info)
-	{		
+	{	
+		roomPlayerDic [pNum] = new pInfoStruct (null, Colors [cNum], tNum, cNum);
 		setOK [pNum] = un ? true : false;
 
 	}
