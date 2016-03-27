@@ -19,7 +19,6 @@ public class Game_All_Init : Photon.MonoBehaviour
 	GameObject mapMG;
 	GameObject minimapMG;
 	Timelimit gameTimer;
-	public commons common;
 
 	int myNum;
 	For_next forNext;
@@ -31,17 +30,11 @@ public class Game_All_Init : Photon.MonoBehaviour
 	Color[] playerColor;
 	ghost_base[] ghosts;
 	int[] ghostNum;
-	GameObject commonsList;
 
 	// Use this for initialization
 	void Awake ()
 	{
 		forNext = GameObject.Find ("ForNextScene").GetComponent<For_next> ();				
-		commonsList = GameObject.Find ("commonsList");		
-		foreach (Transform child in commonsList.transform){
-			if(child.GetComponent<commons>().photonView.isMine) common = child.GetComponent<commons>();
-		}
-		forNext = GameObject.Find ("ForNextScene").GetComponent<For_next> ();
 		//myNum = forNext.owneerIdToNum [photonView.ownerId];
 		myNum = forNext.myid;
 		gameTimer = GameObject.Find ("Player_info/Time").GetComponent<Timelimit> ();
@@ -114,12 +107,8 @@ public class Game_All_Init : Photon.MonoBehaviour
 
 	IEnumerator WaitInit(){
 		int count = 0;
-		common.ok = true;
-		while (count != forNext.playerNum) {
-			count=0;
-			foreach (Transform child in commonsList.transform){
-				if(child.GetComponent<commons>().ok) count++;
-			}
+		forNext.startF [myNum];
+		while (forNext.AllLoadEnd()) {
 			yield return 0;
 		}
 		organMap = GameObject.Find ("Organ/Map");
@@ -131,7 +120,6 @@ public class Game_All_Init : Photon.MonoBehaviour
 		MakeMG ();
 
 		//MakeMiniMG ();
-		common.myOk = true;
 		gameTimer.IsEnable = true;
 		
 	}

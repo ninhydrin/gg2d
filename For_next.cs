@@ -19,6 +19,7 @@ public class For_next : Photon.MonoBehaviour
 	int gnum = 0;
 	public bool ready = false;
 	bool flag;
+	public bool[] startF;
 
 	public struct pInfoStruct
 	{
@@ -47,10 +48,13 @@ public class For_next : Photon.MonoBehaviour
 		playerList = GameObject.Find ("Players").transform;
 		playerNum = 2;
 		players = new pInfoStruct[playerNum];
+
 		setOK = new Dictionary<int, bool> ();
+		startF = new bool[playerNum];
 		numToOwnerId = new int[playerNum];
 		numToColor = new Color[playerNum];
 		owneerIdToNum = new Dictionary<int,int> ();
+
 		DontDestroyOnLoad (gameObject);
 		DontDestroyOnLoad (GameObject.Find ("PlayerList"));
 		DontDestroyOnLoad (GameObject.Find ("MGList"));
@@ -82,53 +86,68 @@ public class For_next : Photon.MonoBehaviour
 		}
 
 		if (ready && !flag) {
-			PhotonPlayer[] player = PhotonNetwork.playerList;
-			for (int i = 0; i < player.Length; i++) {
-				print (i);
-				print (setOK [player [i].ID]);
-			}
-			int count = 0;
-
-			for (int i = 0; i < player.Length; i++) {
-				if (setOK [player [i].ID])
-					count++;
-			}
-			if (count == playerNum) {
-				for (int i = 0; i < player.Length; i++) {
-					numToOwnerId [i] = player [i].ID; 
-				}
-				System.Array.Sort (numToOwnerId);
-				for (int i = 0; i < player.Length; i++) {
-					players [i] = roomPlayerDic [numToOwnerId [i]];
-					owneerIdToNum [numToOwnerId [i]] = i;
-					if (numToOwnerId [i] == PhotonNetwork.player.ID) {
-						myid = i;
-						myCo = players [i].playerColor;
-					}
-				}
+			if (CheckPlayerReady()){
+				SetID ();
 				flag = true;
 				StartCoroutine (LoadScene ());
 			}
 		}
 	}
+	public bool	AllLoadEnd (){
+		int count = 0;
+		for (int i = 0; i < playerNum; i++) {
+			if (startF [i])
+				count++;
+		}
+		if (count == playerNum)
+			return true;
+		return false;
+	}
+
+	void SetID(){
+		PhotonPlayer[] player = PhotonNetwork.playerList;
+		for (int i = 0; i < playerNum; i++) {					
+			numToOwnerId [i] = player [i].ID; 
+			players [i] = roomPlayerDic [numToOwnerId [i]];
+			owneerIdToNum [numToOwnerId [i]] = i;
+			if (numToOwnerId [i] == PhotonNetwork.player.ID) {
+				myid = i;
+				myCo = players [i].playerColor;
+			}
+		}
+	
+	}
+
+	bool CheckPlayerReady ()
+	{
+		PhotonPlayer[] player = PhotonNetwork.playerList;
+		int count = 0;
+		for (int i = 0; i < player.Length; i++) {
+			if (setOK [player [i].ID])
+				count++;
+		}
+		if (count == playerNum)
+			return true;
+		return false;
+	}
 
 	public void SetPlayer (int pNum, GameObject pOb, int tNum, int cNum)
 	{
 		roomPlayerDic [pNum] = new pInfoStruct (pOb, Colors [cNum], tNum, cNum);
-		object[] args = new object[4]{ pNum, cNum, tNum, true};
+		object[] args = new object[4]{ pNum, cNum, tNum, true };
 		photonView.RPC ("SendOK", PhotonTargets.All, args);
 		setOK [pNum] = true;
 	}
 
 	public void UnsetPlayer (int pNum)
 	{
-		object[] args = new object[4]{ pNum, 0, 0, false};
+		object[] args = new object[4]{ pNum, 0, 0, false };
 		photonView.RPC ("SendOK", PhotonTargets.All, args);
 		setOK [pNum] = false;
 	}
 
 	[PunRPC]
-	public void SendOK (int pNum,int cNum,int tNum,bool un,PhotonMessageInfo info)
+	public void SendOK (int pNum, int cNum, int tNum, bool un, PhotonMessageInfo info)
 	{	
 		roomPlayerDic [pNum] = new pInfoStruct (null, Colors [cNum], tNum, cNum);
 		setOK [pNum] = un ? true : false;
@@ -146,7 +165,6 @@ public class For_next : Photon.MonoBehaviour
 		Text loadingText = GameObject.Find ("Text").GetComponent<Text> ();
 		AsyncOperation async = Application.LoadLevelAsync ("Main");
 		
-
 		async.allowSceneActivation = false;    // シーン遷移をしない
 		
 		while (async.progress < 0.9f) {
