@@ -107,7 +107,8 @@ public class Game_All_Init : Photon.MonoBehaviour
 
 	IEnumerator WaitInit(){
 		int count = 0;
-		forNext.startF [myNum] = true;
+		//forNext.startF [myNum] = true;
+		forNext.StartFlag(myNum);
 		while (forNext.AllLoadEnd()) {
 			yield return 0;
 		}

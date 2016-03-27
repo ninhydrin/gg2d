@@ -113,7 +113,14 @@ public class For_next : Photon.MonoBehaviour
 		numToOwnerId [number] = id;
 		ownerIdToNum [id] = number;
 	}
+	public void StartFlag(int num){
+		photonView.RPC ("SF", PhotonTargets.All, num);
+	}
 
+	[PunRPC]
+	void SF(int num){
+		startF [num] = true;
+	}
 	void SetPlayerID ()
 	{
 		PhotonPlayer[] player = PhotonNetwork.playerList;
