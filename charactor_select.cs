@@ -63,14 +63,16 @@ public class charactor_select : Photon.MonoBehaviour
 				MoveCharactor ();
 
 				if (Input.GetButtonDown ("Jump") && forNext.ready) {
-					forNext.SetPlayer (PhotonNetwork.player.ID, playerOb [seleP], teamNum, seleC);
+					forNext.SetPlayer (PhotonNetwork.player.ID, teamNum, seleC);
 					charactors [seleP].transform.eulerAngles = Vector3.zero;
 					setOk = true;
 				}
 			} else {
-				if (Input.GetKeyDown (KeyCode.L)) {
-					forNext.UnsetPlayer (PhotonNetwork.player.ID);
-					setOk = false;
+				if (!forNext.flag) {
+					if (Input.GetKeyDown (KeyCode.L)) {
+						forNext.UnsetPlayer (PhotonNetwork.player.ID);
+						setOk = false;
+					}
 				}
 			}
 		}

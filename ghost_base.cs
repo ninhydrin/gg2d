@@ -29,10 +29,10 @@ public class ghost_base : Photon.MonoBehaviour
 		playerNum = forNext.playerNum;
 		domiColor = new Color[playerNum];
 		for (int i = 0; i<playerNum; i++)
-			domiColor [i] = forNext.players [i].playerColor;
+			domiColor [i] = forNext.Colors[forNext.playerInfo [i].colorNum];
 
 		ghostHP = Instantiate (ghostHP_ob);
-		ghostHP.GetComponent<ghost_control> ().init (gameObject, forNext.owneerIdToNum [photonView.ownerId]);
+		ghostHP.GetComponent<ghost_control> ().init (gameObject, forNext.ownerIdToNum [photonView.ownerId]);
 		ghostHP.transform.SetParent (GameObject.Find ("Minimap").transform);
 
 		myPV = photonView;

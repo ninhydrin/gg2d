@@ -37,13 +37,13 @@ public class PlayerController : Photon.MonoBehaviour
 		myParent = GameObject.Find("PlayerList");
 		transform.SetParent (myParent.transform);
 		forNext = GameObject.Find ("ForNextScene").GetComponent<For_next> ();
-		myNum = forNext.owneerIdToNum [photonView.ownerId];
+		myNum = forNext.ownerIdToNum [photonView.ownerId];
 		//myNum = forNext.myid;
-		myColor = forNext.players[myNum].playerColor;
-		colorNum = forNext.players [myNum].colorNum;
+		colorNum = forNext.playerInfo [myNum].colorNum;
+		myColor = forNext.Colors [colorNum];
 		nowHP = maxHP;
 		nowTP = maxTP / 2;
-		tag = forNext.owneerIdToNum[photonView.ownerId].ToString()+"P_Master";
+		tag = forNext.ownerIdToNum[photonView.ownerId].ToString()+"P_Master";
 		if (!photonView.isMine) {
 			myHead = Instantiate(Resources.Load("Master_HP_TP")) as GameObject;
 			myHead.GetComponent<master_head_HPTP>().init(gameObject,myColor);

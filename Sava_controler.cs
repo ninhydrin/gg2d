@@ -67,9 +67,9 @@ public class Sava_controler : Photon.MonoBehaviour
 		canReport = true;		
 		HP = maxHP;
 		forNext = GameObject.Find ("ForNextScene").GetComponent<For_next> ();
-		myNum = forNext.owneerIdToNum [photonView.ownerId];
+		myNum = forNext.ownerIdToNum [photonView.ownerId];
 		tag = myNum.ToString () + "P_Sava";
-		myColor = forNext.players [myNum].playerColor;
+		myColor = forNext.Colors[forNext.playerInfo[myNum].colorNum];
 		MakeHeadHP ();		
 		repoFight = repoRearch = repoSituation = true;
 	}
@@ -176,7 +176,7 @@ public class Sava_controler : Photon.MonoBehaviour
 		leader = le;
 		myTeamNum = myNumm;
 		forNext = GameObject.Find ("ForNextScene").GetComponent<For_next> ();
-		gameObject.tag = forNext.owneerIdToNum [photonView.ownerId].ToString () + "P_Sava";
+		gameObject.tag = forNext.ownerIdToNum [photonView.ownerId].ToString () + "P_Sava";
 	}
 
 	void MakeHeadHP ()
