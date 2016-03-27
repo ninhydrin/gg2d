@@ -46,9 +46,9 @@ public class Network_manager : Photon.PunBehaviour
 			if (shoutMarco && GUILayout.Button ("Marco!")) {
 				myPhotonView.RPC ("Marco", PhotonTargets.All);
 			}
-			if (!shoutMarco && GUILayout.Button ("Polo!")) {
-				myPhotonView.RPC ("Polo", PhotonTargets.All);
-			}
+			//if (!shoutMarco && GUILayout.Button ("Polo!")) {
+			//	myPhotonView.RPC ("Polo", PhotonTargets.All);
+			//}
 		}
 	}
 }

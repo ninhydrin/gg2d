@@ -20,7 +20,7 @@ public class charactor_select : Photon.MonoBehaviour
 	Color barC = Color.gray;
 	Image myFace;
 	Button buttons;
-	GameObject forNext;
+	For_next forNext;
 	public bool setOk;
 	public bool startOk;
 
@@ -42,66 +42,38 @@ public class charactor_select : Photon.MonoBehaviour
 			charactors [i] = Instantiate (charactors [i], new Vector3 (i * 30, 50 * photonView.ownerId, 0), Quaternion.identity) as GameObject;
 		}
 
-		forNext = GameObject.Find ("ForNextScene");
+		forNext = GameObject.Find ("ForNextScene").GetComponent<For_next>();
 		DontDestroyOnLoad (forNext);
  
 		myColor.color = charColor [seleC];
 		SetCamPos ();
 		
 	}
-	
+
 	// Update is called once per frame
 	void Update ()
 	{
 		SetCamPos ();
 		myColor.color = charColor [seleC];
+		if (Input.GetKeyDown (KeyCode.G))
+			Debug.Log (photonView.ownerId);
 		if (photonView.isMine) {
 			if (!setOk) {
-				if (selector == 0) { //
-					if (Input.GetKeyDown (buttons.LStick_Left)) {
-						seleP = seleP < 1 ? charNum - 1 : seleP - 1;
-						charactors [seleP].transform.eulerAngles = Vector3.zero;
-					} else if (Input.GetKeyDown (buttons.LStick_Right)) {
-						seleP = seleP > charNum - 2 ? 0 : seleP + 1;
-						charactors [seleP].transform.eulerAngles = Vector3.zero;
-					}
-				} else if (selector == 1) {
-					if (Input.GetKeyDown (buttons.LStick_Left)) {
-						seleC = seleC < 1 ? colorNum - 1 : seleC - 1;
-					} else if (Input.GetKeyDown (buttons.LStick_Right)) {
-						seleC = seleC > colorNum - 2 ? 0 : seleC + 1;
-					}
-				} else if (selector == 2) {
-					if (Input.GetKeyDown (buttons.LStick_Left)) {
-						seleT = seleT < 1 ? teamNum - 1 : seleT - 1;					
-					} else if (Input.GetKeyDown (buttons.LStick_Right)) {
-						seleT = seleT > teamNum - 2 ? 0 : seleT + 1;
-					}
-				}
+				OnKeyDown ();
+				MoveCharactor ();
 
-				if (Input.GetKeyDown (buttons.LStick_Down)) {
-					selector = selector < 1 ? 2 : selector - 1;				
-				} else if (Input.GetKeyDown (buttons.LStick_Up)) {
-					selector = selector > 1 ? 0 : selector + 1;		
-				}
-
-				for (int i =0; i<charNum; i++) {
-					charactors [i].transform.Rotate (Vector3.up * Time.deltaTime * 10);
-				}
-
-				if (Input.GetButtonDown ("Jump")) {
-					forNext.GetComponent<For_next> ().SetPlayer (photonView.ownerId, playerOb [seleP], charColor [seleC], teamNum, seleC);
+				if (Input.GetButtonDown ("Jump") && forNext.ready) {
+					forNext.SetPlayer (PhotonNetwork.player.ID, playerOb [seleP], charColor [seleC], teamNum, seleC);
 					charactors [seleP].transform.eulerAngles =Vector3.zero;
 					setOk = true;
 				}
 			} else {
-
 				if (Input.GetKeyDown (KeyCode.L)) {
+					forNext.UnsetPlayer (PhotonNetwork.player.ID);
 					setOk = false;
 				}
 			}
 		}
-		forNext.GetComponent<For_next> ().SetPlayer (photonView.ownerId, playerOb [seleP], charColor [seleC], teamNum, seleC);
 		
 	}
 
@@ -111,6 +83,41 @@ public class charactor_select : Photon.MonoBehaviour
 		cam1.transform.position = new Vector3 (30 * seleP, 2 + 50 * photonView.ownerId, 4);
 	}
 
+	void MoveCharactor(){
+		for (int i =0; i<charNum; i++) {
+			charactors [i].transform.Rotate (Vector3.up * Time.deltaTime * 10);
+		}
+	}
+	void OnKeyDown(){
+		if (selector == 0) { //
+			if (Input.GetKeyDown (buttons.LStick_Left)) {
+				seleP = seleP < 1 ? charNum - 1 : seleP - 1;
+				charactors [seleP].transform.eulerAngles = Vector3.zero;
+			} else if (Input.GetKeyDown (buttons.LStick_Right)) {
+				seleP = seleP > charNum - 2 ? 0 : seleP + 1;
+				charactors [seleP].transform.eulerAngles = Vector3.zero;
+			}
+		} else if (selector == 1) {
+			if (Input.GetKeyDown (buttons.LStick_Left)) {
+				seleC = seleC < 1 ? colorNum - 1 : seleC - 1;
+			} else if (Input.GetKeyDown (buttons.LStick_Right)) {
+				seleC = seleC > colorNum - 2 ? 0 : seleC + 1;
+			}
+		} else if (selector == 2) {
+			if (Input.GetKeyDown (buttons.LStick_Left)) {
+				seleT = seleT < 1 ? teamNum - 1 : seleT - 1;					
+			} else if (Input.GetKeyDown (buttons.LStick_Right)) {
+				seleT = seleT > teamNum - 2 ? 0 : seleT + 1;
+			}
+		}
+
+		if (Input.GetKeyDown (buttons.LStick_Down)) {
+			selector = selector < 1 ? 2 : selector - 1;				
+		} else if (Input.GetKeyDown (buttons.LStick_Up)) {
+			selector = selector > 1 ? 0 : selector + 1;		
+		}
+
+	}
 	void OnPhotonSerializeView (PhotonStream stream, PhotonMessageInfo info)
 	{
 		if (stream.isWriting) {

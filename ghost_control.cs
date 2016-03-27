@@ -57,21 +57,21 @@ public class ghost_control : Photon.MonoBehaviour
 		control_bar = new GameObject[playerNum + 1];
 		ghostB = target.GetComponent<ghost_base> ();
 
-		for (int i=0; i<playerNum+1; i++) {			
+		for (int i=0; i<=playerNum; i++) {			
 			control_bar [i] = Instantiate (control_barOb);			
 			RectTransform rt = control_bar [i].GetComponent<RectTransform> ();
-			if (i == 0) {
+			if (i == playerNum) {
 				rt.pivot = new Vector2 (1f, 0.5f);
 				rt.anchoredPosition = Vector2.right * rt.sizeDelta.x / 2;
+				transform.SetAsFirstSibling();				
 			} else {
-				control_bar [i].GetComponent<Image> ().color = forNext.players [i-1].playerColor;			
+				control_bar [i].GetComponent<Image> ().color = ghostB.domiColor[i];			
 				rt.anchoredPosition = Vector2.left * rt.sizeDelta.x / 2;				
 			}
 			control_bar [i].transform.SetParent (transform);
-			if(i != pNum)
-				transform.SetAsFirstSibling();
 		}
-
+		control_bar [pNum].transform.SetAsLastSibling ();
+		control_bar [playerNum].transform.SetAsFirstSibling ();
 		canShow = false;
 		barLength = control_bar [playerNum].GetComponent<RectTransform> ().sizeDelta.x;
 		LenUnit = barLength / 100;
@@ -94,12 +94,12 @@ public class ghost_control : Photon.MonoBehaviour
 
 	void AdjustmentBar ()
 	{
-		int sum = ghostB.power [playerNum]; //中立のバー
+		int sum = 0;
 		float yy = control_bar [playerNum].GetComponent<RectTransform> ().sizeDelta.y;
 		
 		for (int i =0; i<playerNum; i++) {
+			sum += ghostB.power [i];			
 			control_bar [i].GetComponent<RectTransform> ().sizeDelta = new Vector2 (AdLen (sum, LenUnit), yy);
-			sum += ghostB.power [i];
 		}
 	}
 

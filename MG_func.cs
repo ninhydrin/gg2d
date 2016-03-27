@@ -15,6 +15,7 @@ public class MG_func : Photon.MonoBehaviour
 	int recF = 0;
 	int myNum;
 	Color myColor;
+	Sprite[] A,B,C,D,E;
 
 	public struct order
 	{
@@ -61,6 +62,8 @@ public class MG_func : Photon.MonoBehaviour
 	Game_All_Init GameMaster;
 	GameObject myParent;
 	For_next forNext;
+	int myColorNum;
+	Sprite[] savaIcon;
 	// Use this for initialization
 
 	void Awake ()
@@ -69,10 +72,11 @@ public class MG_func : Photon.MonoBehaviour
 		myParent = GameObject.Find ("MGList");
 		transform.SetParent (myParent.transform);
 		myNum = forNext.owneerIdToNum [photonView.ownerId];
+		myColorNum = forNext.players [myNum].colorNum;
 		//myNum = forNext.myid;
 		myColor = forNext.myCo;
 		tag = myNum.ToString () + "P_MG";
-
+		savaIcon=Resources.LoadAll<Sprite>("C"+myColorNum.ToString());
 	}
 
 	void Start ()
@@ -160,11 +164,11 @@ public class MG_func : Photon.MonoBehaviour
 		creating = false;
 	}
 
-	public void Order (string ob, int sTime, bool lea, string mIcon,int gNum, Vector2 dest,Sprite face,int mHP)
+	public void Order (string ob, int sTime, bool lea, string sType,int gNum, Vector2 dest,Sprite face,int mHP)
 	{
 		prepare [orderToken].emissionRate = 100;
 		
-		sava_queue [orderToken].Enqueue (new order (sTime, ob, gNum, lea, createMapIcon (mIcon, orderToken, gNum), createMinimapIcon (mIcon, orderToken), createSideHP (face, orderToken,mHP), dest));
+		sava_queue [orderToken].Enqueue (new order (sTime, ob, gNum, lea, createMapIcon (sType, orderToken, gNum), createMinimapIcon (sType, orderToken), createSideHP (face, orderToken,mHP), dest));
 		orderToken = orderToken > 4 ? 0 : orderToken + 1;
 	}
 
@@ -176,17 +180,17 @@ public class MG_func : Photon.MonoBehaviour
 		return sideHP_ob;
 	}
 
-	public GameObject createMapIcon (string map_icon, int targetPreNum, int gNum)
+	public GameObject createMapIcon (string savaType, int targetPreNum, int gNum)
 	{
-		GameObject map_icon_ob = PhotonNetwork.Instantiate ("map/"+map_icon, Vector3.zero, Quaternion.identity, 0) as GameObject;		
+		GameObject map_icon_ob = PhotonNetwork.Instantiate ("map/"+savaType+myColorNum.ToString(), Vector3.zero, Quaternion.identity, 0) as GameObject;
 		map_icon_ob.transform.SetParent (GameObject.Find ("Organ/Map/Organ_sava").transform);
 		map_icon_ob.GetComponent<mapicon> ().init (prepare [targetPreNum].gameObject, gNum);
 		return map_icon_ob;
 	}
 	
-	public GameObject createMinimapIcon (string minimap_icon, int targetPreNum)
+	public GameObject createMinimapIcon (string savaType, int targetPreNum)
 	{
-		GameObject minimap_icon_ob = PhotonNetwork.Instantiate ("minimap/"+minimap_icon, Vector3.zero, Quaternion.identity, 0) as GameObject;		
+		GameObject minimap_icon_ob = PhotonNetwork.Instantiate ("minimap/"+savaType, Vector3.zero, Quaternion.identity, 0) as GameObject;		
 		minimap_icon_ob.transform.SetParent (GameObject.Find ("Minimap/Field").transform);
 		minimap_icon_ob.GetComponent<minimap_icon> ().init (prepare [targetPreNum].gameObject);
 		return minimap_icon_ob;

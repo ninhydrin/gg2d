@@ -27,6 +27,7 @@ public class organ_MG : MonoBehaviour
 	{
 		forNext = GameObject.Find ("ForNextScene").GetComponent<For_next> ();	
 		myNum = forNext.myid;
+		GetComponent<UnityEngine.UI.Image> ().sprite = Resources.LoadAll<Sprite> ("MMG") [forNext.players [myNum].colorNum];
 		rt = GetComponent<RectTransform> ();
 		rt.localScale = new Vector3 (1f, 1f, 0);
 		MG = GameObject.FindWithTag (forNext.myid.ToString () + "P_MG");

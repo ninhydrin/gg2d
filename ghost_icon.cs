@@ -13,8 +13,8 @@ public class ghost_icon : MonoBehaviour
 	RectTransform cursorRt;
 	bool imTarget;
 	int myGroupNum;
-	Color defaultColor = Color.gray;
-
+	Sprite[] domiColorList;
+	Sprite neutralColor;
 	For_next forNext;
 	bool cando;
 	// Use this for initialization
@@ -26,13 +26,15 @@ public class ghost_icon : MonoBehaviour
 		cursorRt = GameObject.Find ("Organ/Map/Organ_Cursor").GetComponent<RectTransform> ();
 		myColor = GetComponent<Image> ();
 		transform.SetSiblingIndex (0);
+		domiColorList = Resources.LoadAll<Sprite>("G");
+		neutralColor = Resources.Load<Sprite> ("GH");
 	}
 	
 	// Update is called once per frame
 	void Update ()
 	{
 		if (cando) {
-			myColor.color = ghostB.dominator >= 0 ? ghostB.domiColor[ghostB.dominator] : defaultColor;
+			myColor.sprite = ghostB.dominator >= 0 ? domiColorList[ghostB.dominator] : neutralColor;
 			if (organC.savaDictSetting || organC.summoning) {
 				float inter = Vector2.Distance (cursorRt.anchoredPosition, rt.anchoredPosition);
 

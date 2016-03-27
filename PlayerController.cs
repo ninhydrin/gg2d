@@ -20,6 +20,7 @@ public class PlayerController : Photon.MonoBehaviour
 	RectTransform itemSelector;
 	int itemPoint;
 	public int myNum;
+	int colorNum;
 	int maxHP = 500;
 	int nowHP;
 	int maxTP = 100;
@@ -39,6 +40,7 @@ public class PlayerController : Photon.MonoBehaviour
 		myNum = forNext.owneerIdToNum [photonView.ownerId];
 		//myNum = forNext.myid;
 		myColor = forNext.players[myNum].playerColor;
+		colorNum = forNext.players [myNum].colorNum;
 		nowHP = maxHP;
 		nowTP = maxTP / 2;
 		tag = forNext.owneerIdToNum[photonView.ownerId].ToString()+"P_Master";
@@ -49,8 +51,8 @@ public class PlayerController : Photon.MonoBehaviour
 		}
 		miniMe = Instantiate(Resources.Load("minimap/Mini_master")) as GameObject;
 		miniMe.GetComponent<mini_master> ().init (gameObject, myColor);
-		organMe = Instantiate (Resources.Load ("Organ_master")) as GameObject;
-		organMe.GetComponent<organ_master> ().init (gameObject, myColor);
+		organMe = Instantiate (Resources.Load ("Map_master")) as GameObject;
+		organMe.GetComponent<organ_master> ().init (gameObject,colorNum);
 		
 	}
 

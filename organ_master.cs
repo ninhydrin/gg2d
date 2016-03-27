@@ -14,11 +14,11 @@ public class organ_master : MonoBehaviour
 	bool cando = false;
 
 		
-	public void init(GameObject me,Color myC){
+	public void init(GameObject me,int myC){
 		transform.SetParent(GameObject.Find("Organ/Map").transform);
 		rt = GetComponent<RectTransform> ();		
 		player = me;
-		GetComponent<UnityEngine.UI.Image> ().color = myC;
+		GetComponent<UnityEngine.UI.Image> ().sprite = Resources.LoadAll<Sprite> ("M") [myC];
 		x = GameObject.Find ("Map").GetComponent<RectTransform>().sizeDelta.x;
 		y = GameObject.Find ("Map").GetComponent<RectTransform>().sizeDelta.y;
 		offset = rt.anchoredPosition;

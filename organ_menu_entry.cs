@@ -6,7 +6,7 @@ public class organ_menu_entry : MonoBehaviour
 {
 
 	public string sava;
-	public string map_icon;
+	public string myType;
 	public int cost;
 	public string savaName;
 	public Sprite face;

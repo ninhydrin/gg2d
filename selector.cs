@@ -129,7 +129,7 @@ public class selector : MonoBehaviour
 			leader=false;
 		}
 		for (int i =0; i<theEntry.HowMany; i++) {
-			MG.Order (theEntry.sava,theEntry.sumonTime,leader,theEntry.map_icon,gnum,dest,theEntry.face,theEntry.maxHp);
+			MG.Order (theEntry.sava,theEntry.sumonTime,leader,theEntry.myType,gnum,dest,theEntry.face,theEntry.maxHp);
 			leader = false;			
 		}
 	}

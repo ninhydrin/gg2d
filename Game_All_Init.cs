@@ -93,7 +93,7 @@ public class Game_All_Init : Photon.MonoBehaviour
 
 	void MakeMapMG ()
 	{
-		mapMG = PhotonNetwork.Instantiate (forNext.mapMG [forNext.players [0].colorNum], Vector3.zero, Quaternion.identity, 0);
+		mapMG = PhotonNetwork.Instantiate ("MapMG", Vector3.zero, Quaternion.identity, 0);
 		mapMG.GetComponent<RectTransform> ().localScale = new Vector3 (1f, 1f, 0);
 
 	}

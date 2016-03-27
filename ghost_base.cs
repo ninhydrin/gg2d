@@ -27,17 +27,18 @@ public class ghost_base : Photon.MonoBehaviour
 		transform.SetParent (myParent.transform);
 		forNext = GameObject.Find ("ForNextScene").GetComponent<For_next> ();
 		playerNum = forNext.playerNum;
+		domiColor = new Color[playerNum];
+		for (int i = 0; i<playerNum; i++)
+			domiColor [i] = forNext.players [i].playerColor;
+
 		ghostHP = Instantiate (ghostHP_ob);
-		ghostHP.GetComponent<ghost_control> ().init (gameObject,forNext.owneerIdToNum[photonView.ownerId]);
+		ghostHP.GetComponent<ghost_control> ().init (gameObject, forNext.owneerIdToNum [photonView.ownerId]);
 		ghostHP.transform.SetParent (GameObject.Find ("Minimap").transform);
 
 		myPV = photonView;
 		power = new int[playerNum + 1];
-		domiColor = new Color[playerNum];
 		power [playerNum] = 100;
-		for (int i = 0; i<playerNum; i++)
-			domiColor [i] = forNext.players [i].playerColor;
-
+	
 		right = transform.FindChild ("Light").GetComponent<ParticleSystem> ();
 		offset.x = ((transform.position.x - 250f) * 3f) / 5f;
 		offset.y = ((transform.position.z - 250f) * 3f) / 5f;
@@ -49,7 +50,7 @@ public class ghost_base : Photon.MonoBehaviour
 		mapicon.transform.SetParent (GameObject.Find ("Map").transform);
 		myNum = forNext.getGNum ();
 		mapicon.GetComponent<ghost_icon> ().init (myNum, offset, this);
-		
+		dominator = -1;
 	}
 	
 	// Update is called once per frame
@@ -94,11 +95,6 @@ public class ghost_base : Photon.MonoBehaviour
 		power [team] += da;
 		if (power [team] > 100)
 			power [team] = 100;
-		if (power [playerNum] < da) {
-			power [playerNum] = 0;
-		} else {
-			power [playerNum] -= da;
-		}
 		for (int i=0; i<playerNum; i++) {
 			if (i != team) {				
 				power [i] = power [i] < da ? 0 : power [i] - da / (playerNum - 1);
