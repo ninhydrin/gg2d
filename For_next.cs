@@ -104,7 +104,7 @@ public class For_next : Photon.MonoBehaviour
 			}
 		}
 	}
-
+	public int aa = 110;
 	public void SetPlayer (int pNum, GameObject pOb, Color pCo, int tNum, int cNum)
 	{
 		roomPlayerDic [pNum] = new pInfoStruct (pOb, pCo, tNum, cNum);
@@ -156,7 +156,8 @@ public class For_next : Photon.MonoBehaviour
 	public void SendOK (int pNum)
 	{
 		Debug.Log ("send!!");
-		setOK[pNum] = true;
+		aa = pNum;
+		//setOK[pNum] = true;
 	}
 
 }
