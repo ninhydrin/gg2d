@@ -55,9 +55,10 @@ public class charactor_select : Photon.MonoBehaviour
 	{
 		SetCamPos ();
 		//myColor.color = charColor [seleC];
-		if (Input.GetKeyDown (KeyCode.G))
-			Debug.Log (photonView.ownerId);
 		if (photonView.isMine) {
+			if (!forNext.ready)
+				setOk = false;
+
 			if (!setOk) {
 				OnKeyDown ();
 				MoveCharactor ();
@@ -143,8 +144,6 @@ public class charactor_select : Photon.MonoBehaviour
 			seleC = (int)stream.ReceiveNext ();
 			seleT = (int)stream.ReceiveNext ();
 			setOk = (bool)stream.ReceiveNext ();
-
-			
 			
 		}
 	}
