@@ -109,7 +109,7 @@ public class Game_All_Init : Photon.MonoBehaviour
 		int count = 0;
 		//forNext.startF [myNum] = true;
 		forNext.StartFlag(myNum);
-		while (forNext.AllLoadEnd()) {
+		while (forNext.AllLoadEnd()) {			
 			yield return 0;
 		}
 		organMap = GameObject.Find ("Organ/Map");
