@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.SceneManagement; 
 using UnityEngine.UI;
 
 public class For_next : Photon.MonoBehaviour
@@ -186,8 +187,9 @@ public class For_next : Photon.MonoBehaviour
 
 	IEnumerator LoadScene ()
 	{
+		PhotonNetwork.isMessageQueueRunning = false;
 		Text loadingText = GameObject.Find ("Text").GetComponent<Text> ();
-		AsyncOperation async = Application.LoadLevelAsync ("Main");
+		AsyncOperation async = SceneManager.LoadSceneAsync("Main");
 		
 		async.allowSceneActivation = false;    // シーン遷移をしない
 		
@@ -216,8 +218,6 @@ public class For_next : Photon.MonoBehaviour
 		foreach (PhotonPlayer p in player) {
 			Debug.Log ("id is " + p.ID.ToString ());
 			Debug.Log ("ok is " + setOK [p.ID].ToString());
-			Debug.Log ("ok is " + setOK [p.ID].ToString());
-			Debug.Log (p.ID.ToString()+"'s ok is " + p.customProperties["ok"].ToString());
 			//Debug.Log ("pInfor is " + roomPlayerDic [p.ID].ToString());
 		}
 	}

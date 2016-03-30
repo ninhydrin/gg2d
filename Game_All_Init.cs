@@ -30,17 +30,18 @@ public class Game_All_Init : Photon.MonoBehaviour
 	Color[] playerColor;
 	ghost_base[] ghosts;
 	int[] ghostNum;
-
+	bool myEnd;
 	// Use this for initialization
 	void Awake ()
 	{
 		forNext = GameObject.Find ("ForNextScene").GetComponent<For_next> ();				
 		//myNum = forNext.owneerIdToNum [photonView.ownerId];
-		myNum = forNext.myid;
+		//myNum = forNext.myid;
 		gameTimer = GameObject.Find ("Player_info/Time").GetComponent<Timelimit> ();
-
+		forNext.StartFlag(PhotonNetwork.player.ID);
 		ghostList = GameObject.Find ("GhostList");
-		StartCoroutine (WaitInit ());
+		myEnd = true;
+		//StartCoroutine (WaitInit ());
 		/*
 		organMap = GameObject.Find ("Organ/Map");
 		miniMap = GameObject.Find ("Minimap/Field");
@@ -52,6 +53,14 @@ public class Game_All_Init : Photon.MonoBehaviour
 		MakeMapMG ();
 		MakeMiniMG ();
 		*/
+
+	}
+	void Update(){
+		if (forNext.AllLoadEnd () && myEnd ) {
+			PhotonNetwork.isMessageQueueRunning = true;
+			print ("aaa");
+			myEnd = false;
+		}
 
 	}
 	void MakeMGHP(){
