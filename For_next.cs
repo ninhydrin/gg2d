@@ -188,7 +188,7 @@ public class For_next : Photon.MonoBehaviour
 
 	IEnumerator LoadScene ()
 	{
-		PhotonNetwork.isMessageQueueRunning = false;
+		//PhotonNetwork.isMessageQueueRunning = false;
 		Text loadingText = GameObject.Find ("Text").GetComponent<Text> ();
 		AsyncOperation async = SceneManager.LoadSceneAsync("Main");
 		
