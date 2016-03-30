@@ -175,6 +175,7 @@ public class For_next : Photon.MonoBehaviour
 	[PunRPC]
 	public void SendOK (int pNum, int cNum, int tNum, bool un, PhotonMessageInfo info)
 	{	
+		Debug.Log ("call " + pNum.ToString ());
 		roomPlayerDic [pNum] = new pInfoStruct (pNum, tNum, cNum);
 		setOK [pNum] = un ? true : false;
 	}
