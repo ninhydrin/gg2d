@@ -39,7 +39,7 @@ public class Network_manager : Photon.PunBehaviour
 
 	public override void OnJoinedRoom ()
 	{
-		PhotonNetwork.player.customProperties = new Hashtable() { { "ok", false } }; //playerのカスタムプロパティ
+		PhotonNetwork.player.SetCustomProperties(new Hashtable() { { "ok", false } }); //playerのカスタムプロパティ
 		GameObject selectChar = PhotonNetwork.Instantiate ("CharaSele", Vector3.zero, Quaternion.identity, 0);
 		//DontDestroyOnLoad (PhotonNetwork.Instantiate ("Commons", Vector3.zero, Quaternion.identity, 0));
 		//monster.GetComponent<myThirdPersonController>().isControllable = true;

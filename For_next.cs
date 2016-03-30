@@ -33,7 +33,7 @@ public class For_next : Photon.MonoBehaviour
 	public bool flag;
 	public Dictionary <int,bool> startF;
 
-	Transform playerList;
+	//Transform playerList;
 	public Dictionary<int,pInfoStruct> roomPlayerDic;
 	public Dictionary<int,bool> setOK;
 	public pInfoStruct[] playerInfo;
@@ -41,8 +41,8 @@ public class For_next : Photon.MonoBehaviour
 	// Use this for initialization
 	void Start ()
 	{
-		playerList = GameObject.Find ("Players").transform;
-		playerNum = myRoom.maxPlayers;
+		//playerList = GameObject.Find ("Players").transform;
+		playerNum = 2;//myRoom.maxPlayers;
 		playerInfo = new pInfoStruct[playerNum];
 		myid = -1;
 		setOK = new Dictionary<int, bool> ();
@@ -103,6 +103,7 @@ public class For_next : Photon.MonoBehaviour
 							return false;
 						setOK [p.ID] = false;
 						startF [p.ID] = false;
+						//roomPlayerDic [p.ID] = null;
 					}
 				}
 				PhotonNetwork.room.open = false;
@@ -217,7 +218,7 @@ public class For_next : Photon.MonoBehaviour
 			Debug.Log ("ok is " + setOK [p.ID].ToString());
 			Debug.Log ("ok is " + setOK [p.ID].ToString());
 			Debug.Log (p.ID.ToString()+"'s ok is " + p.customProperties["ok"].ToString());
-			Debug.Log ("pInfor is " + roomPlayerDic [p.ID].ToString());
+			//Debug.Log ("pInfor is " + roomPlayerDic [p.ID].ToString());
 		}
 	}
 }
