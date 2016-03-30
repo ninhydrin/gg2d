@@ -108,21 +108,21 @@ public class Game_All_Init : Photon.MonoBehaviour
 	IEnumerator WaitInit(){
 		int count = 0;
 		//forNext.startF [myNum] = true;
-		forNext.StartFlag(myNum);
+		forNext.StartFlag(PhotonNetwork.player.ID);
 		while (forNext.AllLoadEnd()) {			
 			yield return 0;
 		}
 		organMap = GameObject.Find ("Organ/Map");
 		miniMap = GameObject.Find ("Minimap/Field");
 		playerNum = forNext.playerNum;
-		
+		/*
 		if (PhotonNetwork.isMasterClient)
 			MakeGhost ();
 		MakeMG ();
 
 		//MakeMiniMG ();
 		gameTimer.IsEnable = true;
-		
+		*/
 	}
 	// Update is called once per frame
 	/*

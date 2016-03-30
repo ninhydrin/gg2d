@@ -37,12 +37,12 @@ public class For_next : Photon.MonoBehaviour
 	public Dictionary<int,pInfoStruct> roomPlayerDic;
 	public Dictionary<int,bool> setOK;
 	public pInfoStruct[] playerInfo;
-	
+	Room myRoom;
 	// Use this for initialization
 	void Start ()
 	{
 		playerList = GameObject.Find ("Players").transform;
-		playerNum = 2;
+		playerNum = myRoom.maxPlayers;
 		playerInfo = new pInfoStruct[playerNum];
 		myid = -1;
 		setOK = new Dictionary<int, bool> ();
@@ -51,6 +51,7 @@ public class For_next : Photon.MonoBehaviour
 		numToColor = new Color[playerNum];
 		ownerIdToNum = new Dictionary<int,int> ();
 		roomPlayerDic = new Dictionary<int, pInfoStruct> ();
+		myRoom = PhotonNetwork.room;
 		DontDestroyOnLoad (gameObject);
 		DontDestroyOnLoad (GameObject.Find ("PlayerList"));
 		DontDestroyOnLoad (GameObject.Find ("MGList"));
@@ -101,8 +102,10 @@ public class For_next : Photon.MonoBehaviour
 						if (p.ID < 0)
 							return false;
 						setOK [p.ID] = false;
+						startF [p.ID] = false;
 					}
 				}
+				PhotonNetwork.room.open = false;
 				return true;
 			}
 		}
@@ -201,8 +204,6 @@ public class For_next : Photon.MonoBehaviour
 	
 		PhotonPlayer[] player = PhotonNetwork.playerList;
 	
-		//loadingBar.fillAmount = 1;
-
 		yield return new WaitForSeconds (1);
 		
 		async.allowSceneActivation = true;    // シーン遷移許可
@@ -214,6 +215,8 @@ public class For_next : Photon.MonoBehaviour
 		foreach (PhotonPlayer p in player) {
 			Debug.Log ("id is " + p.ID.ToString ());
 			Debug.Log ("ok is " + setOK [p.ID].ToString());
+			Debug.Log ("ok is " + setOK [p.ID].ToString());
+			Debug.Log (p.ID.ToString()+"'s ok is " + p.customProperties["ok"].ToString());
 			Debug.Log ("pInfor is " + roomPlayerDic [p.ID].ToString());
 		}
 	}

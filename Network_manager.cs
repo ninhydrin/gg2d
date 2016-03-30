@@ -1,4 +1,6 @@
 ﻿using UnityEngine;
+using System.Collections;
+using Hashtable = ExitGames.Client.Photon.Hashtable;
 
 public class Network_manager : Photon.PunBehaviour
 {
@@ -24,12 +26,20 @@ public class Network_manager : Photon.PunBehaviour
 	
 	public void OnPhotonRandomJoinFailed ()
 	{
-		PhotonNetwork.CreateRoom (null);
+		RoomOptions roomOptions = new RoomOptions ();
+		roomOptions.isVisible = true;
+		roomOptions.isOpen = true;
+		roomOptions.maxPlayers = 2;
+		roomOptions.customRoomProperties = new Hashtable (){{"CustomProperties", "カスタムプロパティ"} };
+		roomOptions.customRoomPropertiesForLobby = new string[] {"CustomProperties"};
+		// ルームの作成
+		PhotonNetwork.CreateRoom ("CustomPropertiesRoom", roomOptions, null);
+		//PhotonNetwork.CreateRoom (null);
 	}
 
 	public override void OnJoinedRoom ()
 	{
-
+		PhotonNetwork.player.customProperties = new Hashtable() { { "ok", false } }; //playerのカスタムプロパティ
 		GameObject selectChar = PhotonNetwork.Instantiate ("CharaSele", Vector3.zero, Quaternion.identity, 0);
 		//DontDestroyOnLoad (PhotonNetwork.Instantiate ("Commons", Vector3.zero, Quaternion.identity, 0));
 		//monster.GetComponent<myThirdPersonController>().isControllable = true;
