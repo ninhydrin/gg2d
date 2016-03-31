@@ -32,6 +32,7 @@ public class GameInfo : MonoBehaviour
 	{
 		DontDestroyOnLoad (gameObject);
 		myNum = PhotonNetwork.player.ID;
+		playerInfo = new Dictionary<int, pInfoStruct> ();
 		Colors [0] = new Color (1f, 8f/255, 8f/255);
 		Colors [1] = new Color (37f/255, 75f/255, 1);
 		Colors [2] = new Color (243f/255, 1, 41f/255);
