@@ -33,14 +33,18 @@ public class PlayerController : Photon.MonoBehaviour
 	GameObject myHead;
 	GameObject miniMe;
 	GameObject organMe;
+	CameraController myCamera;
+	GameInfo gameInfo;
 	void Awake(){
 		myParent = GameObject.Find("PlayerList");
 		transform.SetParent (myParent.transform);
+		myCamera = GameObject.Find ("MainCamera").GetComponent<CameraController> ();
+		myCamera.Init ();
+		gameInfo = GameObject.Find ("GameMaster").GetComponent<GameInfo> ();
 		forNext = GameObject.Find ("ForNextScene").GetComponent<For_next> ();
 		myNum = forNext.ownerIdToNum [photonView.ownerId];
 		//myNum = forNext.myid;
-		colorNum = forNext.playerInfo [myNum].colorNum;
-		myColor = forNext.Colors [colorNum];
+		myColor = gameInfo.myColor;
 		nowHP = maxHP;
 		nowTP = maxTP / 2;
 		tag = forNext.ownerIdToNum[photonView.ownerId].ToString()+"P_Master";

@@ -49,6 +49,7 @@ public class Sava_controler : Photon.MonoBehaviour
 	sava_report toSubmission;
 	bool canReport;
 	For_next forNext;
+	GameInfo gameInfo;
 	bool repoRearch, repoFight, repoSituation;
 	static int idleState = Animator.StringToHash ("Base Layer.Idle");
 	static int walkState = Animator.StringToHash ("Base Layer.Idle");
@@ -67,9 +68,10 @@ public class Sava_controler : Photon.MonoBehaviour
 		canReport = true;		
 		HP = maxHP;
 		forNext = GameObject.Find ("ForNextScene").GetComponent<For_next> ();
+		gameInfo = GameObject.Find ("GameMaster").GetComponent<GameInfo> ();
 		myNum = forNext.ownerIdToNum [photonView.ownerId];
 		tag = myNum.ToString () + "P_Sava";
-		myColor = forNext.Colors[forNext.playerInfo[myNum].colorNum];
+		myColor = gameInfo.myColor;
 		MakeHeadHP ();		
 		repoFight = repoRearch = repoSituation = true;
 	}

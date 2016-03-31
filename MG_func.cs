@@ -45,6 +45,7 @@ public class MG_func : Photon.MonoBehaviour
 	GameObject mapMG;
 	GameObject MGHP;
 	GameObject Mana;
+
 	public GameObject headHP;
 	public GameObject sideHP;
 	public GameObject ManaOb;
@@ -61,20 +62,20 @@ public class MG_func : Photon.MonoBehaviour
 	int orderToken;
 	Game_All_Init GameMaster;
 	GameObject myParent;
-	For_next forNext;
+	GameInfo gameInfo;
 	int myColorNum;
 	Sprite[] savaIcon;
 	// Use this for initialization
 
 	void Awake ()
 	{
-		forNext = GameObject.Find ("ForNextScene").GetComponent<For_next> ();
+		gameInfo = GameObject.Find ("GameMaster").GetComponent<GameInfo> ();
 		myParent = GameObject.Find ("MGList");
 		transform.SetParent (myParent.transform);
-		myNum = forNext.ownerIdToNum [photonView.ownerId];
-		myColorNum = forNext.playerInfo [myNum].colorNum;
+		myNum = gameInfo.myNum;
+		myColorNum = gameInfo.myColorNum;
 		//myNum = forNext.myid;
-		myColor = forNext.myCo;
+		myColor = gameInfo.myColor;
 		tag = myNum.ToString () + "P_MG";
 		savaIcon=Resources.LoadAll<Sprite>("C"+myColorNum.ToString());
 	}
@@ -90,8 +91,8 @@ public class MG_func : Photon.MonoBehaviour
 			mySava = GameObject.FindWithTag ("My_sava").transform;
 		
 		}
-		player = GameObject.Find (myNum.ToString () + "P_Master");
-		MakeMGHP ();
+		//player = GameObject.Find (myNum.ToString () + "P_Master");
+		//MakeMGHP ();
 		sava_queue = new Queue<order>[6];
 
 		creating = false;
@@ -103,7 +104,7 @@ public class MG_func : Photon.MonoBehaviour
 	void MakeMGHP ()
 	{
 		MGHP = Instantiate (Resources.Load ("MG_HP")) as GameObject;
-		MGHP.transform.FindChild ("MG_HP_bar").GetComponent<Image> ().color = forNext.Colors[forNext.playerInfo [myNum].colorNum];
+		MGHP.transform.FindChild ("MG_HP_bar").GetComponent<Image> ().color = myColor;
 		HPBar = MGHP.transform.FindChild ("MG_HP_bar").GetComponent<RectTransform> ();
 		MGHP.transform.SetParent (GameObject.Find ("Player_info").transform);
 		MGHP.GetComponent<RectTransform> ().anchoredPosition = new Vector2 (-175f + 328f * myNum, -22.5f);

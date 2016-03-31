@@ -26,7 +26,6 @@ public class CameraController : MonoBehaviour
 	void Start ()
 	{
 		forNext = GameObject.Find ("ForNextScene").GetComponent<For_next> ();
-		myNum = forNext.myid;
 		buttons = GameObject.Find ("Player_info").GetComponent<Button> ();
 		x = 8f;
 		y = 6f;
@@ -36,19 +35,12 @@ public class CameraController : MonoBehaviour
 		zz = -5f;
 		offset = new Vector3 (0f, y, z);
 		lockOn = new Vector3 (0f, yy, zz);
-		StartCoroutine (WaitInit ());
-		//transform.localRotation.x = ;
-
-		
 	}
 
-	IEnumerator WaitInit ()
+	public void Init ()
 	{
-		common = GameObject.FindWithTag ("commons").GetComponent<commons> ();
 		forNext = GameObject.Find ("ForNextScene").GetComponent<For_next> ();		
-		while (!common.myOk) {
-			yield return 0;
-		}	
+		myNum = PhotonNetwork.player.ID;
 		player = GameObject.FindWithTag (myNum.ToString () + "P_Master");
 		playerC = player.GetComponent<PlayerController> ();
 		CP = player.transform.FindChild ("Camera_Pos");

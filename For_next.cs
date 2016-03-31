@@ -6,20 +6,6 @@ using UnityEngine.UI;
 
 public class For_next : Photon.MonoBehaviour
 {
-	public struct pInfoStruct
-	{
-		public int charNum;
-		public int teamNum;
-		public int colorNum;
-
-		public pInfoStruct (int chNum, int tNum, int cNum)
-		{
-			charNum = chNum;
-			teamNum = tNum;
-			colorNum = cNum;
-		}
-	}
-
 
 	public int playerNum;
 	//プレイヤーの数
@@ -35,29 +21,25 @@ public class For_next : Photon.MonoBehaviour
 	public Dictionary <int,bool> startF;
 
 	//Transform playerList;
-	public Dictionary<int,pInfoStruct> roomPlayerDic;
 	public Dictionary<int,bool> setOK;
-	public pInfoStruct[] playerInfo;
 	Room myRoom;
+	GameInfo gameInfo;
 	// Use this for initialization
 	void Start ()
 	{
-		//playerList = GameObject.Find ("Players").transform;
 		playerNum = 2;//myRoom.maxPlayers;
-		playerInfo = new pInfoStruct[playerNum];
+		gameInfo = GameObject.Find ("GameMaster").GetComponent<GameInfo> ();
 		myid = -1;
 		setOK = new Dictionary<int, bool> ();
 		startF = new Dictionary<int, bool> ();
 		numToOwnerId = new int[playerNum];
 		numToColor = new Color[playerNum];
 		ownerIdToNum = new Dictionary<int,int> ();
-		roomPlayerDic = new Dictionary<int, pInfoStruct> ();
 		myRoom = PhotonNetwork.room;
 		DontDestroyOnLoad (gameObject);
 		DontDestroyOnLoad (GameObject.Find ("PlayerList"));
 		DontDestroyOnLoad (GameObject.Find ("MGList"));
 		DontDestroyOnLoad (GameObject.Find ("GhostList"));
-				
 	}
 
 
@@ -159,7 +141,6 @@ public class For_next : Photon.MonoBehaviour
 
 	public void SetPlayer (int pNum, int tNum, int cNum)
 	{
-		roomPlayerDic [pNum] = new pInfoStruct (pNum, tNum, cNum);
 		object[] args = new object[4]{ pNum, cNum, tNum, true };
 		photonView.RPC ("SendOK", PhotonTargets.All, args);
 		setOK [pNum] = true;
@@ -175,8 +156,8 @@ public class For_next : Photon.MonoBehaviour
 	[PunRPC]
 	public void SendOK (int pNum, int cNum, int tNum, bool un, PhotonMessageInfo info)
 	{	
-		Debug.Log ("call " + pNum.ToString ());
-		roomPlayerDic [pNum] = new pInfoStruct (pNum, tNum, cNum);
+		if(un)
+		gameInfo.SetInfo(pNum, tNum, cNum);
 		setOK [pNum] = un ? true : false;
 	}
 

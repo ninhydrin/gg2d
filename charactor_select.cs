@@ -23,7 +23,7 @@ public class charactor_select : Photon.MonoBehaviour
 	For_next forNext;
 	public bool setOk;
 	public bool startOk;
-
+	GameInfo gameInfo;
 	// Use this for initialization
 	void Start ()
 	{
@@ -34,7 +34,7 @@ public class charactor_select : Photon.MonoBehaviour
 		cam1 = transform.FindChild ("Cam").gameObject;
 		myColor = transform.FindChild ("Color").GetComponent<Image> ();
 		myTeam = transform.FindChild ("Team").GetComponent<Image> ();
-
+		gameInfo = GameObject.Find ("GameMaster").GetComponent<GameInfo> ();
 		rt = GetComponent<RectTransform> ();
 		rt.anchoredPosition = new Vector2 (-180 + (photonView.ownerId - 1) * 360, 65);
 		cam1.GetComponent<Camera> ().rect = new Rect (0.07f + (photonView.ownerId - 1) * 0.5f, 0, 0.3f, 0.5f);

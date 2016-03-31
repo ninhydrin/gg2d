@@ -12,12 +12,13 @@ public class ghost_base : Photon.MonoBehaviour
 	Vector2 offset;
 	ParticleSystem right;
 	int myNum, playerNum;
-	public int  dominator;
+	public int dominator;
 	public Color[] domiColor;
 	bool coF;
 	GameObject myParent;
 	ghost_control ghostC;
 	For_next forNext;
+	GameInfo gameInfo;
 	public int[] power;
 
 	// Use this for initialization
@@ -26,11 +27,18 @@ public class ghost_base : Photon.MonoBehaviour
 		myParent = GameObject.Find ("GhostList");
 		transform.SetParent (myParent.transform);
 		forNext = GameObject.Find ("ForNextScene").GetComponent<For_next> ();
+		gameInfo = GameObject.Find ("GameMqster").GetComponent<GameInfo> ();
 		playerNum = forNext.playerNum;
 		domiColor = new Color[playerNum];
+		/*
+		PhotonPlayer[] player = PhotonNetwork.playerList;
+		foreach (PhotonPlayer pPlayer in player) {
+			domiColor[] [pPlayer.ID])
+				return false;
+		}
 		for (int i = 0; i<playerNum; i++)
 			domiColor [i] = forNext.Colors[forNext.playerInfo [i].colorNum];
-
+*/
 		ghostHP = Instantiate (ghostHP_ob);
 		ghostHP.GetComponent<ghost_control> ().init (gameObject, forNext.ownerIdToNum [photonView.ownerId]);
 		ghostHP.transform.SetParent (GameObject.Find ("Minimap").transform);
@@ -72,7 +80,7 @@ public class ghost_base : Photon.MonoBehaviour
 	public void SyncPower (int[] ob, PhotonMessageInfo info)
 	{
 		bool domiCheck = true;
-		for (int i=0; i<playerNum; i++) {
+		for (int i = 0; i < playerNum; i++) {
 			power [i] = ob [i];			
 			if (power [i] >= 100) {
 				dominator = i;
@@ -95,7 +103,7 @@ public class ghost_base : Photon.MonoBehaviour
 		power [team] += da;
 		if (power [team] > 100)
 			power [team] = 100;
-		for (int i=0; i<playerNum; i++) {
+		for (int i = 0; i < playerNum; i++) {
 			if (i != team) {				
 				power [i] = power [i] < da ? 0 : power [i] - da / (playerNum - 1);
 			}
@@ -124,7 +132,7 @@ public class ghost_base : Photon.MonoBehaviour
 	public IEnumerator CanDominate (int a)
 	{
 		int k = 0;
-		while (k<150) {
+		while (k < 150) {
 			if (dominator != a) {
 				coF = false;
 				yield break;

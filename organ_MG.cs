@@ -20,14 +20,14 @@ public class organ_MG : MonoBehaviour
 	int myGroupNum;
 	For_next forNext;
 	bool startFlag;
-
+	GameInfo gameInfo;
 	bool cando;
-	// Use this for initialization
+		// Use this for initialization
 	void Start ()
 	{
-		forNext = GameObject.Find ("ForNextScene").GetComponent<For_next> ();	
+		gameInfo = GameObject.Find ("GameMaster").GetComponent<GameInfo> ();
 		myNum = forNext.myid;
-		GetComponent<UnityEngine.UI.Image> ().sprite = Resources.LoadAll<Sprite> ("MMG") [forNext.playerInfo [myNum].colorNum];
+		GetComponent<UnityEngine.UI.Image> ().sprite = Resources.LoadAll<Sprite> ("MMG") [gameInfo.myColorNum];
 		rt = GetComponent<RectTransform> ();
 		rt.localScale = new Vector3 (1f, 1f, 0);
 		MG = GameObject.FindWithTag (forNext.myid.ToString () + "P_MG");
