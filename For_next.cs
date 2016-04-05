@@ -36,6 +36,7 @@ public class For_next : Photon.MonoBehaviour
 		myid = -1;
 		setOK = new Dictionary<int, bool> ();
 		startF = new Dictionary<int, bool> ();
+		loadF = new Dictionary<int, bool> ();
 		numToOwnerId = new int[playerNum];
 		numToColor = new Color[playerNum];
 		ownerIdToNum = new Dictionary<int,int> ();
