@@ -125,6 +125,7 @@ public class For_next : Photon.MonoBehaviour
 						foreach (PhotonPlayer p in player) {
 							object[] args = new object[2]{ p.ID, num };
 							photonView.RPC ("Id2Num", PhotonTargets.All, args);
+							num += 1;
 						}
 					}
 				}
@@ -264,6 +265,7 @@ public class For_next : Photon.MonoBehaviour
 		foreach (PhotonPlayer p in player) {
 			Debug.Log ("id is " + p.ID.ToString ());
 			Debug.Log ("ok is " + setOK [p.ID].ToString ());
+			Debug.Log ("ID2NUM[" + p.ID.ToString () + "] = " + gameInfo.idToNum [p.ID]);
 			//Debug.Log ("pInfor is " + roomPlayerDic [p.ID].ToString());
 		}
 	}
