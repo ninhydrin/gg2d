@@ -93,7 +93,7 @@ public class MG_func : Photon.MonoBehaviour
 		
 		}
 		//player = GameObject.Find (myNum.ToString () + "P_Master");
-		//MakeMGHP ();
+		MakeMGHP ();
 		sava_queue = new Queue<order>[6];
 
 		creating = false;
@@ -102,19 +102,6 @@ public class MG_func : Photon.MonoBehaviour
 		//minimapMG = Instantiate (Resources.Load("miniMG"), new Vector3 (transform.position.x, transform.position.y, 0), Quaternion.identity) as GameObject;			
 	}
 
-	void MakeMGHP ()
-	{
-		MGHP = Instantiate (Resources.Load ("MG_HP")) as GameObject;
-		MGHP.transform.FindChild ("MG_HP_bar").GetComponent<Image> ().color = myColor;
-		HPBar = MGHP.transform.FindChild ("MG_HP_bar").GetComponent<RectTransform> ();
-		MGHP.transform.SetParent (GameObject.Find ("Player_info").transform);
-		MGHP.GetComponent<RectTransform> ().anchoredPosition = new Vector2 (-175f + 328f * myNum, -22.5f);
-
-		MGHP.tag = myNum.ToString () + "P_HP";
-		
-		HPUnit = HPBar.sizeDelta.x / HP;
-		barrierOb = MGHP.transform.FindChild ("Barrier").GetComponent<Text> ();
-	}
 
 	// Update is called once per frame
 	void Update ()
@@ -251,12 +238,37 @@ public class MG_func : Photon.MonoBehaviour
 		canRecover = true;
 	}
 
+	/// <summary>
+	/// ミニマップのMGを作成
+	/// </summary>
 	void MakeMiniMG ()
 	{
 		float x = (gameObject.transform.position.x - 250f) / 5f;
 		float y = (gameObject.transform.position.z - 250f) / 5f;		
 		minimapMG = PhotonNetwork.Instantiate ("miniMG", new Vector3 (x, y, 0), Quaternion.identity, 0) as GameObject;	
 		minimapMG.GetComponent<minimap_MG> ().Init (gameObject);
+	}
+	/// <summary>
+	/// MGのHPを作成
+	/// </summary>
+	/*
+	void MakeMGHP(){
+		MGHP = PhotonNetwork.Instantiate ("MG_HP", new Vector3 (-225f, -65f, 0), Quaternion.identity, 0) as GameObject;
+		MGHP.tag = myNum.ToString()+"P_HP";
+	}
+*/
+	void MakeMGHP ()
+	{
+		MGHP = Instantiate (Resources.Load ("MG_HP")) as GameObject;
+		MGHP.transform.FindChild ("MG_HP_bar").GetComponent<Image> ().color = myColor;
+		HPBar = MGHP.transform.FindChild ("MG_HP_bar").GetComponent<RectTransform> ();
+		MGHP.transform.SetParent (GameObject.Find ("Player_info").transform);
+		MGHP.GetComponent<RectTransform> ().anchoredPosition = new Vector2 (-175f + 328f * myNum, -22.5f);
+
+		MGHP.tag = myNum.ToString () + "P_HP";
+
+		HPUnit = HPBar.sizeDelta.x / HP;
+		barrierOb = MGHP.transform.FindChild ("Barrier").GetComponent<Text> ();
 	}
 
 }

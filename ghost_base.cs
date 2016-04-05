@@ -27,7 +27,7 @@ public class ghost_base : Photon.MonoBehaviour
 		myParent = GameObject.Find ("GhostList");
 		transform.SetParent (myParent.transform);
 		forNext = GameObject.Find ("ForNextScene").GetComponent<For_next> ();
-		gameInfo = GameObject.Find ("GameMqster").GetComponent<GameInfo> ();
+		gameInfo = GameObject.Find ("GameMaster").GetComponent<GameInfo> ();
 		playerNum = forNext.playerNum;
 		domiColor = new Color[playerNum];
 		/*

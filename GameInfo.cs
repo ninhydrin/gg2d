@@ -23,6 +23,7 @@ public class GameInfo : MonoBehaviour
 	public Color[] Colors = new Color[6];
 	public int playerNum;
 	public Dictionary<int,pInfoStruct> playerInfo;
+	public Dictionary<int,int> idToNum;
 
 	public int myNum;
 	public Color myColor;
@@ -33,6 +34,7 @@ public class GameInfo : MonoBehaviour
 		DontDestroyOnLoad (gameObject);
 		myNum = PhotonNetwork.player.ID;
 		playerInfo = new Dictionary<int, pInfoStruct> ();
+		idToNum = new Dictionary<int, int> ();
 		Colors [0] = new Color (1f, 8f/255, 8f/255);
 		Colors [1] = new Color (37f/255, 75f/255, 1);
 		Colors [2] = new Color (243f/255, 1, 41f/255);

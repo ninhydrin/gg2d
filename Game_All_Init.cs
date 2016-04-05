@@ -97,7 +97,7 @@ public class Game_All_Init : Photon.MonoBehaviour
 		organMap = GameObject.Find ("Organ/Map");
 		miniMap = GameObject.Find ("Minimap/Field");
 		MakeMG ();
-		if (PhotonNetwork.isMasterClient)
-			MakeGhost ();
+		//if (PhotonNetwork.isMasterClient)
+		//	MakeGhost ();
 	}
 }

@@ -120,6 +120,13 @@ public class For_next : Photon.MonoBehaviour
 						loadF [p.ID] = false;
 						//roomPlayerDic [p.ID] = null;
 					}
+					if (PhotonNetwork.isMasterClient) {
+						int num = 0;
+						foreach (PhotonPlayer p in player) {
+							object[] args = new object[2]{ p.ID, num };
+							photonView.RPC ("Id2Num", PhotonTargets.All, args);
+						}
+					}
 				}
 				PhotonNetwork.room.open = false;
 				return true;
@@ -211,6 +218,11 @@ public class For_next : Photon.MonoBehaviour
 		if (un)
 			gameInfo.SetInfo (pNum, tNum, cNum);
 		setOK [pNum] = un ? true : false;
+	}
+
+	[PunRPC]
+	void Id2Num(int id,int num){
+		gameInfo.idToNum [id] = num;
 	}
 
 	public int getGNum ()
