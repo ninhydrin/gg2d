@@ -18,6 +18,7 @@ public class Game_All_Init : Photon.MonoBehaviour
 	GameObject mapMG;
 	GameObject minimapMG;
 
+
 	int myNum;
 	For_next forNext;
 	int ghostIncome;
@@ -27,20 +28,24 @@ public class Game_All_Init : Photon.MonoBehaviour
 	ghost_base[] ghosts;
 	int[] ghostNum;
 	bool myEnd;
+	bool MGFlag;
+	bool miniMGFlag;
+	bool manaFlag;
+
 	// Use this for initialization
 	void Awake ()
 	{
 		forNext = GameObject.Find ("ForNextScene").GetComponent<For_next> ();				
-		forNext.StartFlag(PhotonNetwork.player.ID);
+		forNext.SetFlag(PhotonNetwork.player.ID,0);
 		ghostList = GameObject.Find ("GhostList");
 		myEnd = true;
 	}
 
 	void Update(){
-		if (forNext.AllLoadEnd () && myEnd ) {
+		if (forNext.FlagCheck (0) && myEnd ) {
 			Debug.Log ("non");
 			myEnd = false;
-			//StartInit ();
+			StartInit ();
 		}
 	}
 	void MakeMGHP(){
@@ -61,7 +66,7 @@ public class Game_All_Init : Photon.MonoBehaviour
 		float x = (MG.transform.position.x - 250f) / 5f;
 		float y = (MG.transform.position.z - 250f) / 5f;		
 		minimapMG = PhotonNetwork.Instantiate ("miniMG", new Vector3 (x, y, 0), Quaternion.identity, 0) as GameObject;	
-		minimapMG.GetComponent<minimap_MG> ().Init (mapMG);
+		minimapMG.GetComponent<minimap_MG> ().Init (MG);
 	}
 	void MakeMana(){
 		Instantiate (Mana);
@@ -93,6 +98,7 @@ public class Game_All_Init : Photon.MonoBehaviour
 		miniMap = GameObject.Find ("Minimap/Field");
 		MakeMG ();
 		MakeMiniMG ();
-
+		if (PhotonNetwork.isMasterClient)
+			MakeGhost ();
 	}
 }

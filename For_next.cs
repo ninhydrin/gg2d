@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEngine.SceneManagement; 
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class For_next : Photon.MonoBehaviour
@@ -18,7 +18,11 @@ public class For_next : Photon.MonoBehaviour
 	int gnum = 0;
 	public bool ready = false;
 	public bool flag;
+
 	public Dictionary <int,bool> startF;
+	public Dictionary <int,bool> loadF;
+	public Dictionary <int,bool> MGF;
+	public Dictionary <int,bool> miniMGF;
 
 	//Transform playerList;
 	public Dictionary<int,bool> setOK;
@@ -61,13 +65,39 @@ public class For_next : Photon.MonoBehaviour
 	/// <summary>
 	/// 全員ロードが終わったか
 	/// </summary>
-	public bool	AllLoadEnd ()
+	/// <param name='num'> 0:ロード,1:MG,2:miniMG,3:mana </param>
+	
+	public bool	FlagCheck (int num)
 	{
 		PhotonPlayer[] player = PhotonNetwork.playerList;
-		foreach (PhotonPlayer pPlayer in player) {
-			if (!startF [pPlayer.ID])
-				return false;
+		switch (num) {
+		case 0:
+			foreach (PhotonPlayer pPlayer in player) {
+				if (!loadF [pPlayer.ID])
+					return false;
+			}
+			break;
+
+		case 1:
+			foreach (PhotonPlayer pPlayer in player) {
+				if (!startF [pPlayer.ID])
+					return false;
+			}
+			break;
+		case 2:
+			foreach (PhotonPlayer pPlayer in player) {
+				if (!startF [pPlayer.ID])
+					return false;
+			}
+			break;
+		case 3:
+			foreach (PhotonPlayer pPlayer in player) {
+				if (!startF [pPlayer.ID])
+					return false;
+			}
+			break;
 		}
+
 		return true;
 	}
 
@@ -93,7 +123,7 @@ public class For_next : Photon.MonoBehaviour
 				return true;
 			}
 		}
-			return false;
+		return false;
 	}
 
 	[PunRPC]
@@ -105,15 +135,35 @@ public class For_next : Photon.MonoBehaviour
 			myid = number;
 	}
 
-	public void StartFlag (int num)
+	/// <summary>
+	/// 指定のフラグを立てる
+	/// </summary>
+	/// <param name='id'> 自分のプレイヤーID </param>
+	/// <param name='num'> フラグの番号 </param>
+
+	public void SetFlag (int id, int num)
 	{
-		photonView.RPC ("SF", PhotonTargets.All, num);
+		object[] args = new object[2]{ id, num };
+		photonView.RPC ("SF", PhotonTargets.All, args);
 	}
 
 	[PunRPC]
-	void SF (int id)
+	void SF (int id, int num)
 	{
-		startF [id] = true;
+		switch (num) {
+		case 0:
+			loadF [id] = true;
+			break;
+		case 1:
+			MGF [id] = true;
+			break;
+		case 2:
+			miniMGF [id] = true;
+			break;
+		case 3:
+			startF [id] = true;
+			break;
+		}
 	}
 
 	/// <summary>
@@ -125,7 +175,7 @@ public class For_next : Photon.MonoBehaviour
 	bool CheckPlayerReady ()
 	{
 		PhotonPlayer[] player = PhotonNetwork.playerList;
-		foreach (PhotonPlayer p in player){
+		foreach (PhotonPlayer p in player) {
 			if (!setOK [p.ID])
 				return false;
 		}
@@ -156,8 +206,8 @@ public class For_next : Photon.MonoBehaviour
 	[PunRPC]
 	public void SendOK (int pNum, int cNum, int tNum, bool un, PhotonMessageInfo info)
 	{	
-		if(un)
-		gameInfo.SetInfo(pNum, tNum, cNum);
+		if (un)
+			gameInfo.SetInfo (pNum, tNum, cNum);
 		setOK [pNum] = un ? true : false;
 	}
 
@@ -171,7 +221,7 @@ public class For_next : Photon.MonoBehaviour
 	{
 		//PhotonNetwork.isMessageQueueRunning = false;
 		Text loadingText = GameObject.Find ("Text").GetComponent<Text> ();
-		AsyncOperation async = SceneManager.LoadSceneAsync("Main");
+		AsyncOperation async = SceneManager.LoadSceneAsync ("Main");
 		
 		async.allowSceneActivation = false;    // シーン遷移をしない
 		
@@ -199,8 +249,9 @@ public class For_next : Photon.MonoBehaviour
 		PhotonPlayer[] player = PhotonNetwork.playerList;
 		foreach (PhotonPlayer p in player) {
 			Debug.Log ("id is " + p.ID.ToString ());
-			Debug.Log ("ok is " + setOK [p.ID].ToString());
+			Debug.Log ("ok is " + setOK [p.ID].ToString ());
 			//Debug.Log ("pInfor is " + roomPlayerDic [p.ID].ToString());
 		}
 	}
+
 }
