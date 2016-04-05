@@ -199,9 +199,9 @@ public class For_next : Photon.MonoBehaviour
 	/// <param name='tNum'> 自分のチーム番号 </param>
 	/// <param name='cNum'> 自分のカラー番号 </param>
 
-	public void SetPlayer (int pNum, int tNum, int cNum)
+	public void SetPlayer (int id, int pNum, int tNum, int cNum)
 	{
-		object[] args = new object[4]{ pNum, cNum, tNum, true };
+		object[] args = new object[5]{ id, pNum, cNum, tNum, true };
 		photonView.RPC ("SendOK", PhotonTargets.All, args);
 		setOK [pNum] = true;
 	}
@@ -214,15 +214,16 @@ public class For_next : Photon.MonoBehaviour
 	}
 
 	[PunRPC]
-	public void SendOK (int pNum, int cNum, int tNum, bool un, PhotonMessageInfo info)
+	public void SendOK (int id, int pNum, int cNum, int tNum, bool un, PhotonMessageInfo info)
 	{	
 		if (un)
-			gameInfo.SetInfo (pNum, tNum, cNum);
+			gameInfo.SetInfo (id, pNum, tNum, cNum);
 		setOK [pNum] = un ? true : false;
 	}
 
 	[PunRPC]
-	void Id2Num(int id,int num){
+	void Id2Num (int id, int num)
+	{
 		gameInfo.idToNum [id] = num;
 		if (PhotonNetwork.player.ID == id)
 			gameInfo.myNum = num;
@@ -263,9 +264,13 @@ public class For_next : Photon.MonoBehaviour
 
 	void ForDebugg ()
 	{
-		Debug.Log ("my id is " + PhotonNetwork.player.ID.ToString());
+		Debug.Log ("my id is " + PhotonNetwork.player.ID.ToString ());
 		PhotonPlayer[] player = PhotonNetwork.playerList;
 		foreach (PhotonPlayer p in player) {
+			Debug.Log ("color " + gameInfo.playerInfo [p.ID].pColor.ToString ());
+			Debug.Log ("coNum" + gameInfo.playerInfo [p.ID].colorNum.ToString ());
+			Debug.Log ("chNum" + gameInfo.playerInfo [p.ID].charNum.ToString ());
+			Debug.Log ("tNum" + gameInfo.playerInfo [p.ID].teamNum.ToString ());
 			Debug.Log ("ID2NUM[" + p.ID.ToString () + "] = " + gameInfo.idToNum [p.ID]);
 			//Debug.Log ("pInfor is " + roomPlayerDic [p.ID].ToString());
 		}

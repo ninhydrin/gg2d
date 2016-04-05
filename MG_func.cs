@@ -74,7 +74,6 @@ public class MG_func : Photon.MonoBehaviour
 		transform.SetParent (myParent.transform);
 		myNum = gameInfo.myNum;
 		myColorNum = gameInfo.myColorNum;
-		//myNum = forNext.myid;
 		myColor = gameInfo.myColor;
 		tag = myNum.ToString () + "P_MG";
 		savaIcon=Resources.LoadAll<Sprite>("C"+myColorNum.ToString());

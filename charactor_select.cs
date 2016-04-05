@@ -64,7 +64,7 @@ public class charactor_select : Photon.MonoBehaviour
 				MoveCharactor ();
 
 				if (Input.GetButtonDown ("Jump") && forNext.ready) {
-					forNext.SetPlayer (PhotonNetwork.player.ID, teamNum, seleC);
+					forNext.SetPlayer (PhotonNetwork.player.ID, gameInfo.myNum, teamNum, seleC);
 					charactors [seleP].transform.eulerAngles = Vector3.zero;
 					setOk = true;
 				}

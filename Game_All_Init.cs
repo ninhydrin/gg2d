@@ -26,6 +26,7 @@ public class Game_All_Init : Photon.MonoBehaviour
 	GameObject[] playerMGs;
 	Color[] playerColor;
 	ghost_base[] ghosts;
+	GameInfo gameInfo;
 	int[] ghostNum;
 	bool myEnd;
 	bool MGFlag;
@@ -37,6 +38,7 @@ public class Game_All_Init : Photon.MonoBehaviour
 	{
 		forNext = GameObject.Find ("ForNextScene").GetComponent<For_next> ();				
 		forNext.SetFlag(PhotonNetwork.player.ID,0);
+		gameInfo = GameObject.Find ("GameMaster").GetComponent<GameInfo> ();
 		ghostList = GameObject.Find ("GhostList");
 		myEnd = true;
 	}
