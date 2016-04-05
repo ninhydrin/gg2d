@@ -203,14 +203,14 @@ public class For_next : Photon.MonoBehaviour
 	{
 		object[] args = new object[5]{ id, pNum, cNum, tNum, true };
 		photonView.RPC ("SendOK", PhotonTargets.All, args);
-		setOK [pNum] = true;
+		setOK [id] = true;
 	}
 
-	public void UnsetPlayer (int pNum)
+	public void UnsetPlayer (int id)
 	{
-		object[] args = new object[4]{ pNum, 0, 0, false };
+		object[] args = new object[5]{ id, 0, 0, 0, false };
 		photonView.RPC ("SendOK", PhotonTargets.All, args);
-		setOK [pNum] = false;
+		setOK [id] = false;
 	}
 
 	[PunRPC]
@@ -218,7 +218,7 @@ public class For_next : Photon.MonoBehaviour
 	{	
 		if (un)
 			gameInfo.SetInfo (id, pNum, tNum, cNum);
-		setOK [pNum] = un ? true : false;
+		setOK [id] = un ? true : false;
 	}
 
 	[PunRPC]
