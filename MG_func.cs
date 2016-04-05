@@ -78,6 +78,7 @@ public class MG_func : Photon.MonoBehaviour
 		myColor = gameInfo.myColor;
 		tag = myNum.ToString () + "P_MG";
 		savaIcon=Resources.LoadAll<Sprite>("C"+myColorNum.ToString());
+		MakeMiniMG()
 	}
 
 	void Start ()
@@ -145,7 +146,7 @@ public class MG_func : Photon.MonoBehaviour
 		//	GetComponent<UnityEngine.UI.Image>().enabled=true;			
 
 	}
-
+	
 	void make ()
 	{		
 		int a = summonToken < 1 ? 5 : summonToken - 1;		
@@ -164,7 +165,13 @@ public class MG_func : Photon.MonoBehaviour
 
 		creating = false;
 	}
-
+	/// <summary>
+	/// 鯖の召喚の注文
+	/// </summary>
+	/// <param name='ob'> オブジェクト名 </param>
+	/// <param name='sTime'> 召喚時間 </param>
+	/// <param name='lea'> リーダーフラグ </param>
+	/// 
 	public void Order (string ob, int sTime, bool lea, string sType,int gNum, Vector2 dest,Sprite face,int mHP)
 	{
 		prepare [orderToken].emissionRate = 100;
@@ -234,6 +241,7 @@ public class MG_func : Photon.MonoBehaviour
 
 	int aa = 0;
 
+
 	IEnumerator Recovery ()
 	{
 		while (aa<600) {
@@ -241,6 +249,14 @@ public class MG_func : Photon.MonoBehaviour
 			yield return 0;
 		}
 		canRecover = true;
+	}
+
+	void MakeMiniMG ()
+	{
+		float x = (gameObject.transform.position.x - 250f) / 5f;
+		float y = (gameObject.transform.position.z - 250f) / 5f;		
+		minimapMG = PhotonNetwork.Instantiate ("miniMG", new Vector3 (x, y, 0), Quaternion.identity, 0) as GameObject;	
+		minimapMG.GetComponent<minimap_MG> ().Init (gameObject);
 	}
 
 }

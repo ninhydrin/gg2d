@@ -116,6 +116,7 @@ public class For_next : Photon.MonoBehaviour
 							return false;
 						setOK [p.ID] = false;
 						startF [p.ID] = false;
+						loadF [p.ID] = false;
 						//roomPlayerDic [p.ID] = null;
 					}
 				}
