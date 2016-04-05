@@ -78,7 +78,7 @@ public class MG_func : Photon.MonoBehaviour
 		myColor = gameInfo.myColor;
 		tag = myNum.ToString () + "P_MG";
 		savaIcon=Resources.LoadAll<Sprite>("C"+myColorNum.ToString());
-		MakeMiniMG()
+		MakeMiniMG ();
 	}
 
 	void Start ()
