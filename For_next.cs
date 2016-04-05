@@ -224,6 +224,8 @@ public class For_next : Photon.MonoBehaviour
 	[PunRPC]
 	void Id2Num(int id,int num){
 		gameInfo.idToNum [id] = num;
+		if (PhotonNetwork.player.ID == id)
+			gameInfo.myNum = num;
 	}
 
 	public int getGNum ()
@@ -261,10 +263,9 @@ public class For_next : Photon.MonoBehaviour
 
 	void ForDebugg ()
 	{
+		Debug.Log ("my id is " + PhotonNetwork.player.ID.ToString());
 		PhotonPlayer[] player = PhotonNetwork.playerList;
 		foreach (PhotonPlayer p in player) {
-			Debug.Log ("id is " + p.ID.ToString ());
-			Debug.Log ("ok is " + setOK [p.ID].ToString ());
 			Debug.Log ("ID2NUM[" + p.ID.ToString () + "] = " + gameInfo.idToNum [p.ID]);
 			//Debug.Log ("pInfor is " + roomPlayerDic [p.ID].ToString());
 		}
