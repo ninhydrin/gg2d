@@ -199,25 +199,26 @@ public class For_next : Photon.MonoBehaviour
 	/// <param name='tNum'> 自分のチーム番号 </param>
 	/// <param name='cNum'> 自分のカラー番号 </param>
 
-	public void SetPlayer (int id, int pNum, int tNum, int cNum)
+	public void SetPlayer (int id, int pNum, int chNum, int tNum, int cNum)
 	{
-		object[] args = new object[5]{ id, pNum, cNum, tNum, true };
+		object[] args = new object[6]{ id, pNum, chNum, cNum, tNum, true };
 		photonView.RPC ("SendOK", PhotonTargets.All, args);
 		setOK [id] = true;
 	}
 
 	public void UnsetPlayer (int id)
 	{
-		object[] args = new object[5]{ id, 0, 0, 0, false };
+		object[] args = new object[6]{ id, 0, 0, 0, 0, false };
 		photonView.RPC ("SendOK", PhotonTargets.All, args);
 		setOK [id] = false;
 	}
 
 	[PunRPC]
-	public void SendOK (int id, int pNum, int cNum, int tNum, bool un, PhotonMessageInfo info)
+	public void SendOK (int id, int pNum, int chNum, int tNum, int cNum, bool un, PhotonMessageInfo info)
 	{	
+		print ("id:" + id.ToString () + "pNum:" + pNum.ToString () + "cNum:" + cNum.ToString () + "tNum:" + tNum);
 		if (un)
-			gameInfo.SetInfo (id, pNum, tNum, cNum);
+			gameInfo.SetInfo (id, pNum, chNum, tNum, cNum);
 		setOK [id] = un ? true : false;
 	}
 

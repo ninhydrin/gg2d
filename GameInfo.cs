@@ -6,13 +6,15 @@ public class GameInfo : MonoBehaviour
 {
 	public struct pInfoStruct
 	{
+		public int playerNum;
 		public int charNum;
 		public int teamNum;
 		public int colorNum;
 		public Color pColor;
 
-		public pInfoStruct (int chNum, int tNum, int cNum, Color mCo)
+		public pInfoStruct (int pNum ,int chNum, int tNum, int cNum, Color mCo)
 		{
+			playerNum=pNum;
 			charNum = chNum;
 			teamNum = tNum;
 			colorNum = cNum;
@@ -44,9 +46,9 @@ public class GameInfo : MonoBehaviour
 	}
 
 
-	public void SetInfo (int id,int pNum, int cNum, int tNum)
+	public void SetInfo (int id,int pNum,int chNum, int cNum, int tNum)
 	{	
-		playerInfo [pNum] = new pInfoStruct (pNum, tNum, cNum, Colors [cNum]);
+		playerInfo [id] = new pInfoStruct (pNum, chNum, tNum, cNum, Colors [cNum]);
 		if (pNum == PhotonNetwork.player.ID) {
 			myNum = pNum;
 			myColor = Colors [cNum];

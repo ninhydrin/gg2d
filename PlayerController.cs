@@ -35,6 +35,8 @@ public class PlayerController : Photon.MonoBehaviour
 	GameObject organMe;
 	CameraController myCamera;
 	GameInfo gameInfo;
+
+
 	void Awake(){
 		myParent = GameObject.Find("PlayerList");
 		transform.SetParent (myParent.transform);
