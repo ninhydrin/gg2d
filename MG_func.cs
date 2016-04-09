@@ -77,24 +77,20 @@ public class MG_func : Photon.MonoBehaviour
 		myColor = gameInfo.myColor;
 		tag = myNum.ToString () + "P_MG";
 		savaIcon=Resources.LoadAll<Sprite>("C"+myColorNum.ToString());
-		MakeMiniMG ();
+		if (photonView.isMine) {
+			MakeMiniMG ();
+			MakeMGHP ();
+		}
 	}
 
 	void Start ()
 	{		
-		/*
-		myParent = GameObject.Find ("MGList");	
-		transform.SetParent (myParent.transform);	
-*/
 		if (photonView.isMine) {
 			savaSide = GameObject.Find ("Player_info/Sava_side").transform;
 			mySava = GameObject.FindWithTag ("My_sava").transform;
-		
 		}
 		//player = GameObject.Find (myNum.ToString () + "P_Master");
-		MakeMGHP ();
 		sava_queue = new Queue<order>[6];
-
 		creating = false;
 		CreatePreparePos ();
 		//minimapMG = PhotonNetwork.Instantiate ("miniMG", new Vector3 (50, 0, 50), Quaternion.identity, 0) as GameObject;			

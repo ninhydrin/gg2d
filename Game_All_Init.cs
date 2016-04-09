@@ -58,11 +58,12 @@ public class Game_All_Init : Photon.MonoBehaviour
 	{
 		MG = PhotonNetwork.Instantiate ("MG", new Vector3 (40+420*myNum, 0, 40+420*myNum), Quaternion.identity, 0) as GameObject;
 		MG.transform.Rotate (new Vector3(-90f,45f+myNum*180f,0));
-		//Player = PhotonNetwork.Instantiate ("UP", new Vector3 (50, 20, 50), Quaternion.identity, 0) as GameObject;
 		//MakeMiniMG ();	
 		//MakeMapMG ();
 	}
-
+	void MakeCharacter(){
+		Player = PhotonNetwork.Instantiate ("UP", new Vector3 (50, 20, 50), Quaternion.identity, 0) as GameObject;
+	}
 	void MakeMiniMG ()
 	{
 		float x = (MG.transform.position.x - 250f) / 5f;
@@ -99,6 +100,7 @@ public class Game_All_Init : Photon.MonoBehaviour
 		organMap = GameObject.Find ("Organ/Map");
 		miniMap = GameObject.Find ("Minimap/Field");
 		MakeMG ();
+		MakeCharacter ();
 		//if (PhotonNetwork.isMasterClient)
 		//	MakeGhost ();
 	}

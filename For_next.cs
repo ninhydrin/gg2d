@@ -203,14 +203,12 @@ public class For_next : Photon.MonoBehaviour
 	{
 		object[] args = new object[6]{ id, pNum, chNum, cNum, tNum, true };
 		photonView.RPC ("SendOK", PhotonTargets.All, args);
-		setOK [id] = true;
 	}
 
 	public void UnsetPlayer (int id)
 	{
 		object[] args = new object[6]{ id, 0, 0, 0, 0, false };
 		photonView.RPC ("SendOK", PhotonTargets.All, args);
-		setOK [id] = false;
 	}
 
 	[PunRPC]
