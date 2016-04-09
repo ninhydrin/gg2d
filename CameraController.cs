@@ -37,11 +37,11 @@ public class CameraController : MonoBehaviour
 		lockOn = new Vector3 (0f, yy, zz);
 	}
 
-	public void Init ()
+	public void Init (GameObject target)
 	{
 		forNext = GameObject.Find ("ForNextScene").GetComponent<For_next> ();		
 		myNum = PhotonNetwork.player.ID;
-		player = GameObject.FindWithTag (myNum.ToString () + "P_Master");
+		player = target;
 		playerC = player.GetComponent<PlayerController> ();
 		CP = player.transform.FindChild ("Camera_Pos");
 		LOP = player.transform.FindChild ("LockOnPos");

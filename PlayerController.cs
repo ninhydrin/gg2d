@@ -40,8 +40,10 @@ public class PlayerController : Photon.MonoBehaviour
 	void Awake(){
 		myParent = GameObject.Find("PlayerList");
 		transform.SetParent (myParent.transform);
-		myCamera = GameObject.Find ("MainCamera").GetComponent<CameraController> ();
-		myCamera.Init ();
+		if (photonView.isMine) {
+			myCamera = GameObject.Find ("MainCamera").GetComponent<CameraController> ();
+			myCamera.Init (gameObject);
+		}
 		gameInfo = GameObject.Find ("GameMaster").GetComponent<GameInfo> ();
 		forNext = GameObject.Find ("ForNextScene").GetComponent<For_next> ();
 		myNum = forNext.ownerIdToNum [photonView.ownerId];

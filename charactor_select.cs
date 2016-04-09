@@ -64,7 +64,7 @@ public class charactor_select : Photon.MonoBehaviour
 				MoveCharactor ();
 
 				if (Input.GetButtonDown ("Jump") && forNext.ready) {
-					forNext.SetPlayer (PhotonNetwork.player.ID, gameInfo.myNum,seleP,seleT, seleC);
+					forNext.SetPlayer (PhotonNetwork.player.ID, gameInfo.myNum, seleP, seleT, seleC);
 					charactors [seleP].transform.eulerAngles = Vector3.zero;
 					setOk = true;
 				}
@@ -84,6 +84,8 @@ public class charactor_select : Photon.MonoBehaviour
 	{
 		myFace.sprite = charFace [seleP];
 		cam1.transform.position = new Vector3 (30 * seleP, 2 + 50 * photonView.ownerId, 4);
+		myColor.color = forNext.Colors [seleC];
+
 	}
 
 	void MoveCharactor ()
@@ -109,7 +111,6 @@ public class charactor_select : Photon.MonoBehaviour
 			} else if (Input.GetKeyDown (buttons.LStick_Right)) {
 				seleC = seleC > colorNum - 2 ? 0 : seleC + 1;
 			}
-			myColor.color = forNext.Colors [seleC];
 		} else if (selector == 2) {//チーム
 			if (Input.GetKeyDown (buttons.LStick_Left)) {
 				seleT = seleT < 1 ? teamNum - 1 : seleT - 1;					
